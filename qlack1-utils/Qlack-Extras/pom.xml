@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.eurodyn.qlack.extras</groupId>
+  <artifactId>Qlack-Extras</artifactId>
+  <packaging>pom</packaging>
+  <version>2.10.0-SNAPSHOT</version>
+  <name>Qlack-Extras</name>
+  <url>http://www.qlack.com</url>
+
+  <issueManagement>
+    <system>Bugzilla</system>
+    <url>http://bugzilla.eurodyn.com</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>Hudson</system>
+    <url>http://qs.eurodyn.com</url>
+  </ciManagement>
+
+  <organization>
+    <name>European Dynamics SA</name>
+    <url>http://www.eurodyn.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>nmix</id>
+      <name>Nassos A. Michas</name>
+      <email>nassos.michas@eurodyn.com</email>
+      <organization>European Dynamics SA</organization>
+      <organizationUrl>http://www.eurodyn.com</organizationUrl>
+    </developer>
+    <developer>
+      <id>cka</id>
+      <name>Christina Kaskoura</name>
+      <email>christina.kaskoura@eurodyn.com</email>
+      <organization>European Dynamics SA</organization>
+      <organizationUrl>http://www.eurodyn.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <!-- Default SCM configuration -->
+  <scm>
+    <connection>scm:svn:svn://svn.eurodyn.com/qlack-utils/trunk/Qlack-Extras/</connection>
+    <developerConnection>scm:svn:svn://svn.eurodyn.com/qlack-utils/trunk/Qlack-Extras/
+    </developerConnection>
+    <tag>HEAD</tag>
+    <url>svn://svn.eurodyn.com/qlack-utils/trunk/Qlack-Extras/</url>
+  </scm>
+
+  <properties>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <dependency-check-maven.version>5.3.2</dependency-check-maven.version>
+    <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
+    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
+
+    <sonar.dependencyCheck.reportPath>${project.build.directory}/dependency-check-report.xml
+    </sonar.dependencyCheck.reportPath>
+    <sonar.dependencyCheck.htmlReportPath>${project.build.directory}/dependency-check-report.html
+    </sonar.dependencyCheck.htmlReportPath>
+    <sonar.projectKey>${project.groupId}:${project.artifactId}:git</sonar.projectKey>
+  </properties>
+
+  <modules>
+    <module>Qlack-Extras-DBRebuild</module>
+    <module>Qlack-Extras-Hibernate</module>
+    <module>Qlack-Extras-TranslationsConverter</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>${sonar-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>${dependency-check-maven.version}</version>
+          <configuration>
+            <format>ALL</format>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

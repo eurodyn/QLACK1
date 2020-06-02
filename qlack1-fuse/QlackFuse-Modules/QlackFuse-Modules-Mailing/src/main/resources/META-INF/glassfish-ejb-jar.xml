@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-ejb-jar PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 EJB 3.1//EN" "http://glassfish.org/dtds/glassfish-ejb-jar_3_1-1.dtd">
+<glassfish-ejb-jar>
+    <enterprise-beans>
+        <ejb>
+            <ejb-name>InternalMessageManagerImpl</ejb-name>
+            <resource-ref>
+                <res-ref-name>QlackConnectionFactory</res-ref-name>
+                <jndi-name>jms/Qlack_JMS_Connector</jndi-name>
+            </resource-ref>
+            <message-destination-ref>
+                <message-destination-ref-name>QlackNotificationTopic</message-destination-ref-name>
+                <jndi-name>jms/QlackNotificationTopic</jndi-name>
+            </message-destination-ref>
+        </ejb>
+    </enterprise-beans>
+    <disable-nonportable-jndi-names>true</disable-nonportable-jndi-names>
+</glassfish-ejb-jar>
