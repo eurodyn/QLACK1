@@ -15,7 +15,7 @@
             </resource-ref>
         </session>
         <session>
-            <ejb-name>InternalMessageManagerImpl</ejb-name>
+            <ejb-name>InternalMessageManagerBean</ejb-name>
             <resource-ref>
                 <res-ref-name>QlackConnectionFactory</res-ref-name>
                 <mapped-name>java:/jms/Qlack_JMS_Connector</mapped-name>

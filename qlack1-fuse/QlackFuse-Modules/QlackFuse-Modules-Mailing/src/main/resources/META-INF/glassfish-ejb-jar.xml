@@ -3,7 +3,7 @@
 <glassfish-ejb-jar>
     <enterprise-beans>
         <ejb>
-            <ejb-name>InternalMessageManagerImpl</ejb-name>
+            <ejb-name>InternalMessageManagerBean</ejb-name>
             <resource-ref>
                 <res-ref-name>QlackConnectionFactory</res-ref-name>
                 <jndi-name>jms/Qlack_JMS_Connector</jndi-name>

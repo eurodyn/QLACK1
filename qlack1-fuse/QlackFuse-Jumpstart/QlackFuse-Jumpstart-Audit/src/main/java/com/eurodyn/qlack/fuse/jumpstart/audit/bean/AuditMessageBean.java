@@ -9,6 +9,7 @@ import javax.ejb.EJBException;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.ejb.ActivationConfigProperty;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -21,7 +22,11 @@ import java.util.logging.Logger;
 /**
  * @author European Dynamics SA
  */
-@MessageDriven(name = "AuditMDB")
+//@MessageDriven(name = "AuditMDB")
+@MessageDriven(activationConfig = {
+        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/AuditQueue"),
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue") })
 @TransactionManagement(TransactionManagementType.BEAN)
 public class AuditMessageBean implements MessageListener {
   //IMPORTANT: MDBs should implement MessageListener, in order to be deployed on Jboss-AS server
@@ -39,7 +44,7 @@ public class AuditMessageBean implements MessageListener {
           .getProperty("QlackFuseJS.audit.parent.ear");
       audit = (AuditLoggingManager) ContextSingleton.getInstance().lookup(
           "java:global/" + parentEar
-              + "QlackFuse-Modules-AuditingLogging/AuditLoggingManagerImpl");
+              + "QlackFuse-Modules-AuditingLogging/AuditLoggingManagerBean");
     } catch (NamingException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
     }

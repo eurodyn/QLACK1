@@ -63,10 +63,10 @@ public class I18nAction extends ActionSupport {
           PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.parent.ear"));
       keyManager = (KeyManager) ContextSingleton.getInstance().lookup("java:global/"
           + PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.parent.ear")
-          + "QlackFuse-Modules-Lexicon/KeyManagerImpl");
+          + "QlackFuse-Modules-Lexicon/KeyManagerBean");
       languageManager = (LanguageManager) ContextSingleton.getInstance().lookup("java:global/"
           + PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.parent.ear")
-          + "QlackFuse-Modules-Lexicon/LanguageManagerImpl");
+          + "QlackFuse-Modules-Lexicon/LanguageManagerBean");
       logger.log(Level.CONFIG, "Fetching application translations.");
       fetchTranslations();
 
