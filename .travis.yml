@@ -2,4 +2,10 @@ language: java
 
 jdk: openjdk11
 
-script: mvn clean install
+addons:
+  sonarcloud:
+    organization: "eurodyn"
+    token:
+      secure: "XpLlZul8/tH+gjiJdwQi9ptimlkR8a5rhdyi/p4fojBBf4j6AIygONvKXb7q206qN7Yonh6srlUddSoDxyo9MXyUjzS78+Wa+UL8YOskqUIYlOz6TP9WW63Jw4OxrvTsWISaKbnejGzUBoIRimELokxxbulJnggGO+zVCbztM0nSudA7+bUXNqf3KX3x24oi7WPn3xIDrSSU4J3Geqgycgj4vAbKHw5kkJtuqX1PtBdJXVORUjUIELJsX+TsayqiMsQh6JaNV25r11cIqOZE7YcvfzBaDBEfw9vRZ/EBOR+AFf6KEZoaYbiIqxQHqWBdINxKPV+XiwrXzWVC93QIkVVmHpRgj0iwj3P+8mxzSFRFjaAK0cAGbgf4g9yBYdu9t4cjs/UkLID4I5iuihsH31pp50vovhuo8lomGJw2+9yS0o6fz1VmXUuyvaiQ5VF0qg/akMBDN4dCoyp5USfFUDJ+rPErtvu1hKcC9KL8+EdN4eiiWLB+eRoFfQBinW80VB3F3TRT9lGxpUPewVYym2bU0Bz2yre9fJ+1nd1bGtfgx+GsmA/O3tqgs59uPrpyhE6ThGVl8BT+AscBhtbc7KztELxKdbMd6Zeqs7zaqWFTfNGYwWTKbd0ZMl8x7LYKZB86zAH0wfcObasDfPVC8tVaZPyFed6SpkVCvFKNsWE="
+      
+script: mvn clean install sonar:sonar -Dsonar.projectKey=eurodyn_QLACK1
