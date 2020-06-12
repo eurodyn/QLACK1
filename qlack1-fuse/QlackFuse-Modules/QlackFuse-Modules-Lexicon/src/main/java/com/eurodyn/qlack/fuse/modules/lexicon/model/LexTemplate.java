@@ -1,8 +1,6 @@
 package com.eurodyn.qlack.fuse.modules.lexicon.model;
 
 
-import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,11 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 @Entity
 @Table(
     name = "lex_template"
 )
 public class LexTemplate implements Serializable {
+
   private String id;
   private LexLanguage languageId;
   private String name;
@@ -35,7 +37,8 @@ public class LexTemplate implements Serializable {
     this.createdBy = createdBy;
   }
 
-  public LexTemplate(LexLanguage languageId, String name, String value, long createdOn, String createdBy, Long lastModifiedOn, String lastModifiedBy) {
+  public LexTemplate(LexLanguage languageId, String name, String value, long createdOn, String createdBy,
+      Long lastModifiedOn, String lastModifiedBy) {
     this.languageId = languageId;
     this.name = name;
     this.value = value;

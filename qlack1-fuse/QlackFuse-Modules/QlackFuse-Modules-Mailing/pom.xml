@@ -29,6 +29,11 @@
       <artifactId>hibernate-core</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>net.bzdyl.ejb3criteria</groupId>
+      <artifactId>ejb3criteria</artifactId>
+      <version>${ejb3criteria.version}</version>
+    </dependency>
 
     <!-- 3rd Party Dependencies -->
     <dependency>
@@ -60,6 +65,15 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <annotationProcessorPath>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </annotationProcessorPath>
+          </annotationProcessorPaths>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

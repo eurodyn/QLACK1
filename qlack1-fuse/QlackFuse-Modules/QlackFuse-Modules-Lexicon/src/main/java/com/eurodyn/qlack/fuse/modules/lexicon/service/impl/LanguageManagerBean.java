@@ -2,12 +2,12 @@ package com.eurodyn.qlack.fuse.modules.lexicon.service.impl;
 
 import com.eurodyn.qlack.commons.search.PagingParams;
 import com.eurodyn.qlack.fuse.commons.search.ApplyPagingParams;
+import com.eurodyn.qlack.fuse.modules.lexicon.dto.LexLanguageDTO;
 import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException;
 import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException.CODES;
+import com.eurodyn.qlack.fuse.modules.lexicon.model.LexLanguage;
 import com.eurodyn.qlack.fuse.modules.lexicon.service.KeyManager;
 import com.eurodyn.qlack.fuse.modules.lexicon.service.LanguageManager;
-import com.eurodyn.qlack.fuse.modules.lexicon.dto.LexLanguageDTO;
-import com.eurodyn.qlack.fuse.modules.lexicon.model.LexLanguage;
 import com.eurodyn.qlack.fuse.modules.lexicon.util.ConverterUtil;
 import com.eurodyn.qlack.fuse.modules.lexicon.util.LexiconValidationUtil;
 import javax.ejb.EJB;
@@ -21,7 +21,6 @@ import net.bzdyl.ejb3.criteria.CriteriaFactory;
 import net.bzdyl.ejb3.criteria.Order;
 import net.bzdyl.ejb3.criteria.restrictions.Restrictions;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,20 +42,18 @@ import java.util.logging.Logger;
 /**
  * A Stateless Session EJB and also web service implementation class providing methods for language management.
  *
- * $Id: LanguageManagerBean.java 187 2020-04-02 16:02:06Z devops-d2 $
- *
- * http://www.qlack.com Copyright 2013 - European Dynamics SA - All rights reserved.
- *
- * This source code can only be used with explicit permission of its owner.
+ * @author EUROPEAN DYNAMICS SA.
  */
 @Stateless(name = "LanguageManagerBean")
 public class LanguageManagerBean implements LanguageManager {
 
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
-  private static final Logger logger = Logger.getLogger(LanguageManagerBean.class.getName());
+
   @EJB(name = "KeyManagerBean")
   private KeyManager keyManager;
+
+  private static final Logger logger = Logger.getLogger(LanguageManagerBean.class.getName());
 
   /**
    * {@inheritDoc}
@@ -229,7 +226,7 @@ public class LanguageManagerBean implements LanguageManager {
   @Override
   public void toggleStatus(String locale, boolean newStatus) {
     LexLanguage lang = getLanguageEntityByLocale(locale);
-    if (lang != null){
+    if (lang != null) {
       lang.setActive(newStatus);
     }
   }

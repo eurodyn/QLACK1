@@ -1,8 +1,5 @@
 package com.eurodyn.qlack.fuse.modules.lexicon.model;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,11 +7,17 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Entity
 @Table(
     name = "lex_language"
 )
 public class LexLanguage implements Serializable {
+
   private String id;
   private String name;
   private String locale;
@@ -37,7 +40,8 @@ public class LexLanguage implements Serializable {
     this.active = active;
   }
 
-  public LexLanguage(String name, String locale, long createdOn, String createdBy, Long lastModifiedOn, String lastModifiedBy, boolean active, Set<LexTemplate> lexTemplates, Set<LexData> lexDatas) {
+  public LexLanguage(String name, String locale, long createdOn, String createdBy, Long lastModifiedOn,
+      String lastModifiedBy, boolean active, Set<LexTemplate> lexTemplates, Set<LexData> lexDatas) {
     this.name = name;
     this.locale = locale;
     this.createdOn = createdOn;

@@ -2,34 +2,34 @@ package com.eurodyn.qlack.fuse.modules.lexicon.service.impl;
 
 import com.eurodyn.qlack.commons.exception.QlackCommonsException;
 import com.eurodyn.qlack.commons.exception.QlackCommonsException.CODES;
-import com.eurodyn.qlack.fuse.modules.lexicon.service.TemplatesManager;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexTemplate;
+import com.eurodyn.qlack.fuse.modules.lexicon.service.TemplatesManager;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
 /**
- * $Id: TemplatesManagerBean.java 164 2020-02-19 10:24:17Z Ioannis.Mousmoutis $
+ * Service implementation for Template Interface.
  *
- * http://www.qlack.com Copyright 2013 - European Dynamics SA - All rights reserved.
- *
- * This source code can only be used with explicit permission of its owner.
+ * @author EUROPEAN DYNAMICS SA.
  */
 @Stateless(name = "TemplatesManagerBean")
 public class TemplatesManagerBean implements TemplatesManager {
 
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
+
   private static final Logger logger = Logger.getLogger(TemplatesManagerBean.class.getName());
 
   @Override

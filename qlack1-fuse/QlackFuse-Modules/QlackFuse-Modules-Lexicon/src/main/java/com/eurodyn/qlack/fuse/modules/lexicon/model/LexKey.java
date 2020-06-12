@@ -1,9 +1,5 @@
 package com.eurodyn.qlack.fuse.modules.lexicon.model;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +10,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Entity
 @Table(
     name = "lex_key",
@@ -22,6 +23,7 @@ import javax.persistence.UniqueConstraint;
     )}
 )
 public class LexKey implements Serializable {
+
   private String id;
   private LexGroup groupId;
   private String name;
@@ -39,7 +41,8 @@ public class LexKey implements Serializable {
     this.createdOn = createdOn;
   }
 
-  public LexKey(LexGroup groupId, String name, String createdBy, long createdOn, Long lastModifiedOn, String lastModifiedBy, Set<LexData> lexDatas) {
+  public LexKey(LexGroup groupId, String name, String createdBy, long createdOn, Long lastModifiedOn,
+      String lastModifiedBy, Set<LexData> lexDatas) {
     this.groupId = groupId;
     this.name = name;
     this.createdBy = createdBy;

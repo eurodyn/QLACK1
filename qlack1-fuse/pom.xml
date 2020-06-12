@@ -83,6 +83,7 @@
     <aspectj.version>1.9.5</aspectj.version>
     <guice.version>4.2.3</guice.version>
     <struts2-core.version>2.3.33</struts2-core.version>
+    <ejb3criteria.version>0.4</ejb3criteria.version>
 
     <sonar.dependencyCheck.reportPath>${project.build.directory}/dependency-check-report.xml
     </sonar.dependencyCheck.reportPath>

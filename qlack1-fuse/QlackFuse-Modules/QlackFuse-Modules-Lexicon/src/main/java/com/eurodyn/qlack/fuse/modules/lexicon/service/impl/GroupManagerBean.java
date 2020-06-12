@@ -1,39 +1,37 @@
 package com.eurodyn.qlack.fuse.modules.lexicon.service.impl;
 
-import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException;
-import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException.CODES;
-import com.eurodyn.qlack.fuse.modules.lexicon.service.GroupManager;
 import com.eurodyn.qlack.commons.search.PagingParams;
 import com.eurodyn.qlack.fuse.commons.search.ApplyPagingParams;
 import com.eurodyn.qlack.fuse.modules.lexicon.dto.LexGroupDTO;
+import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException;
+import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException.CODES;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexGroup;
+import com.eurodyn.qlack.fuse.modules.lexicon.service.GroupManager;
 import com.eurodyn.qlack.fuse.modules.lexicon.util.ConverterUtil;
 import com.eurodyn.qlack.fuse.modules.lexicon.util.LexiconValidationUtil;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- * A Stateless Session EJB and also web service implementation class providing methods for group
- * management like CRUD operation for Group and Lexicon Group Mapping table.
+ * A Stateless Session EJB and also web service implementation class providing methods for group management like CRUD
+ * operation for Group and Lexicon Group Mapping table.
  *
- * $Id: GroupManagerBean.java 164 2020-02-19 10:24:17Z Ioannis.Mousmoutis $
- *
- * http://www.qlack.com Copyright 2013 - European Dynamics SA - All rights reserved.
- *
- * This source code can only be used with explicit permission of its owner.
+ * @author EUROPEAN DYNAMICS SA.
  */
 @Stateless(name = "GroupManagerBean")
 public class GroupManagerBean implements GroupManager {
 
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
+
   private static final Logger logger = Logger.getLogger(GroupManagerBean.class.getName());
 
   /**

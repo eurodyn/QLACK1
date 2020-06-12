@@ -1,24 +1,26 @@
 package com.eurodyn.qlack.fuse.modules.lexicon.service.impl;
 
-import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException;
-import com.eurodyn.qlack.fuse.modules.lexicon.service.KeyManager;
-import com.eurodyn.qlack.fuse.modules.lexicon.service.LanguageManager;
 import com.eurodyn.qlack.commons.search.PagingParams;
 import com.eurodyn.qlack.fuse.commons.search.ApplyPagingParams;
 import com.eurodyn.qlack.fuse.modules.lexicon.dto.LexDataDTO;
 import com.eurodyn.qlack.fuse.modules.lexicon.dto.LexKeyDTO;
 import com.eurodyn.qlack.fuse.modules.lexicon.dto.LexLanguageDTO;
+import com.eurodyn.qlack.fuse.modules.lexicon.exception.QlackFuseLexiconException;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexData;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexGroup;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexKey;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexLanguage;
+import com.eurodyn.qlack.fuse.modules.lexicon.service.KeyManager;
+import com.eurodyn.qlack.fuse.modules.lexicon.service.LanguageManager;
 import com.eurodyn.qlack.fuse.modules.lexicon.util.ConverterUtil;
 import com.eurodyn.qlack.fuse.modules.lexicon.util.LexiconValidationUtil;
-import java.util.*;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import net.bzdyl.ejb3.criteria.Criteria;
 import net.bzdyl.ejb3.criteria.CriteriaFactory;
 import net.bzdyl.ejb3.criteria.Order;
@@ -26,32 +28,30 @@ import net.bzdyl.ejb3.criteria.restrictions.MatchMode;
 import net.bzdyl.ejb3.criteria.restrictions.Restrictions;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
 /**
- * A Stateless Session EJB and also web service implementation class providing methods for key
- * management like CRUD operation for Key and Lexicon Key Mapping table.
+ * A Stateless Session EJB and also web service implementation class providing methods for key management like CRUD
+ * operation for Key and Lexicon Key Mapping table.
  *
- * $Id: KeyManagerBean.java 164 2020-02-19 10:24:17Z Ioannis.Mousmoutis $
- *
- * http://www.qlack.com Copyright 2013 - European Dynamics SA - All rights reserved.
- *
- * This source code can only be used with explicit permission of its owner.
+ * @author EUROPEAN DYNAMICS SA.
  */
 @Stateless(name = "KeyManagerBean")
 public class KeyManagerBean implements KeyManager {
 
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
-  private static final Logger logger = Logger.getLogger(KeyManagerBean.class.getName());
+
   @EJB(name = "LanguageManagerBean")
   private LanguageManager langManager;
 
-  public void setEm(EntityManager em) {
-    this.em = em;
-  }
-
-  public void setLangManager(LanguageManager langManager) {
-    this.langManager = langManager;
-  }
+  private static final Logger logger = Logger.getLogger(KeyManagerBean.class.getName());
 
   /**
    * {@inheritDoc}
@@ -67,7 +67,7 @@ public class KeyManagerBean implements KeyManager {
     lexKey.setCreatedBy(lexKeyDTO.getCreatedBy());
     lexKey.setCreatedOn(lexKeyDTO.getCreatedOn());
     if (!StringUtils.isEmpty(lexKeyDTO.getGroupId())) {
-      lexKey.setGroupId((LexGroup) em.find(LexGroup.class, lexKeyDTO.getGroupId()));
+      lexKey.setGroupId(em.find(LexGroup.class, lexKeyDTO.getGroupId()));
     }
     lexKey.setName(lexKeyDTO.getName());
     em.persist(lexKey);
@@ -79,7 +79,7 @@ public class KeyManagerBean implements KeyManager {
       lexData.setCreatedBy(lexKeyDTO.getCreatedBy());
       lexData.setCreatedOn(lexKeyDTO.getCreatedOn());
       lexData.setApproved(true);
-      lexData.setLanguageId((LexLanguage) em.find(LexLanguage.class, lgDTO.getId()));
+      lexData.setLanguageId(em.find(LexLanguage.class, lgDTO.getId()));
       lexData.setValue(lexKeyDTO.getName());
       lexData.setKeyId(lexKey);
       em.persist(lexData);
@@ -129,7 +129,7 @@ public class KeyManagerBean implements KeyManager {
   @Override
   public void updateTranslationByKeyID(String keyID, String locale, String value,
       String modifiedBy) throws QlackFuseLexiconException {
-    updateTranslationByKey((LexKey) em.find(LexKey.class, keyID), locale, value, modifiedBy);
+    updateTranslationByKey(em.find(LexKey.class, keyID), locale, value, modifiedBy);
   }
 
   private void updateTranslationByKey(LexKey key, final String locale, final String value,
@@ -173,7 +173,7 @@ public class KeyManagerBean implements KeyManager {
     for (LexDataDTO lDTO : lDTOs) {
       translations.put(lDTO.getLocale(), lDTO.getValue());
     }
-    updateTranslationsByKey((LexKey) em.find(LexKey.class, keyID), translations, modifiedBy);
+    updateTranslationsByKey(em.find(LexKey.class, keyID), translations, modifiedBy);
   }
 
   /**
