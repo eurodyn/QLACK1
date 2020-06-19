@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 //@MessageDriven(name = "AuditMDB")
 @MessageDriven(activationConfig = {
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-        @ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/AuditQueue"),
+        @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/AuditQueue"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue") })
 @TransactionManagement(TransactionManagementType.BEAN)
 public class AuditMessageBean implements MessageListener {

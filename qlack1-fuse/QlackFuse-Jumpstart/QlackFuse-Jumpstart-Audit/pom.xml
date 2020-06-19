@@ -74,6 +74,15 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ejb-plugin</artifactId>
+        <version>${maven-ejb-plugin.version}</version>
+        <configuration>
+          <ejbVersion>${ejb.version}</ejbVersion>
+          <generateClient>true</generateClient>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>com.nickwongdev</groupId>
         <artifactId>aspectj-maven-plugin</artifactId>
         <version>${aspectj-maven-plugin.version}</version>
