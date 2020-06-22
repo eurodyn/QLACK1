@@ -42,7 +42,7 @@ public class GroupManagerBean implements GroupManager {
    * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public LexGroupDTO createGroup(LexGroupDTO lexGroupDTO) throws QlackFuseLexiconException {
+  public LexGroupDTO createGroup(LexGroupDTO lexGroupDTO) {
     LexGroup group = ConverterUtil.lexGroupDTOtoLexGroup(lexGroupDTO);
     group.setCreatedOn(System.currentTimeMillis());
     em.persist(group);
@@ -115,9 +115,9 @@ public class GroupManagerBean implements GroupManager {
   public LexGroupDTO[] listGroups(PagingParams paging) {
     Query query = em.createQuery("select g from LexGroup g order by g.title");
     query = ApplyPagingParams.apply(query, paging);
-    List<LexGroupDTO> retVal = new ArrayList<LexGroupDTO>();
-    for (Iterator<LexGroup> lgI = query.getResultList().iterator(); lgI.hasNext(); ) {
-      retVal.add(ConverterUtil.lexGroupToLexGroupDTO(lgI.next()));
+    List<LexGroupDTO> retVal = new ArrayList<>();
+    for (LexGroup o : (Iterable<LexGroup>) query.getResultList()) {
+      retVal.add(ConverterUtil.lexGroupToLexGroupDTO(o));
     }
 
     return retVal.toArray(new LexGroupDTO[retVal.size()]);
@@ -144,9 +144,9 @@ public class GroupManagerBean implements GroupManager {
     query.setParameter("descSearchTerm", "%" + searchTerm.toUpperCase() + "%");
     query.setParameter("titleSearchTerm", "%" + searchTerm.toUpperCase() + "%");
     query = ApplyPagingParams.apply(query, paging);
-    List<LexGroupDTO> retVal = new ArrayList<LexGroupDTO>();
-    for (Iterator<LexGroup> lgI = query.getResultList().iterator(); lgI.hasNext(); ) {
-      retVal.add(ConverterUtil.lexGroupToLexGroupDTO(lgI.next()));
+    List<LexGroupDTO> retVal = new ArrayList<>();
+    for (LexGroup o : (Iterable<LexGroup>) query.getResultList()) {
+      retVal.add(ConverterUtil.lexGroupToLexGroupDTO(o));
     }
 
     return retVal.toArray(new LexGroupDTO[retVal.size()]);

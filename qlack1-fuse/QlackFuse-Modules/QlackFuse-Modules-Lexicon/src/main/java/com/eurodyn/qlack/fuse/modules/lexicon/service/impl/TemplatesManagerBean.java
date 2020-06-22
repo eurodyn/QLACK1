@@ -59,9 +59,7 @@ public class TemplatesManagerBean implements TemplatesManager {
         Template template = new Template(templateName, new StringReader(templateBody), null);
         template.process(templateData, retVal);
         retVal.flush();
-      } catch (TemplateException ex) {
-        throw new QlackCommonsException(CODES.ERR_COM_0000, ex.getLocalizedMessage());
-      } catch (IOException ex) {
+      } catch (TemplateException | IOException ex) {
         throw new QlackCommonsException(CODES.ERR_COM_0000, ex.getLocalizedMessage());
       }
     }

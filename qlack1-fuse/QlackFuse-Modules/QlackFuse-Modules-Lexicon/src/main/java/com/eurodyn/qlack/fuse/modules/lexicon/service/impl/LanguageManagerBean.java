@@ -60,11 +60,9 @@ public class LanguageManagerBean implements LanguageManager {
    *
    * @param lexLanguageDTO {@inheritDoc}
    * @return {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public LexLanguageDTO createLanguage(LexLanguageDTO lexLanguageDTO)
-      throws QlackFuseLexiconException {
+  public LexLanguageDTO createLanguage(LexLanguageDTO lexLanguageDTO) {
     LexLanguage language = ConverterUtil.lexLanguageDTOtoLexLanguage(lexLanguageDTO);
     language.setCreatedOn(System.currentTimeMillis());
     em.persist(language);
@@ -158,8 +156,8 @@ public class LanguageManagerBean implements LanguageManager {
     Query query = criteria.prepareQuery(em);
     query = ApplyPagingParams.apply(query, paging);
     List<LexLanguageDTO> retVal = new ArrayList<>();
-    for (Iterator<LexLanguage> lgI = query.getResultList().iterator(); lgI.hasNext(); ) {
-      retVal.add(ConverterUtil.lexLanguageToLexLanguageDTO(lgI.next()));
+    for (LexLanguage o : (Iterable<LexLanguage>) query.getResultList()) {
+      retVal.add(ConverterUtil.lexLanguageToLexLanguageDTO(o));
     }
 
     return retVal.toArray(new LexLanguageDTO[retVal.size()]);
@@ -257,8 +255,7 @@ public class LanguageManagerBean implements LanguageManager {
 
     // Add the data.
     int rowCounter = 3;
-    for (Iterator<String> keyI = translations.keySet().iterator(); keyI.hasNext(); ) {
-      String key = keyI.next();
+    for (String key : translations.keySet()) {
       Row row = sheet.createRow(rowCounter++);
       row.createCell(0).setCellValue(createHelper.createRichTextString(key));
       row.createCell(1).setCellValue(createHelper.createRichTextString(translations.get(key)));

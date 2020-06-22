@@ -84,12 +84,19 @@
     <guice.version>4.2.3</guice.version>
     <struts2-core.version>2.3.33</struts2-core.version>
     <ejb3criteria.version>0.4</ejb3criteria.version>
+    <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
 
     <sonar.dependencyCheck.reportPath>${project.build.directory}/dependency-check-report.xml
     </sonar.dependencyCheck.reportPath>
     <sonar.dependencyCheck.htmlReportPath>${project.build.directory}/dependency-check-report.html
     </sonar.dependencyCheck.htmlReportPath>
     <sonar.projectKey>${project.groupId}:${project.artifactId}:git</sonar.projectKey>
+
+    <sonar.coverage.exclusions>
+      src/main/java/com/eurodyn/qlack/fuse/modules/**/model/*,
+      src/main/java/com/eurodyn/qlack/fuse/modules/**/dto/*,
+      src/main/java/com/eurodyn/qlack/fuse/modules/**/exception/*
+    </sonar.coverage.exclusions>
   </properties>
 
   <modules>

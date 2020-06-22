@@ -58,10 +58,9 @@ public class KeyManagerBean implements KeyManager {
    *
    * @param lexKeyDTO {@inheritDoc}
    * @return {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public String createKey(LexKeyDTO lexKeyDTO) throws QlackFuseLexiconException {
+  public String createKey(LexKeyDTO lexKeyDTO) {
     // Create the new key.
     LexKey lexKey = new LexKey();
     lexKey.setCreatedBy(lexKeyDTO.getCreatedBy());
@@ -95,7 +94,7 @@ public class KeyManagerBean implements KeyManager {
     return lexKey.getId();
   }
 
-  private LexKey getKeyByName(String keyName) {
+  protected LexKey getKeyByName(String keyName) {
     Criteria criteria = CriteriaFactory.createCriteria("LexKey");
     criteria.add(Restrictions.eq("name", keyName));
 
@@ -109,11 +108,10 @@ public class KeyManagerBean implements KeyManager {
    * @param locale {@inheritDoc}
    * @param value {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
   public void updateTranslationByKeyName(String keyName, String locale, String value,
-      String modifiedBy) throws QlackFuseLexiconException {
+      String modifiedBy) {
     updateTranslationByKey(getKeyByName(keyName), locale, value, modifiedBy);
   }
 
@@ -124,16 +122,15 @@ public class KeyManagerBean implements KeyManager {
    * @param locale {@inheritDoc}
    * @param value {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
   public void updateTranslationByKeyID(String keyID, String locale, String value,
-      String modifiedBy) throws QlackFuseLexiconException {
+      String modifiedBy) {
     updateTranslationByKey(em.find(LexKey.class, keyID), locale, value, modifiedBy);
   }
 
   private void updateTranslationByKey(LexKey key, final String locale, final String value,
-      String modifiedBy) throws QlackFuseLexiconException {
+      String modifiedBy) {
     Map m = new HashMap();
     m.put(locale, value);
     updateTranslationsByKey(key, m, modifiedBy);
@@ -145,13 +142,11 @@ public class KeyManagerBean implements KeyManager {
    * @param keyName {@inheritDoc}
    * @param lDTOs {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
   public void updateTranslationsByKeyNameWithDTO(String keyName, LexDataDTO[] lDTOs,
-      String modifiedBy)
-      throws QlackFuseLexiconException {
-    Map<String, String> translations = new HashMap<String, String>();
+      String modifiedBy) {
+    Map<String, String> translations = new HashMap<>();
     for (LexDataDTO lDTO : lDTOs) {
       translations.put(lDTO.getLocale(), lDTO.getValue());
     }
@@ -164,12 +159,10 @@ public class KeyManagerBean implements KeyManager {
    * @param keyID {@inheritDoc}
    * @param lDTOs {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public void updateTranslationsByKeyID(String keyID, LexDataDTO[] lDTOs, String modifiedBy)
-      throws QlackFuseLexiconException {
-    Map<String, String> translations = new HashMap<String, String>();
+  public void updateTranslationsByKeyID(String keyID, LexDataDTO[] lDTOs, String modifiedBy) {
+    Map<String, String> translations = new HashMap<>();
     for (LexDataDTO lDTO : lDTOs) {
       translations.put(lDTO.getLocale(), lDTO.getValue());
     }
@@ -182,27 +175,25 @@ public class KeyManagerBean implements KeyManager {
    * @param keyName {@inheritDoc}
    * @param data {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
   public void updateTranslationsByKeyName(String keyName, HashMap<String, String> data,
-      String modifiedBy) throws QlackFuseLexiconException {
+      String modifiedBy) {
     updateTranslationsByKey(getKeyByName(keyName), data, modifiedBy);
   }
 
   private void updateTranslationsByKey(LexKey key, Map<String, String> data,
-      String modifiedBy) throws QlackFuseLexiconException {
-    for (Iterator<String> localeI = data.keySet().iterator(); localeI.hasNext(); ) {
+      String modifiedBy) {
+    for (String s : data.keySet()) {
       Criteria criteria = CriteriaFactory.createCriteria("LexData");
       criteria.createAlias("keyId", "key");
       criteria.add(Restrictions.eq("key.id", key.getId()));
-      String locale = localeI.next();
       criteria.createAlias("languageId", "lg");
-      criteria.add(Restrictions.eq("lg.locale", locale));
+      criteria.add(Restrictions.eq("lg.locale", s));
       LexData lexData = (LexData) criteria.prepareQuery(em).getSingleResult();
       lexData.setLastModifiedBy(modifiedBy);
       lexData.setLastModifiedOn(System.currentTimeMillis());
-      lexData.setValue(data.get(locale));
+      lexData.setValue(data.get(s));
       em.persist(lexData);
     }
   }
@@ -211,10 +202,9 @@ public class KeyManagerBean implements KeyManager {
    * {@inheritDoc}
    *
    * @param keyName {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public void deleteKeyByName(String keyName) throws QlackFuseLexiconException {
+  public void deleteKeyByName(String keyName) {
     deleteKey(getKeyByName(keyName));
   }
 
@@ -222,14 +212,13 @@ public class KeyManagerBean implements KeyManager {
    * {@inheritDoc}
    *
    * @param keyID {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public void deleteKeyByID(String keyID) throws QlackFuseLexiconException {
+  public void deleteKeyByID(String keyID) {
     deleteKey(em.find(LexKey.class, keyID));
   }
 
-  private void deleteKey(LexKey key) throws QlackFuseLexiconException {
+  private void deleteKey(LexKey key) {
     em.remove(key);
   }
 
@@ -253,10 +242,9 @@ public class KeyManagerBean implements KeyManager {
    *
    * @param keyName {@inheritDoc}
    * @return {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public LexKeyDTO viewKeyByName(String keyName) throws QlackFuseLexiconException {
+  public LexKeyDTO viewKeyByName(String keyName) {
     return ConverterUtil.lexKeyToLexKeyDTO(getKeyByName(keyName));
   }
 
@@ -266,11 +254,9 @@ public class KeyManagerBean implements KeyManager {
    * @param keyName {@inheritDoc}
    * @param newName {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public void renameKeyByName(String keyName, String newName, String modifiedBy)
-      throws QlackFuseLexiconException {
+  public void renameKeyByName(String keyName, String newName, String modifiedBy) {
     renameKey(getKeyByName(keyName), newName, modifiedBy);
   }
 
@@ -280,11 +266,9 @@ public class KeyManagerBean implements KeyManager {
    * @param keyID {@inheritDoc}
    * @param newName {@inheritDoc}
    * @param modifiedBy {@inheritDoc}
-   * @throws QlackFuseLexiconException {@inheritDoc}
    */
   @Override
-  public void renameKeyByID(String keyID, String newName, String modifiedBy)
-      throws QlackFuseLexiconException {
+  public void renameKeyByID(String keyID, String newName, String modifiedBy) {
     renameKey(em.find(LexKey.class, keyID), newName, modifiedBy);
   }
 
@@ -312,9 +296,9 @@ public class KeyManagerBean implements KeyManager {
       query.setParameter("groupId", groupId);
     }
     query = ApplyPagingParams.apply(query, paging);
-    List<LexKeyDTO> retVal = new ArrayList<LexKeyDTO>();
-    for (Iterator<LexKey> lexKeyI = query.getResultList().iterator(); lexKeyI.hasNext(); ) {
-      retVal.add(ConverterUtil.lexKeyToLexKeyDTO(lexKeyI.next()));
+    List<LexKeyDTO> retVal = new ArrayList<>();
+    for (LexKey o : (Iterable<LexKey>) query.getResultList()) {
+      retVal.add(ConverterUtil.lexKeyToLexKeyDTO(o));
     }
 
     return retVal.toArray(new LexKeyDTO[retVal.size()]);
@@ -345,9 +329,9 @@ public class KeyManagerBean implements KeyManager {
     }
     query.setParameter("nameSearchTerm", "%" + searchTerm.toUpperCase() + "%");
     query = ApplyPagingParams.apply(query, paging);
-    List<LexKeyDTO> retVal = new ArrayList<LexKeyDTO>();
-    for (Iterator<LexKey> lexKeyI = query.getResultList().iterator(); lexKeyI.hasNext(); ) {
-      retVal.add(ConverterUtil.lexKeyToLexKeyDTO(lexKeyI.next()));
+    List<LexKeyDTO> retVal = new ArrayList<>();
+    for (LexKey o : (Iterable<LexKey>) query.getResultList()) {
+      retVal.add(ConverterUtil.lexKeyToLexKeyDTO(o));
     }
 
     return retVal.toArray(new LexKeyDTO[retVal.size()]);
@@ -361,7 +345,7 @@ public class KeyManagerBean implements KeyManager {
    */
   @Override
   public HashMap<String, String> getTranslationsByKeyName(String keyName) {
-    HashMap<String, String> retVal = new HashMap<String, String>();
+    HashMap<String, String> retVal = new HashMap<>();
 
     Criteria criteria = CriteriaFactory.createCriteria("LexData");
     criteria.createAlias("languageId", "lg");
@@ -369,8 +353,7 @@ public class KeyManagerBean implements KeyManager {
     criteria.createAlias("keyId", "key");
     criteria.add(Restrictions.eq("key.name", keyName));
     List l = criteria.prepareQuery(em).getResultList();
-    for (Iterator<LexData> i = l.iterator(); i.hasNext(); ) {
-      LexData lexData = i.next();
+    for (LexData lexData : (Iterable<LexData>) l) {
       retVal.put(lexData.getLanguageId().getLocale(), lexData.getValue());
     }
 
@@ -386,7 +369,7 @@ public class KeyManagerBean implements KeyManager {
    */
   @Override
   public HashMap<String, String> getTranslationsForLocale(String locale, String filter) {
-    HashMap<String, String> retVal = new LinkedHashMap<String, String>();
+    HashMap<String, String> retVal = new LinkedHashMap<>();
 
     Criteria criteria = CriteriaFactory.createCriteria("LexData");
     criteria.createAlias("keyId", "key");
@@ -398,8 +381,7 @@ public class KeyManagerBean implements KeyManager {
           Restrictions.like("value", filter, MatchMode.ANYWHERE)));
     }
     List l = criteria.prepareQuery(em).getResultList();
-    for (Iterator<LexData> i = l.iterator(); i.hasNext(); ) {
-      LexData lexData = i.next();
+    for (LexData lexData : (Iterable<LexData>) l) {
       retVal.put(lexData.getKeyId().getName(), lexData.getValue());
     }
 
@@ -416,11 +398,11 @@ public class KeyManagerBean implements KeyManager {
   @Override
   public void updateTranslationsForLocale(String locale, HashMap<String, String> values,
       String modifiedBy) {
-    for (Iterator<String> keyI = values.keySet().iterator(); keyI.hasNext(); ) {
+    for (String s : values.keySet()) {
       Criteria criteria = CriteriaFactory.createCriteria("LexData");
       criteria.createAlias("languageId", "lg");
       criteria.add(Restrictions.eq("lg.locale", locale));
-      String key = keyI.next();
+      String key = s;
       criteria.createAlias("keyId", "key");
       criteria.add(Restrictions.eq("key.name", key));
       LexData lexData = (LexData) criteria.prepareQuery(em).getSingleResult();
@@ -445,8 +427,7 @@ public class KeyManagerBean implements KeyManager {
     LexLanguage lexLanguage = (LexLanguage) criteria.prepareQuery(em).getSingleResult();
 
     em.setFlushMode(FlushModeType.COMMIT);
-    for (Iterator<String> keyI = values.keySet().iterator(); keyI.hasNext(); ) {
-      String key = keyI.next();
+    for (String key : values.keySet()) {
       LexData lexData = new LexData();
       lexData.setKeyId(getKeyByName(key));
       lexData.setLanguageId(lexLanguage);
@@ -480,7 +461,7 @@ public class KeyManagerBean implements KeyManager {
       LexData lexData = (LexData) criteria.prepareQuery(em).getSingleResult();
       retVal = lexData.getValue();
     } catch (NoResultException ex) {
-      // do nothinh
+      // do nothing
     }
 
     return retVal;
@@ -496,7 +477,7 @@ public class KeyManagerBean implements KeyManager {
    */
   @Override
   public HashMap<String, String> getTranslationsForGroupAndLocale(String groupId, String locale) {
-    HashMap<String, String> retVal = new LinkedHashMap<String, String>();
+    HashMap<String, String> retVal = new LinkedHashMap<>();
 
     Query query = em.createQuery("SELECT d FROM LexData d WHERE d.languageId.locale = :locale "
         + "AND d.keyId.groupId.id = :groupId");
@@ -506,8 +487,7 @@ public class KeyManagerBean implements KeyManager {
 
     @SuppressWarnings("unchecked")
     List<LexData> l = query.getResultList();
-    for (Iterator<LexData> i = l.iterator(); i.hasNext(); ) {
-      LexData lexData = i.next();
+    for (LexData lexData : l) {
       retVal.put(lexData.getKeyId().getName(), lexData.getValue());
     }
 
