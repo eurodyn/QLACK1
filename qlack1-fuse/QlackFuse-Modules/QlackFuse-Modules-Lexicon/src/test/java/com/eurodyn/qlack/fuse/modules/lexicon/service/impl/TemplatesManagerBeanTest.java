@@ -55,7 +55,7 @@ class TemplatesManagerBeanTest {
   @Test
   void processTemplateByNameEmptyTest() throws QlackCommonsException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
-    Assertions.assertEquals(null, templatesManagerBean.processTemplateByName(TEMPLATE_NAME, null));
+    Assertions.assertNull(templatesManagerBean.processTemplateByName(TEMPLATE_NAME, null));
   }
 
   @Test

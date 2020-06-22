@@ -10,6 +10,10 @@ import com.eurodyn.qlack.fuse.modules.lexicon.model.LexKey;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexLanguage;
 import com.eurodyn.qlack.fuse.modules.lexicon.model.LexTemplate;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -199,6 +203,15 @@ public class InitTestValues {
     hashMap.put(createLexData().getKeyId().getName(), createLexData().getValue());
 
     return hashMap;
+  }
+
+  public byte[] getLanguagesByteArray() throws IOException {
+    Path resourceDirectory = Paths
+        .get("src/test/resources/en_translations.xls");
+
+    ClassLoader classLoader = getClass().getClassLoader();
+
+    return Files.readAllBytes(resourceDirectory);
   }
 
 }

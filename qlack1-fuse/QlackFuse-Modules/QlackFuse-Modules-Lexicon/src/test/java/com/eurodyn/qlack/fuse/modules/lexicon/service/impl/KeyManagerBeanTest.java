@@ -95,7 +95,7 @@ class KeyManagerBeanTest {
   }
 
   @Test
-  public void searchKeysEmptyTest() throws QlackFuseLexiconException {
+  void searchKeysEmptyTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, keyManagerBean.searchKeys(lexKeyDTO.getGroupId(), "Search Term", pagingParams).length);
   }

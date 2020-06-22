@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -29,10 +30,12 @@ class LanguageManagerBeanTest {
 
   private static final String EN_UK = "en_uk";
   private static final String EN = "en";
+  private static final String NEW_USER = "New User";
   private static LexLanguageDTO lexLanguageDTO;
   private static LexLanguage lexLanguage;
   private static LexLanguage[] lexLanguages;
   private static HashMap<String, String> hashMap;
+  private static byte[] lgXl;
   @InjectMocks
   private LanguageManagerBean languageManagerBean;
   @Mock
@@ -45,12 +48,13 @@ class LanguageManagerBeanTest {
   private PagingParams pagingParams;
 
   @BeforeAll
-  static void init() {
+  static void init() throws IOException {
     InitTestValues initTestValues = new InitTestValues();
     lexLanguageDTO = initTestValues.createLexLanguageDTO();
     lexLanguage = initTestValues.createLexLanguage();
     lexLanguages = initTestValues.createLexLanguages();
     hashMap = initTestValues.createLanguageHashMap();
+    lgXl = initTestValues.getLanguagesByteArray();
   }
 
   @Test
@@ -60,7 +64,7 @@ class LanguageManagerBeanTest {
 
   @Test
   void viewLanguageNullTest() throws QlackFuseLexiconException {
-    Assertions.assertEquals(null, languageManagerBean.viewLanguage(lexLanguageDTO.getId()));
+    Assertions.assertNull(languageManagerBean.viewLanguage(lexLanguageDTO.getId()));
   }
 
   @Test
@@ -131,6 +135,14 @@ class LanguageManagerBeanTest {
   void downloadLanguageTest() throws QlackFuseLexiconException {
     Mockito.when(keyManagerBean.getTranslationsForLocale(EN, null)).thenReturn(hashMap);
     Assertions.assertNotNull(languageManagerBean.downloadLanguage(EN));
+  }
+
+  @Test
+  void uploadLanguageTest() throws QlackFuseLexiconException {
+    languageManagerBean.uploadLanguage(EN, lgXl, NEW_USER);
+    Mockito.verify(keyManagerBean, Mockito.times(1))
+        .updateTranslationByKeyName("attachment_desc", EN, "Add attachment description",
+            NEW_USER);
   }
 
 }

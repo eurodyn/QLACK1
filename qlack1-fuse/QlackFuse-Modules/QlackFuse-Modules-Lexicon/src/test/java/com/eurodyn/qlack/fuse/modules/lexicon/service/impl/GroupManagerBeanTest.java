@@ -59,7 +59,7 @@ class GroupManagerBeanTest {
   }
 
   @Test
-  public void deleteGroupByIdNotFoundTest() throws QlackFuseLexiconException {
+  void deleteGroupByIdNotFoundTest() {
     Mockito.when(entityManager.find(LexGroup.class, lexGroupDTO.getId())).thenThrow(new IllegalArgumentException());
     Assertions
         .assertThrows(QlackFuseLexiconException.class, () -> groupManagerBean.deleteGroupByID(lexGroupDTO.getId()));
