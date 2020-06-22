@@ -27,9 +27,8 @@ import java.util.List;
  * @author European Dynamics SA
  */
 @ExtendWith(MockitoExtension.class)
-public class KeyManagerBeanTest {
+class KeyManagerBeanTest {
 
-  private static InitTestValues initTestValues;
   private static LexKeyDTO lexKeyDTO;
   private static LexLanguageDTO[] lexLanguages;
   private static LexKey lexKey;
@@ -47,8 +46,8 @@ public class KeyManagerBeanTest {
   private Query query;
 
   @BeforeAll
-  public static void init() {
-    initTestValues = new InitTestValues();
+  static void init() {
+    InitTestValues initTestValues = new InitTestValues();
     lexKeyDTO = initTestValues.createLexKeyDTO();
     lexLanguages = initTestValues.createLexLanguageDTOs();
     lexKey = initTestValues.createLexKey();
@@ -57,39 +56,39 @@ public class KeyManagerBeanTest {
   }
 
   @Test
-  public void createKeyTest() {
+  void createKeyTest() {
     Mockito.when(languageManagerBean.listLanguages(null, true)).thenReturn(lexLanguages);
     lexKeyDTO.setData(null);
     Assertions.assertNotNull(keyManagerBean.createKey(lexKeyDTO));
   }
 
   @Test
-  public void deleteKeyByIdTest() {
+  void deleteKeyByIdTest() {
     keyManagerBean.deleteKeyByID(lexKeyDTO.getId());
     Mockito.verify(entityManager, Mockito.times(1)).find(LexKey.class, lexKeyDTO.getId());
   }
 
   @Test
-  public void viewKeyByIdTest() throws QlackFuseLexiconException {
+  void viewKeyByIdTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexKey.class, lexKeyDTO.getId())).thenReturn(lexKey);
     Assertions.assertEquals(lexKey.getId(), keyManagerBean.viewKeyByID(lexKeyDTO.getId()).getId());
   }
 
   @Test
-  public void renameKeyByIdTest() {
+  void renameKeyByIdTest() {
     Mockito.when(entityManager.find(LexKey.class, lexKeyDTO.getId())).thenReturn(lexKey);
     keyManagerBean.renameKeyByID(lexKeyDTO.getId(), "New Key Name", "New User");
     Mockito.verify(entityManager, Mockito.times(1)).find(LexKey.class, lexKeyDTO.getId());
   }
 
   @Test
-  public void listKeysByGroupIDEmptyTest() {
+  void listKeysByGroupIDEmptyTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, keyManagerBean.listKeysByGroupID(lexKeyDTO.getId(), pagingParams).length);
   }
 
   @Test
-  public void listKeysByGroupIDTest() {
+  void listKeysByGroupIDTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(Arrays.asList(lexKeys));
     Assertions.assertEquals(1, keyManagerBean.listKeysByGroupID(lexKeyDTO.getId(), pagingParams).length);
@@ -102,20 +101,20 @@ public class KeyManagerBeanTest {
   }
 
   @Test
-  public void searchKeysTest() throws QlackFuseLexiconException {
+  void searchKeysTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(Arrays.asList(lexKeys));
     Assertions.assertEquals(1, keyManagerBean.searchKeys(lexKeyDTO.getGroupId(), "Search Term", pagingParams).length);
   }
 
   @Test
-  public void getTranslationsForGroupAndLocaleEmptyTest() {
+  void getTranslationsForGroupAndLocaleEmptyTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, keyManagerBean.getTranslationsForGroupAndLocale(lexKeyDTO.getGroupId(), "en").size());
   }
 
   @Test
-  public void getTranslationsForGroupAndLocaleTest() {
+  void getTranslationsForGroupAndLocaleTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(lexDataList);
     Assertions.assertEquals(1, keyManagerBean.getTranslationsForGroupAndLocale(lexKeyDTO.getGroupId(), "en").size());

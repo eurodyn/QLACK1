@@ -25,40 +25,28 @@ import java.util.HashMap;
  * @author European Dynamics SA
  */
 @ExtendWith(MockitoExtension.class)
-public class LanguageManagerBeanTest {
+class LanguageManagerBeanTest {
 
+  private static final String EN_UK = "en_uk";
+  private static final String EN = "en";
+  private static LexLanguageDTO lexLanguageDTO;
+  private static LexLanguage lexLanguage;
+  private static LexLanguage[] lexLanguages;
+  private static HashMap<String, String> hashMap;
   @InjectMocks
   private LanguageManagerBean languageManagerBean;
-
   @Mock
   private EntityManager entityManager;
-
   @Mock
   private KeyManagerBean keyManagerBean;
-
   @Mock
   private Query query;
-
   @Mock
   private PagingParams pagingParams;
 
-  private static InitTestValues initTestValues;
-
-  private static LexLanguageDTO lexLanguageDTO;
-
-  private static LexLanguage lexLanguage;
-
-  private static LexLanguage[] lexLanguages;
-
-  private final static String EN_UK = "en_uk";
-
-  private final static String EN = "en";
-
-  private static HashMap<String, String> hashMap;
-
   @BeforeAll
-  public static void init() {
-    initTestValues = new InitTestValues();
+  static void init() {
+    InitTestValues initTestValues = new InitTestValues();
     lexLanguageDTO = initTestValues.createLexLanguageDTO();
     lexLanguage = initTestValues.createLexLanguage();
     lexLanguages = initTestValues.createLexLanguages();
@@ -66,23 +54,23 @@ public class LanguageManagerBeanTest {
   }
 
   @Test
-  public void createLanguageTest() {
+  void createLanguageTest() {
     Assertions.assertEquals(lexLanguageDTO.getName(), languageManagerBean.createLanguage(lexLanguageDTO).getName());
   }
 
   @Test
-  public void viewLanguageNullTest() throws QlackFuseLexiconException {
+  void viewLanguageNullTest() throws QlackFuseLexiconException {
     Assertions.assertEquals(null, languageManagerBean.viewLanguage(lexLanguageDTO.getId()));
   }
 
   @Test
-  public void viewLanguageTest() throws QlackFuseLexiconException {
+  void viewLanguageTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexLanguage.class, lexLanguageDTO.getId())).thenReturn(lexLanguage);
     Assertions.assertEquals(lexLanguage.getName(), languageManagerBean.viewLanguage(lexLanguageDTO.getId()).getName());
   }
 
   @Test
-  public void getLanguageByLocaleTest() throws QlackFuseLexiconException {
+  void getLanguageByLocaleTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getSingleResult()).thenReturn(lexLanguage);
     Assertions.assertEquals(lexLanguage.getName(),
@@ -90,57 +78,57 @@ public class LanguageManagerBeanTest {
   }
 
   @Test
-  public void updateLanguageTest() throws QlackFuseLexiconException {
+  void updateLanguageTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexLanguage.class, lexLanguageDTO.getId())).thenReturn(lexLanguage);
     Assertions.assertEquals(lexLanguage.getName(), languageManagerBean.updateLanguage(lexLanguageDTO).getName());
   }
 
   @Test
-  public void listLanguagesEmptyTest() {
+  void listLanguagesEmptyTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, languageManagerBean.listLanguages(pagingParams, true).length);
   }
 
   @Test
-  public void listLanguagesEmptyOnlyActiveTest() {
+  void listLanguagesEmptyOnlyActiveTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, languageManagerBean.listLanguages(pagingParams, false).length);
   }
 
   @Test
-  public void listLanguagesTest() {
+  void listLanguagesTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(Arrays.asList(lexLanguages));
     Assertions.assertEquals(1, languageManagerBean.listLanguages(pagingParams, true).length);
   }
 
   @Test
-  public void getEffectiveLanguageNullTest() {
+  void getEffectiveLanguageNullTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
-    Assertions.assertEquals("en", languageManagerBean.getEffectiveLanguage(EN_UK, EN));
+    Assertions.assertEquals(EN, languageManagerBean.getEffectiveLanguage(EN_UK, EN));
   }
 
   @Test
-  public void getEffectiveLanguageTest() {
+  void getEffectiveLanguageTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(Arrays.asList(lexLanguages));
-    Assertions.assertEquals("en_uk", languageManagerBean.getEffectiveLanguage(EN_UK, EN));
+    Assertions.assertEquals(EN_UK, languageManagerBean.getEffectiveLanguage(EN_UK, EN));
   }
 
   @Test
-  public void getEffectiveLanguageScenario2Test() {
+  void getEffectiveLanguageScenario2Test() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(Arrays.asList(lexLanguages));
     Assertions.assertEquals("en", languageManagerBean.getEffectiveLanguage(null, EN));
   }
 
   @Test
-  public void downloadLanguageNullTest() throws QlackFuseLexiconException {
+  void downloadLanguageNullTest() throws QlackFuseLexiconException {
     Assertions.assertNotNull(languageManagerBean.downloadLanguage(EN));
   }
 
   @Test
-  public void downloadLanguageTest() throws QlackFuseLexiconException {
+  void downloadLanguageTest() throws QlackFuseLexiconException {
     Mockito.when(keyManagerBean.getTranslationsForLocale(EN, null)).thenReturn(hashMap);
     Assertions.assertNotNull(languageManagerBean.downloadLanguage(EN));
   }

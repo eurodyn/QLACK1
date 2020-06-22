@@ -15,7 +15,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,10 +28,9 @@ import java.util.logging.Logger;
 @Stateless(name = "GroupManagerBean")
 public class GroupManagerBean implements GroupManager {
 
+  private static final Logger logger = Logger.getLogger(GroupManagerBean.class.getName());
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
-
-  private static final Logger logger = Logger.getLogger(GroupManagerBean.class.getName());
 
   /**
    * {@inheritDoc}

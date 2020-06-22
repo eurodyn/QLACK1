@@ -22,10 +22,9 @@ import java.util.List;
  * @author European Dynamics SA
  */
 @ExtendWith(MockitoExtension.class)
-public class TemplatesManagerBeanTest {
+class TemplatesManagerBeanTest {
 
   private static final String TEMPLATE_NAME = "Test Template";
-  private static InitTestValues initTestValues;
   private static List<LexTemplate> lexTemplates;
   @InjectMocks
   private TemplatesManagerBean templatesManagerBean;
@@ -35,32 +34,32 @@ public class TemplatesManagerBeanTest {
   private Query query;
 
   @BeforeAll
-  public static void init() {
-    initTestValues = new InitTestValues();
+  static void init() {
+    InitTestValues initTestValues = new InitTestValues();
     lexTemplates = initTestValues.createLexTemplates();
   }
 
   @Test
-  public void getTemplateByNameEmptyTest() {
+  void getTemplateByNameEmptyTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(null, templatesManagerBean.getTemplateByName(TEMPLATE_NAME));
   }
 
   @Test
-  public void getTemplateByNameTest() {
+  void getTemplateByNameTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(lexTemplates);
     Assertions.assertEquals(lexTemplates.get(0).getValue(), templatesManagerBean.getTemplateByName(TEMPLATE_NAME));
   }
 
   @Test
-  public void processTemplateByNameEmptyTest() throws QlackCommonsException {
+  void processTemplateByNameEmptyTest() throws QlackCommonsException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(null, templatesManagerBean.processTemplateByName(TEMPLATE_NAME, null));
   }
 
   @Test
-  public void processTemplateByNameTest() throws QlackCommonsException {
+  void processTemplateByNameTest() throws QlackCommonsException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(lexTemplates);
     Assertions.assertEquals(TEMPLATE_NAME, templatesManagerBean.processTemplateByName(TEMPLATE_NAME, null));

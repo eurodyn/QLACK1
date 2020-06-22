@@ -30,7 +30,6 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +44,11 @@ import java.util.logging.Logger;
 @Stateless(name = "KeyManagerBean")
 public class KeyManagerBean implements KeyManager {
 
+  private static final Logger logger = Logger.getLogger(KeyManagerBean.class.getName());
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
-
   @EJB(name = "LanguageManagerBean")
   private LanguageManager langManager;
-
-  private static final Logger logger = Logger.getLogger(KeyManagerBean.class.getName());
 
   /**
    * {@inheritDoc}

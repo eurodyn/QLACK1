@@ -24,9 +24,8 @@ import java.util.List;
  * @author European Dynamics SA
  */
 @ExtendWith(MockitoExtension.class)
-public class GroupManagerBeanTest {
+class GroupManagerBeanTest {
 
-  private static InitTestValues initTestValues;
   private static LexGroupDTO lexGroupDTO;
   private static LexGroup lexGroup;
   private static List<LexGroup> lexGroups;
@@ -40,20 +39,20 @@ public class GroupManagerBeanTest {
   private Query query;
 
   @BeforeAll
-  public static void init() {
-    initTestValues = new InitTestValues();
+  static void init() {
+    InitTestValues initTestValues = new InitTestValues();
     lexGroupDTO = initTestValues.createLexGroupDTO();
     lexGroup = initTestValues.createLexGroup();
     lexGroups = initTestValues.createLexGroups();
   }
 
   @Test
-  public void createGroupTest() {
+  void createGroupTest() {
     Assertions.assertEquals(groupManagerBean.createGroup(lexGroupDTO), lexGroupDTO);
   }
 
   @Test
-  public void deleteGroupByIdTest() throws QlackFuseLexiconException {
+  void deleteGroupByIdTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexGroup.class, lexGroupDTO.getId())).thenReturn(lexGroup);
     groupManagerBean.deleteGroupByID(lexGroupDTO.getId());
     Mockito.verify(entityManager, Mockito.times(1)).remove(lexGroup);
@@ -67,44 +66,44 @@ public class GroupManagerBeanTest {
   }
 
   @Test
-  public void viewGroupByIDNullTest() throws QlackFuseLexiconException {
+  void viewGroupByIDNullTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexGroup.class, lexGroupDTO.getId())).thenReturn(null);
     Assertions.assertEquals(null, groupManagerBean.viewGroupByID(lexGroupDTO.getId()));
   }
 
   @Test
-  public void viewGroupByIDTest() throws QlackFuseLexiconException {
+  void viewGroupByIDTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexGroup.class, lexGroupDTO.getId())).thenReturn(lexGroup);
     Assertions.assertEquals(lexGroupDTO.getTitle(), groupManagerBean.viewGroupByID(lexGroupDTO.getId()).getTitle());
   }
 
   @Test
-  public void updateGroupTest() throws QlackFuseLexiconException {
+  void updateGroupTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.find(LexGroup.class, lexGroupDTO.getId())).thenReturn(lexGroup);
     Assertions.assertEquals(lexGroupDTO.getTitle(), groupManagerBean.updateGroup(lexGroupDTO).getTitle());
   }
 
   @Test
-  public void listGroupsEmptyTest() {
+  void listGroupsEmptyTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, groupManagerBean.listGroups(pagingParams).length);
   }
 
   @Test
-  public void listGroupsTest() {
+  void listGroupsTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(lexGroups);
     Assertions.assertEquals(1, groupManagerBean.listGroups(pagingParams).length);
   }
 
   @Test
-  public void searchGroupsEmptyTest() throws QlackFuseLexiconException {
+  void searchGroupsEmptyTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Assertions.assertEquals(0, groupManagerBean.searchGroups("search term", pagingParams).length);
   }
 
   @Test
-  public void searchGroupsTest() throws QlackFuseLexiconException {
+  void searchGroupsTest() throws QlackFuseLexiconException {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(lexGroups);
     Assertions.assertEquals(1, groupManagerBean.searchGroups("search term", pagingParams).length);

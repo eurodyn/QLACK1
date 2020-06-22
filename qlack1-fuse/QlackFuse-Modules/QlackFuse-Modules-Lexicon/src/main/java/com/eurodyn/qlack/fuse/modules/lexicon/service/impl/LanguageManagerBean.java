@@ -33,7 +33,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -47,13 +46,11 @@ import java.util.logging.Logger;
 @Stateless(name = "LanguageManagerBean")
 public class LanguageManagerBean implements LanguageManager {
 
+  private static final Logger logger = Logger.getLogger(LanguageManagerBean.class.getName());
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
-
   @EJB(name = "KeyManagerBean")
   private KeyManager keyManager;
-
-  private static final Logger logger = Logger.getLogger(LanguageManagerBean.class.getName());
 
   /**
    * {@inheritDoc}

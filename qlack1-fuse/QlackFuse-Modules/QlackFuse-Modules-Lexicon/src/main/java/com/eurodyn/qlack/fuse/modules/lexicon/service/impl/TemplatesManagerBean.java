@@ -27,10 +27,9 @@ import java.util.logging.Logger;
 @Stateless(name = "TemplatesManagerBean")
 public class TemplatesManagerBean implements TemplatesManager {
 
+  private static final Logger logger = Logger.getLogger(TemplatesManagerBean.class.getName());
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
-
-  private static final Logger logger = Logger.getLogger(TemplatesManagerBean.class.getName());
 
   @Override
   public String getTemplateByName(String templateName) {

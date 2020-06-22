@@ -44,7 +44,7 @@ public class AlAuditTrace implements Serializable {
   public String getId() {
     if (this.id == null) {
       this.id = java.util.UUID.randomUUID().toString();
-    };
+    }
     return this.id;
   }
 
