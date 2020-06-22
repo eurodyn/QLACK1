@@ -95,7 +95,8 @@
     <sonar.coverage.exclusions>
       src/main/java/com/eurodyn/qlack/fuse/modules/**/model/*,
       src/main/java/com/eurodyn/qlack/fuse/modules/**/dto/*,
-      src/main/java/com/eurodyn/qlack/fuse/modules/**/exception/*
+      src/main/java/com/eurodyn/qlack/fuse/modules/**/exception/*,
+      src/main/java/com/eurodyn/qlack/fuse/modules/**/util/*
     </sonar.coverage.exclusions>
   </properties>
 
