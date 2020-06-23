@@ -17,7 +17,7 @@ import java.util.Properties;
 @Slf4j
 public class PropertiesLoaderSingleton {
 
-  private static PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
+  private static final PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
 
   //properties
   private static Properties properties;

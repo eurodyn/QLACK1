@@ -9,6 +9,7 @@ import com.eurodyn.qlack.fuse.modules.mailing.model.MaiInternalAttachment;
 import com.eurodyn.qlack.fuse.modules.mailing.model.MaiInternalMessages;
 import com.eurodyn.qlack.fuse.modules.mailing.service.InternalMessageManager;
 import com.eurodyn.qlack.fuse.modules.mailing.util.ConverterUtil;
+import com.eurodyn.qlack.fuse.modules.mailing.util.CriteriaBuilderUtil;
 import com.eurodyn.qlack.fuse.modules.mailing.util.MaiConstants;
 import com.eurodyn.qlack.fuse.modules.mailing.util.MailingMessage;
 import com.eurodyn.qlack.fuse.modules.mailing.util.PropertiesLoaderSingleton;
@@ -21,7 +22,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import net.bzdyl.ejb3.criteria.Criteria;
-import net.bzdyl.ejb3.criteria.CriteriaFactory;
 import net.bzdyl.ejb3.criteria.restrictions.Restrictions;
 
 import java.util.ArrayList;
@@ -39,6 +39,9 @@ import java.util.logging.Logger;
 public class InternalMessageManagerBean implements InternalMessageManager {
 
   private static final Logger logger = Logger.getLogger(InternalMessageManagerBean.class.getName());
+  private final CriteriaBuilderUtil messageCriteriaBuilderUtil = new CriteriaBuilderUtil(MaiConstants.INTERNAL_MSG);
+  private final CriteriaBuilderUtil attachmentCriteriaBuilderUtil = new CriteriaBuilderUtil(
+      MaiConstants.INTERNAL_ATTACHMENT);
   @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
   private EntityManager em;
   @Resource(name = "QlackConnectionFactory")
@@ -69,10 +72,10 @@ public class InternalMessageManagerBean implements InternalMessageManager {
         dto.getInternalAttachments();
 
     if (dto.getFwdAttachmentId() != null) {
-      //gets the internal attachement for fwding.
+      //gets the internal attachment for fwding.
       InternalMsgAttachmentDTO internalMsgAttachmentDTO =
           saveInternalAttachment(dto.getFwdAttachmentId());
-      //creates new row for fwded attachement.
+      //creates new row for fwded attachment.
       internalMsgAttachmentDTO.setId(null);
       if (internalMsgAttachments == null) {
         internalMsgAttachments = new ArrayList<>();
@@ -119,7 +122,7 @@ public class InternalMessageManagerBean implements InternalMessageManager {
    */
   @Override
   public List<InternalMessagesDTO> getInternalInboxFolder(String userId) {
-    Criteria criteria = CriteriaFactory.createCriteria(MaiConstants.INTERNAL_MSG);
+    Criteria criteria = messageCriteriaBuilderUtil.getCriteria();
     if (userId != null) {
       criteria.add(Restrictions.eq(MaiConstants.INTERNAL_MSG_TO, userId));
       criteria.add(Restrictions.ne(MaiConstants.INTERNAL_MSG_DELETE_TYPE, "I"));
@@ -135,7 +138,6 @@ public class InternalMessageManagerBean implements InternalMessageManager {
       logger.log(Level.FINEST, "dto.getMessage()=", dto.getMessage());
       logger
           .log(Level.FINEST, "dto.getInternalAttachments()=", dto.getInternalAttachments().size());
-
     }
 
     return dtoList;
@@ -150,7 +152,7 @@ public class InternalMessageManagerBean implements InternalMessageManager {
    */
   @Override
   public long getMailCount(String userId, String status) {
-    Criteria criteria = CriteriaFactory.createCriteria(MaiConstants.INTERNAL_MSG);
+    Criteria criteria = messageCriteriaBuilderUtil.getCriteria();
     if (userId != null) {
       criteria.add(Restrictions.eq(MaiConstants.INTERNAL_MSG_TO, userId));
       criteria.add(Restrictions.ne(MaiConstants.INTERNAL_MSG_DELETE_TYPE, "I"));
@@ -175,9 +177,8 @@ public class InternalMessageManagerBean implements InternalMessageManager {
     if (status != null) {
       q.setParameter("status", status.toUpperCase());
     }
-    Long count = (Long) q.getSingleResult();
 
-    return count;
+    return (Long) q.getSingleResult();
   }
 
   /**
@@ -188,17 +189,16 @@ public class InternalMessageManagerBean implements InternalMessageManager {
    */
   @Override
   public List<InternalMessagesDTO> getInternalSentFolder(String userId) {
-    Criteria criteria = CriteriaFactory.createCriteria(MaiConstants.INTERNAL_MSG);
+    Criteria criteria = messageCriteriaBuilderUtil.getCriteria();
     if (userId != null) {
       criteria.add(Restrictions.eq(MaiConstants.INTERNAL_MSG_FRM, userId));
       criteria.add(Restrictions.ne(MaiConstants.INTERNAL_MSG_DELETE_TYPE, "S"));
     }
     Query query = criteria.prepareQuery(em);
     List<MaiInternalMessages> maiInternalMessagesList = query.getResultList();
-    List<InternalMessagesDTO> imdtos = ConverterUtil
-        .convertToInternalMessagesDTOList(maiInternalMessagesList, em);
 
-    return imdtos;
+    return ConverterUtil
+        .convertToInternalMessagesDTOList(maiInternalMessagesList, em);
   }
 
   /**
@@ -289,7 +289,7 @@ public class InternalMessageManagerBean implements InternalMessageManager {
    */
   @Override
   public List<InternalMsgAttachmentDTO> getInternalAttachments(String messageId) {
-    Criteria criteria = CriteriaFactory.createCriteria(MaiConstants.INTERNAL_ATTACHMENT);
+    Criteria criteria = attachmentCriteriaBuilderUtil.getCriteria();
     if (messageId != null) {
       criteria.add(Restrictions.eq(MaiConstants.INTERNAL_ATTACHMENT_MAIL_ID, messageId));
     }
@@ -315,7 +315,7 @@ public class InternalMessageManagerBean implements InternalMessageManager {
    */
   @Override
   public InternalMsgAttachmentDTO saveInternalAttachment(String attachmentId) {
-    Criteria criteria = CriteriaFactory.createCriteria(MaiConstants.INTERNAL_ATTACHMENT);
+    Criteria criteria = attachmentCriteriaBuilderUtil.getCriteria();
     if (attachmentId != null) {
       criteria.add(Restrictions.eq(MaiConstants.INTERNAL_ATTACHMENT_ID, attachmentId));
     }

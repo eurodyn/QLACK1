@@ -6,17 +6,16 @@ import com.eurodyn.qlack.fuse.modules.mailing.model.MaiAttachment;
 import com.eurodyn.qlack.fuse.modules.mailing.model.MaiEmail;
 import com.eurodyn.qlack.fuse.modules.mailing.service.MailManager;
 import com.eurodyn.qlack.fuse.modules.mailing.util.ConverterUtil;
+import com.eurodyn.qlack.fuse.modules.mailing.util.CriteriaBuilderUtil;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceContext;
 import net.bzdyl.ejb3.criteria.Criteria;
-import net.bzdyl.ejb3.criteria.CriteriaFactory;
 import net.bzdyl.ejb3.criteria.restrictions.Disjunction;
 import net.bzdyl.ejb3.criteria.restrictions.Restrictions;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -30,6 +29,7 @@ import java.util.logging.Logger;
 public class MailManagerBean implements MailManager {
 
   private static final Logger logger = Logger.getLogger(MailManagerBean.class.getName());
+  private final CriteriaBuilderUtil criteriaBuilderUtil = new CriteriaBuilderUtil("MaiEmail");
   @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
   private EntityManager em;
 
@@ -40,8 +40,8 @@ public class MailManagerBean implements MailManager {
    */
   @Override
   public void queueEmails(List<EmailDTO> dtos) {
-    for (Iterator<EmailDTO> emailsIterator = dtos.iterator(); emailsIterator.hasNext(); ) {
-      queueEmail(emailsIterator.next());
+    for (EmailDTO dto : dtos) {
+      queueEmail(dto);
     }
   }
 
@@ -71,15 +71,14 @@ public class MailManagerBean implements MailManager {
 
     // Process attachments.
     if (dto.getAttachments() != null && !dto.getAttachments().isEmpty()) {
-      Set<MaiAttachment> attachments = new HashSet<MaiAttachment>();
-      for (Iterator<AttachmentDTO> attI = dto.getAttachments().iterator(); attI.hasNext(); ) {
-        AttachmentDTO aDTO = attI.next();
+      Set<MaiAttachment> attachments = new HashSet<>();
+      for (AttachmentDTO aDTO : dto.getAttachments()) {
         MaiAttachment attachment = new MaiAttachment();
         attachment.setContentType(aDTO.getContentType());
         attachment.setData(aDTO.getData());
         attachment.setFilename(aDTO.getFilename());
         attachment.setEmailId(entity);
-        attachment.setAttachmentSize(new Long(aDTO.getData().length));
+        attachment.setAttachmentSize((long) aDTO.getData().length);
         em.persist(attachment);
         attachments.add(attachment);
       }
@@ -97,7 +96,7 @@ public class MailManagerBean implements MailManager {
    */
   @Override
   public void cleanup(Long date, EMAIL_STATUS[] status) {
-    Criteria criteria = CriteriaFactory.createCriteria("MaiEmail");
+    Criteria criteria = criteriaBuilderUtil.getCriteria();
 
     // Add status.
     if (status != null && status.length > 0) {
@@ -110,14 +109,14 @@ public class MailManagerBean implements MailManager {
 
     // Add date.
     if (date != null) {
-      criteria.add(Restrictions.le("addedOnDate", date.longValue()));
+      criteria.add(Restrictions.le("addedOnDate", date));
     }
 
     // Delete matching emails.
     em.setFlushMode(FlushModeType.COMMIT);
     List<MaiEmail> l = criteria.prepareQuery(em).getResultList();
-    for (Iterator<MaiEmail> lI = l.iterator(); lI.hasNext(); ) {
-      em.remove(lI.next());
+    for (MaiEmail maiEmail : l) {
+      em.remove(maiEmail);
     }
   }
 

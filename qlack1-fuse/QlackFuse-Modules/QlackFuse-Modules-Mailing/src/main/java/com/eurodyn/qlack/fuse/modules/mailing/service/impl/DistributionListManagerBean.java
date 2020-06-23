@@ -2,18 +2,17 @@ package com.eurodyn.qlack.fuse.modules.mailing.service.impl;
 
 import com.eurodyn.qlack.fuse.modules.mailing.dto.ContactDTO;
 import com.eurodyn.qlack.fuse.modules.mailing.dto.DistributionListDTO;
-import com.eurodyn.qlack.fuse.modules.mailing.exception.QlackFuseMailingException;
 import com.eurodyn.qlack.fuse.modules.mailing.model.MaiContact;
 import com.eurodyn.qlack.fuse.modules.mailing.model.MaiDistributionList;
 import com.eurodyn.qlack.fuse.modules.mailing.service.DistributionListManager;
 import com.eurodyn.qlack.fuse.modules.mailing.util.ConverterUtil;
+import com.eurodyn.qlack.fuse.modules.mailing.util.CriteriaBuilderUtil;
 import com.eurodyn.qlack.fuse.modules.mailing.util.MaiConstants;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import net.bzdyl.ejb3.criteria.Criteria;
-import net.bzdyl.ejb3.criteria.CriteriaFactory;
 import net.bzdyl.ejb3.criteria.restrictions.Restrictions;
 
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ import java.util.List;
 @Stateless(name = "DistributionListManagerBean")
 public class DistributionListManagerBean implements DistributionListManager {
 
+  private final CriteriaBuilderUtil criteriaBuilderUtil = new CriteriaBuilderUtil(MaiConstants.DISTRIBUTIONLIST);
   @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
   private EntityManager em;
 
@@ -35,7 +35,7 @@ public class DistributionListManagerBean implements DistributionListManager {
    * Create a new distribution list.
    */
   @Override
-  public void createDistributionList(DistributionListDTO dto) throws QlackFuseMailingException {
+  public void createDistributionList(DistributionListDTO dto) {
     em.persist(ConverterUtil.convertToDistributionListEntity(dto));
   }
 
@@ -43,7 +43,7 @@ public class DistributionListManagerBean implements DistributionListManager {
    * Edit an existing distribution list.
    */
   @Override
-  public void editDistributionList(DistributionListDTO dto) throws QlackFuseMailingException {
+  public void editDistributionList(DistributionListDTO dto) {
     em.merge(ConverterUtil.convertToDistributionListEntity(dto));
   }
 
@@ -79,11 +79,9 @@ public class DistributionListManagerBean implements DistributionListManager {
    */
   @Override
   public List<DistributionListDTO> search(DistributionListDTO dto) {
-    Criteria criteria = CriteriaFactory.createCriteria(MaiConstants.DISTRIBUTIONLIST);
-    if (dto != null) {
-      if (dto.getName() != null) {
-        criteria.add(Restrictions.eq(MaiConstants.DISTRIBUTIONLIST_NAME, dto.getName()));
-      }
+    Criteria criteria = criteriaBuilderUtil.getCriteria();
+    if ((dto != null) && (dto.getName() != null)) {
+      criteria.add(Restrictions.eq(MaiConstants.DISTRIBUTIONLIST_NAME, dto.getName()));
     }
     Query query = criteria.prepareQuery(em);
 

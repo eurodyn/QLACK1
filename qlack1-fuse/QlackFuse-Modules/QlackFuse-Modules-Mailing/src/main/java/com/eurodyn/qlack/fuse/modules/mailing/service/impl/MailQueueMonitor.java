@@ -41,7 +41,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -54,25 +53,19 @@ import java.util.logging.Logger;
 @Startup
 public class MailQueueMonitor {
 
-  @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
-  private EntityManager em;
-
-  @EJB(name = "MailManagerBean")
-  private MailManager mailManager;
-
-  @Resource
-  private SessionContext context;
-
-  @Resource(mappedName = "mail/QlackMailSession")
-  private Session session;
-
   private static final Logger logger = Logger.getLogger(MailQueueMonitor.class.getName());
-
   // How often (in msec) to check for new queued emails.
   private static final long timerFrequency = 10000;
-
   // Maximum number of tries to send a previously failed e-mail.
-  private final static byte maxTries = 3;
+  private static final byte maxTries = 3;
+  @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
+  private EntityManager em;
+  @EJB(name = "MailManagerBean")
+  private MailManager mailManager;
+  @Resource
+  private SessionContext context;
+  @Resource(mappedName = "mail/QlackMailSession")
+  private Session session;
 
   /**
    * Initialize the MailingManager schedule with specified poll period.
@@ -84,8 +77,8 @@ public class MailQueueMonitor {
 
     // Remove any already running schedules.
     Collection timers = context.getTimerService().getTimers();
-    for (Iterator timersI = timers.iterator(); timersI.hasNext(); ) {
-      Timer timer = (Timer) timersI.next();
+    for (Object o : timers) {
+      Timer timer = (Timer) o;
       if ((timer.getInfo() != null) && (timer.getInfo().equals("MailManager"))) {
         logger.log(Level.WARNING, "Found an already running MailManager which will be"
             + " stopped.");
@@ -106,8 +99,8 @@ public class MailQueueMonitor {
   private void shutdown() {
     logger.log(Level.CONFIG, "Shutting down MailingManager schedule.");
     Collection timers = context.getTimerService().getTimers();
-    for (Iterator timersI = timers.iterator(); timersI.hasNext(); ) {
-      Timer timer = (Timer) timersI.next();
+    for (Object o : timers) {
+      Timer timer = (Timer) o;
       if ((timer.getInfo() != null) && (timer.getInfo().equals("MailManager"))) {
         timer.cancel();
         break;
@@ -127,8 +120,7 @@ public class MailQueueMonitor {
     List<MaiEmail> emails = criteria.prepareQuery(em).getResultList();
     if (!emails.isEmpty()) {
       logger.log(Level.FINER, "Found {0} email(s) to be sent.", emails.size());
-      for (Iterator<MaiEmail> emailsI = emails.iterator(); emailsI.hasNext(); ) {
-        MaiEmail email = emailsI.next();
+      for (MaiEmail email : emails) {
         try {
           email.setDateSent(System.currentTimeMillis());
           email.setTries((byte) (email.getTries() + 1));
@@ -158,8 +150,7 @@ public class MailQueueMonitor {
           List<AttachmentDTO> attachmentList = new ArrayList<>();
           Set<MaiAttachment> attachments = email.getMaiAttachments();
           if (attachments != null && !attachments.isEmpty()) {
-            for (Iterator<MaiAttachment> aI = attachments.iterator(); aI.hasNext(); ) {
-              MaiAttachment attachment = aI.next();
+            for (MaiAttachment attachment : attachments) {
               AttachmentDTO attachmentDTO = new AttachmentDTO();
               attachmentDTO.setContentType(attachment.getContentType());
               attachmentDTO.setData(attachment.getData());
@@ -170,12 +161,12 @@ public class MailQueueMonitor {
           }
 
           send(dto);
-          email.setStatus(MailManagerBean.EMAIL_STATUS.SENT.toString());
+          email.setStatus(EMAIL_STATUS.SENT.toString());
         } catch (Exception ex) {
           // We catch an Exception here, since we do not want an error to cancel the timer.
           logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
           if (email.getTries() >= maxTries) {
-            email.setStatus(MailManagerBean.EMAIL_STATUS.FAILED.toString());
+            email.setStatus(EMAIL_STATUS.FAILED.toString());
             email.setServerResponse(ex.getCause() != null
                 ? ex.getCause().getLocalizedMessage()
                 : ex.getLocalizedMessage());
