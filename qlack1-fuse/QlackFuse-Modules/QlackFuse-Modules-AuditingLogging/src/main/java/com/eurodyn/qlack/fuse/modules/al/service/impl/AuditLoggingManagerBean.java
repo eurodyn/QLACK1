@@ -356,8 +356,7 @@ public class AuditLoggingManagerBean implements AuditLoggingManager {
           Predicate pr = root.get(searchDTO.getColumn().name()).in(searchDTO.getValue());
           cq = addPredicate(cq, cb, pr);
         } else if (SearchOperator.LIKE == searchDTO.getOperator()) {
-          Expression expression = root.get(searchDTO.getColumn().name());
-          Predicate pr = cb.like(expression, "%" + searchDTO.getValue().get(0) + "%");
+          Predicate pr = cb.like(root.get(searchDTO.getColumn().name()), "%" + searchDTO.getValue().get(0) + "%");
 
           cq = addPredicate(cq, cb, pr);
         }
@@ -365,15 +364,13 @@ public class AuditLoggingManagerBean implements AuditLoggingManager {
     }
 
     if (startDate != null) {
-      Expression expression = root.get("createdOn");
-      Predicate pr = cb.greaterThanOrEqualTo(expression, startDate.getTime());
+      Predicate pr = cb.greaterThanOrEqualTo(root.get("createdOn"), startDate.getTime());
 
       cq = addPredicate(cq, cb, pr);
 
     }
     if (endDate != null) {
-      Expression expression = root.get("createdOn");
-      Predicate pr = cb.lessThanOrEqualTo(expression, endDate.getTime());
+      Predicate pr = cb.lessThanOrEqualTo(root.get("createdOn"), endDate.getTime());
 
       cq = addPredicate(cq, cb, pr);
     }
@@ -410,9 +407,8 @@ public class AuditLoggingManagerBean implements AuditLoggingManager {
             cq = addPredicate(cq, cb, pr);
           }
         } else {
-          Expression expression = root.get(searchDTO.getColumn().name());
           // case insensitive search
-          expression = cb.upper(expression);
+          Expression expression = cb.upper(root.get(searchDTO.getColumn().name()));
           String fieldValue = searchDTO.getValue().get(0);
           fieldValue = fieldValue.toUpperCase();
           if (SearchOperator.EQUAL == searchDTO.getOperator()) {
@@ -430,16 +426,11 @@ public class AuditLoggingManagerBean implements AuditLoggingManager {
     }
 
     if (startDate != null) {
-      Expression expression = root.get("createdOn");
-      Predicate pr = cb.greaterThanOrEqualTo(expression, startDate.getTime());
-
+      Predicate pr = cb.greaterThanOrEqualTo(root.get("createdOn"), startDate.getTime());
       cq = addPredicate(cq, cb, pr);
-
     }
     if (endDate != null) {
-      Expression expression = root.get("createdOn");
-      Predicate pr = cb.lessThanOrEqualTo(expression, endDate.getTime());
-
+      Predicate pr = cb.lessThanOrEqualTo(root.get("createdOn"), endDate.getTime());
       cq = addPredicate(cq, cb, pr);
     }
 

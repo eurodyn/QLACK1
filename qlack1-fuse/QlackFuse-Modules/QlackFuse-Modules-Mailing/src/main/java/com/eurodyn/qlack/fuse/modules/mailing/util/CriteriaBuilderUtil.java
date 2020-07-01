@@ -9,10 +9,6 @@ public class CriteriaBuilderUtil {
 
   private final Criteria criteria;
 
-  private CriteriaBuilderUtil(Criteria criteria) {
-    this.criteria = criteria;
-  }
-
   public CriteriaBuilderUtil(String criteriaBuilder) {
     this.criteria = CriteriaFactory.createCriteria(criteriaBuilder);
   }
