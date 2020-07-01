@@ -5,8 +5,8 @@ package com.eurodyn.qlack.fuse.modules.scheduler.util;
  */
 public class SchedulerJobClassLoader extends ClassLoader {
 
-  private byte[] clazz;
-  private String className;
+  private final byte[] clazz;
+  private final String className;
 
   /**
    * Constructor with the class in byteArray and the class name.

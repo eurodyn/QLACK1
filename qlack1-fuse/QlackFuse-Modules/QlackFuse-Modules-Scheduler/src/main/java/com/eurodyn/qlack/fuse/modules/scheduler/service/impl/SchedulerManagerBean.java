@@ -20,7 +20,6 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,10 +32,9 @@ import java.util.logging.Logger;
 @Stateless(name = "SchedulerManagerBean")
 public class SchedulerManagerBean implements SchedulerManager {
 
+  private static final Logger logger = Logger.getLogger(SchedulerManagerBean.class.getName());
   @EJB
   private SchedulerMonitorBean schedulerMonitor;
-
-  private static final Logger logger = Logger.getLogger(SchedulerManagerBean.class.getName());
 
   /**
    * {@inheritDoc}
@@ -52,9 +50,11 @@ public class SchedulerManagerBean implements SchedulerManager {
       logger.log(Level.FINE, "Scheduling job ''{1}.{0}'' with trigger ''{3}.{2}''.",
           new String[]{job.getJobName(), job.getJobGroup(), trigger.getTriggerName(),
               trigger.getTriggerGroup()});
-      SchedulerMonitorBean.getSchedulerInstance().scheduleJob(
-          QuartzConverters.getQuartzJob(job),
-          QuartzConverters.getQuartzTrigger(trigger, job.getJobName(), job.getJobGroup()));
+      schedulerMonitor.
+          getSchedulerInstance().
+          scheduleJob(
+              QuartzConverters.getQuartzJob(job),
+              QuartzConverters.getQuartzTrigger(trigger, job.getJobName(), job.getJobGroup()));
     } catch (ParseException | SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0002,
@@ -101,7 +101,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public void clear() throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance().clear();
+      schedulerMonitor.getSchedulerInstance().clear();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -117,7 +117,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public void pauseAll() throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance().pauseAll();
+      schedulerMonitor.getSchedulerInstance().pauseAll();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -134,7 +134,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public boolean isShutdown() throws QlackFuseSchedulerException {
     try {
-      return SchedulerMonitorBean.getSchedulerInstance().isShutdown();
+      return schedulerMonitor.getSchedulerInstance().isShutdown();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -151,7 +151,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public boolean isStarted() throws QlackFuseSchedulerException {
     try {
-      return SchedulerMonitorBean.getSchedulerInstance().isStarted();
+      return schedulerMonitor.getSchedulerInstance().isStarted();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -168,7 +168,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public boolean isInStandbyMode() throws QlackFuseSchedulerException {
     try {
-      return SchedulerMonitorBean.getSchedulerInstance().isInStandbyMode();
+      return schedulerMonitor.getSchedulerInstance().isInStandbyMode();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -204,7 +204,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public void standby() throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance().standby();
+      schedulerMonitor.getSchedulerInstance().standby();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -220,7 +220,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public void resumeAll() throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance().resumeAll();
+      schedulerMonitor.getSchedulerInstance().resumeAll();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -239,7 +239,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public boolean deleteJob(String jobName, String jobGroup) throws QlackFuseSchedulerException {
     try {
-      return SchedulerMonitorBean.getSchedulerInstance()
+      return schedulerMonitor.getSchedulerInstance()
           .deleteJob(JobKey.jobKey(jobName, jobGroup));
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -260,9 +260,8 @@ public class SchedulerManagerBean implements SchedulerManager {
     boolean retVal = true;
 
     try {
-      for (Iterator<String> jobsI = jobs.keySet().iterator(); jobsI.hasNext(); ) {
-        String nextJob = jobsI.next();
-        retVal = retVal && SchedulerMonitorBean.getSchedulerInstance()
+      for (String nextJob : jobs.keySet()) {
+        retVal = retVal && schedulerMonitor.getSchedulerInstance()
             .deleteJob(JobKey.jobKey(nextJob, jobs.get(nextJob)));
       }
     } catch (SchedulerException ex) {
@@ -290,7 +289,7 @@ public class SchedulerManagerBean implements SchedulerManager {
     SchedulerWrappedJob retVal = null;
 
     try {
-      JobDetail jobDetail = SchedulerMonitorBean.getSchedulerInstance()
+      JobDetail jobDetail = schedulerMonitor.getSchedulerInstance()
           .getJobDetail(JobKey.jobKey(jobName, jobGroup));
       if (jobDetail != null) {
         retVal = new SchedulerWrappedJob();
@@ -325,7 +324,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public String getSchedulerInstanceID() throws QlackFuseSchedulerException {
     try {
-      return SchedulerMonitorBean.getSchedulerInstance().getSchedulerInstanceId();
+      return schedulerMonitor.getSchedulerInstance().getSchedulerInstanceId();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -342,7 +341,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public String getSchedulerName() throws QlackFuseSchedulerException {
     try {
-      return SchedulerMonitorBean.getSchedulerInstance().getSchedulerName();
+      return schedulerMonitor.getSchedulerInstance().getSchedulerName();
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -358,7 +357,7 @@ public class SchedulerManagerBean implements SchedulerManager {
    * @throws SchedulerException if an exception occurs while getTrigger
    */
   private Trigger getTrigger(String triggerName, String triggerGroup) throws SchedulerException {
-    return SchedulerMonitorBean.getSchedulerInstance()
+    return schedulerMonitor.getSchedulerInstance()
         .getTrigger(TriggerKey.triggerKey(triggerName, triggerGroup));
   }
 
@@ -420,7 +419,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   @Override
   public void pauseJob(String jobName, String jobGroup) throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance().pauseJob(JobKey.jobKey(jobName, jobGroup));
+      schedulerMonitor.getSchedulerInstance().pauseJob(JobKey.jobKey(jobName, jobGroup));
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
@@ -439,7 +438,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   public void pauseTrigger(String triggerName, String triggerGroup)
       throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance()
+      schedulerMonitor.getSchedulerInstance()
           .pauseTrigger(TriggerKey.triggerKey(triggerName, triggerGroup));
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
@@ -460,7 +459,7 @@ public class SchedulerManagerBean implements SchedulerManager {
   public void rescheduleJob(String oldTriggerName, String oldTriggerGroup,
       SchedulerWrappedTrigger trigger) throws QlackFuseSchedulerException {
     try {
-      SchedulerMonitorBean.getSchedulerInstance()
+      schedulerMonitor.getSchedulerInstance()
           .rescheduleJob(TriggerKey.triggerKey(oldTriggerName, oldTriggerGroup),
               QuartzConverters.getQuartzTrigger(trigger, oldTriggerName, oldTriggerGroup));
     } catch (SchedulerException | ParseException ex) {
@@ -502,10 +501,10 @@ public class SchedulerManagerBean implements SchedulerManager {
             .put(Constants.QSCH_CLASS_NAME, wrappedJob.getDataMap().get(Constants.QSCH_CLASS_NAME));
         jobDataMap.put(Constants.QSCH_CLASS_ARRAY,
             wrappedJob.getDataMap().get(Constants.QSCH_CLASS_ARRAY));
-        SchedulerMonitorBean.getSchedulerInstance()
+        schedulerMonitor.getSchedulerInstance()
             .triggerJob(JobKey.jobKey(jobName, jobGroup), jobDataMap);
       } else {
-        SchedulerMonitorBean.getSchedulerInstance().triggerJob(JobKey.jobKey(jobName, jobGroup));
+        schedulerMonitor.getSchedulerInstance().triggerJob(JobKey.jobKey(jobName, jobGroup));
       }
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);

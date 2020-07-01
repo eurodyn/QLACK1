@@ -29,7 +29,7 @@ public class SchedulerMonitorBean {
    *
    * @return Scheduler
    */
-  protected static Scheduler getSchedulerInstance() {
+  protected Scheduler getSchedulerInstance() {
     return scheduler;
   }
 
