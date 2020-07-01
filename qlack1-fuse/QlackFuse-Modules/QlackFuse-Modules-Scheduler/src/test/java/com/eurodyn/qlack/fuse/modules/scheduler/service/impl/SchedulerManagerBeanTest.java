@@ -27,7 +27,7 @@ import java.util.Date;
  */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class SchedulerManagerBeanTest {
+class SchedulerManagerBeanTest {
 
   private static final String jobName = "Test Job Name";
   @InjectMocks

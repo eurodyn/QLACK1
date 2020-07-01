@@ -25,7 +25,7 @@ import java.util.List;
  */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class AuditLevelManagerBeanTest {
+class AuditLevelManagerBeanTest {
 
   @InjectMocks
   private AuditLevelManagerBean auditLevelManagerBean;

@@ -35,7 +35,7 @@ import java.util.List;
  */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class InternalMessageManagerBeanTest {
+class InternalMessageManagerBeanTest {
 
   private static final String USER_ID = "user";
   @Mock

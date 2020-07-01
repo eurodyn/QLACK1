@@ -21,7 +21,7 @@ import org.quartz.SchedulerException;
  */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class SchedulerMonitorBeanTest {
+class SchedulerMonitorBeanTest {
 
   @InjectMocks
   private SchedulerMonitorBean schedulerMonitorBean;

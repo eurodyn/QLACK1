@@ -32,7 +32,7 @@ import java.util.List;
  */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(Lifecycle.PER_CLASS)
-public class DistributionListManagerBeanTest {
+class DistributionListManagerBeanTest {
 
   private DistributionListDTO distributionListDTO;
   private MaiDistributionList maiDistributionList;
