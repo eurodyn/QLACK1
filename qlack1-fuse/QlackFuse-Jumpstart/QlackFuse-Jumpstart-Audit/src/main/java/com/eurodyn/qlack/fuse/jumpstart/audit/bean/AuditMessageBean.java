@@ -38,7 +38,7 @@ public class AuditMessageBean implements MessageListener {
   @Resource
   private UserTransaction userTx;
 
-  static {
+  public void init() {
     try {
       String parentEar = PropertiesLoaderSingleton.getInstance()
           .getProperty("QlackFuseJS.audit.parent.ear");
@@ -49,11 +49,15 @@ public class AuditMessageBean implements MessageListener {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
     }
   }
-
+  
   public void onMessage(Message message) {
     logger.log(Level.FINER, "Received an audit message.");
     try {
       AuditLogDTO auditDTO = (AuditLogDTO) ((ObjectMessage) message).getObject();
+      //initialize audit if not set
+      if (audit == null) {
+        init();
+      }
       //Log the audit in a new transaction in order to avoid poison message situation which
       //will occur if an SQL exception is thrown.
       userTx.begin();
