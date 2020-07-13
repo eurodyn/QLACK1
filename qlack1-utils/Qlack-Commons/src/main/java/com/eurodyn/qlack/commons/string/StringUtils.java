@@ -85,6 +85,7 @@ public class StringUtils {
     return result;
   }
 
+
   /**
    * Filters a string using an array of filter targets. Note that this method does not replace a word with another word
    * but merely replaces a word with a set of characters to indicate that a particular word has been filtered out of a
@@ -107,11 +108,11 @@ public class StringUtils {
 
     // Loop through the filter array and replace the words.
     String retVal = text;
-    for (int i = 0; i < filter.length; i++) {
+    for (String s : filter) {
       if (caseSensitive) {
-        retVal = retVal.replaceAll(filter[i], repeat(filterChar, filter[i].length() + 1));
+        retVal = retVal.replaceAll(s, repeat(filterChar, s.length() + 1));
       } else {
-        retVal = retVal.replaceAll("(?i)" + filter[i], repeat(filterChar, filter[i].length() + 1));
+        retVal = retVal.replaceAll("(?i)" + s, repeat(filterChar, s.length() + 1));
       }
     }
 
@@ -131,9 +132,7 @@ public class StringUtils {
     }
 
     StringBuilder sb = new StringBuilder(chr);
-    for (int i = 1; i <= repeat; i++) {
-      sb.append(chr);
-    }
+    sb.append(String.valueOf(chr).repeat(repeat));
 
     return sb.toString();
   }

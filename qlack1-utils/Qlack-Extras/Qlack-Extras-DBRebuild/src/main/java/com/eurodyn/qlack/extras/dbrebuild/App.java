@@ -152,41 +152,40 @@ public class App {
       // Get available scripts and sort them.
       String[] files = new File(dirPath).list(new DirFilter(scriptsPrefix + "_v\\d{4}\\.sql"));
       if ((files != null) && (files.length > 0)) {
-        Arrays.sort(files, new AlphabeticComparator());
-        Connection con = getConnection();
-        try {
-          for (String scriptFile : files) {
-            if (verbose) {
-              System.out.print("\t" + scriptFile + " - checking...");
-              System.out.flush();
-            }
-            if (shouldRun(scriptFile)) {
-              if (verbose) {
-                System.out.println(" - running...");
-              }
-
-              Reader reader = readFile(dirPath, scriptFile);
-
-              ScriptRunner runner = new ScriptRunner(con);
-              runner.runScript(reader);
-              if (verbose) {
-                System.out.println(" - finished");
-              }
-
-
-            } else {
-              if (verbose) {
-                System.out.println(" - skipped");
-              }
-            }
-          }
-        } finally {
-          if (con != null) {
-            con.close();
-          }
-        }
+        handleFoundFiles(files, dirPath);
       } else {
         System.out.println("\tDid not find any scripts to run.");
+      }
+    }
+  }
+
+  private void handleFoundFiles(String[] files, String dirPath) throws IOException, SQLException {
+    Arrays.sort(files, new AlphabeticComparator());
+    try (Connection con = getConnection()) {
+      for (String scriptFile : files) {
+        if (verbose) {
+          System.out.print("\t" + scriptFile + " - checking...");
+          System.out.flush();
+        }
+        if (shouldRun(scriptFile)) {
+          if (verbose) {
+            System.out.println(" - running...");
+          }
+
+          Reader reader = readFile(dirPath, scriptFile);
+
+          ScriptRunner runner = new ScriptRunner(con);
+          runner.runScript(reader);
+          if (verbose) {
+            System.out.println(" - finished");
+          }
+
+
+        } else {
+          if (verbose) {
+            System.out.println(" - skipped");
+          }
+        }
       }
     }
   }

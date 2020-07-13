@@ -195,8 +195,6 @@ public class SchedulerTriggerBuilder {
           "Trigger does not have a type.");
     }
     switch (triggerType) {
-      case ASAP:
-        break;
       case Daily:
         if (StringUtils.isEmpty(dailyTime)) {
           throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0005,

@@ -125,40 +125,8 @@ public class MailQueueMonitor {
           email.setDateSent(System.currentTimeMillis());
           email.setTries((byte) (email.getTries() + 1));
 
-          // Create a DTO for this email.
-          EmailDTO dto = new EmailDTO();
-          dto.setId(email.getId());
-          dto.setSubject(email.getSubject());
-          dto.setBody(email.getBody());
-          dto.setFrom(email.getFromEmail());
-          if (email.getToEmails() != null) {
-            dto.setToContact(ConverterUtil.createRecepientlist(email.getToEmails()));
-          }
-          if (email.getCcEmails() != null) {
-            dto.setCcContact(ConverterUtil.createRecepientlist(email.getCcEmails()));
-          }
-          if (email.getBccEmails() != null) {
-            dto.setBccContact(ConverterUtil.createRecepientlist(email.getBccEmails()));
-          }
-          if (email.getEmailType().equals("HTML")) {
-            dto.setEmailType(EmailDTO.EMAIL_TYPE.HTML);
-          } else {
-            dto.setEmailType(EmailDTO.EMAIL_TYPE.TEXT);
-          }
-
-          // Process attachments.
-          List<AttachmentDTO> attachmentList = new ArrayList<>();
-          Set<MaiAttachment> attachments = email.getMaiAttachments();
-          if (attachments != null && !attachments.isEmpty()) {
-            for (MaiAttachment attachment : attachments) {
-              AttachmentDTO attachmentDTO = new AttachmentDTO();
-              attachmentDTO.setContentType(attachment.getContentType());
-              attachmentDTO.setData(attachment.getData());
-              attachmentDTO.setFilename(attachment.getFilename());
-              attachmentList.add(attachmentDTO);
-            }
-            dto.setAttachments(attachmentList);
-          }
+          EmailDTO dto = createEmailDTO(email);
+          dto.setAttachments(processAttachments(email));
 
           send(dto);
           email.setStatus(EMAIL_STATUS.SENT.toString());
@@ -181,6 +149,47 @@ public class MailQueueMonitor {
     }
   }
 
+  private EmailDTO createEmailDTO(MaiEmail email) {
+    // Create a DTO for this email.
+    EmailDTO dto = new EmailDTO();
+    dto.setId(email.getId());
+    dto.setSubject(email.getSubject());
+    dto.setBody(email.getBody());
+    dto.setFrom(email.getFromEmail());
+    if (email.getToEmails() != null) {
+      dto.setToContact(ConverterUtil.createRecepientlist(email.getToEmails()));
+    }
+    if (email.getCcEmails() != null) {
+      dto.setCcContact(ConverterUtil.createRecepientlist(email.getCcEmails()));
+    }
+    if (email.getBccEmails() != null) {
+      dto.setBccContact(ConverterUtil.createRecepientlist(email.getBccEmails()));
+    }
+    if (email.getEmailType().equals("HTML")) {
+      dto.setEmailType(EmailDTO.EMAIL_TYPE.HTML);
+    } else {
+      dto.setEmailType(EmailDTO.EMAIL_TYPE.TEXT);
+    }
+
+    return dto;
+  }
+
+  private List<AttachmentDTO> processAttachments(MaiEmail email) {
+    // Process attachments.
+    List<AttachmentDTO> attachmentList = new ArrayList<>();
+    Set<MaiAttachment> attachments = email.getMaiAttachments();
+    if (attachments != null && !attachments.isEmpty()) {
+      for (MaiAttachment attachment : attachments) {
+        AttachmentDTO attachmentDTO = new AttachmentDTO();
+        attachmentDTO.setContentType(attachment.getContentType());
+        attachmentDTO.setData(attachment.getData());
+        attachmentDTO.setFilename(attachment.getFilename());
+        attachmentList.add(attachmentDTO);
+      }
+    }
+    return attachmentList;
+  }
+
   /**
    * Update the data of an email.
    */
@@ -195,41 +204,7 @@ public class MailQueueMonitor {
   private void send(EmailDTO vo) throws QlackFuseMailingException {
     Transport transport = null;
     try {
-      // create a message
-      MimeMessage msg = new MimeMessage(session);
-
-      // Set the From field
-      if (StringUtils.isEmpty(vo.getFrom())) {
-        msg.setFrom(
-            new javax.mail.internet.InternetAddress("Qlack Mailing <no-reply@qlack.eurodyn.com>"));
-      } else {
-        msg.setFrom(new javax.mail.internet.InternetAddress(vo.getFrom()));
-      }
-
-      // Set the To field. (Multiple addresses can be separated by semicolons)
-      List<String> toAddresses = vo.getToContact();
-      if (toAddresses != null && !toAddresses.isEmpty()) {
-        msg.setRecipients(javax.mail.Message.RecipientType.TO,
-            stringLToAddressL(toAddresses));
-      }
-
-      // Set the CC field.
-      List<String> ccAddresses = vo.getCcContact();
-      if (ccAddresses != null && !ccAddresses.isEmpty()) {
-        msg.setRecipients(javax.mail.Message.RecipientType.CC,
-            stringLToAddressL(ccAddresses));
-      }
-
-      // Set the BCC field.
-      List<String> bccAddresses = vo.getBccContact();
-      if (bccAddresses != null && !bccAddresses.isEmpty()) {
-        msg.setRecipients(javax.mail.Message.RecipientType.BCC,
-            stringLToAddressL(bccAddresses));
-      }
-
-      // Set the subject and date.
-      msg.setSubject(vo.getSubject(), "utf-8");
-      msg.setSentDate(new Date());
+      MimeMessage msg = createMimeMessage(vo);
 
       // Set the content.
       // Need to work in parts in case of attachments.
@@ -243,23 +218,8 @@ public class MailQueueMonitor {
           messageBodyPart.setContent(vo.getBody(), "text/html; charset=utf-8");
         }
         multipart.addBodyPart(messageBodyPart);
-        // Part two, three, four, etc. are attachments
-        List<AttachmentDTO> attachmentList = vo.getAttachments();
-        for (AttachmentDTO attachmentDTO : attachmentList) {
-          if (attachmentDTO != null) {
-            String filename = attachmentDTO.getFilename();
-            byte[] data = attachmentDTO.getData();
-            String contentType = attachmentDTO.getContentType();
-            if (filename != null && !filename.equals("") && data != null) {
-              ByteArrayDataSource mimePartDataSource = new ByteArrayDataSource(data,
-                  contentType);
-              MimeBodyPart attachment = new MimeBodyPart();
-              attachment.setDataHandler(new DataHandler(mimePartDataSource));
-              attachment.setFileName(filename);
-              multipart.addBodyPart(attachment);
-            }
-          }
-        }
+
+        multipart = createMimeAttachments(vo.getAttachments(), multipart);
 
         // Put parts in message
         msg.setContent(multipart);
@@ -280,6 +240,68 @@ public class MailQueueMonitor {
     } finally {
       closeEmailTransport(transport);
     }
+  }
+
+  private MimeMessage createMimeMessage(EmailDTO vo) throws MessagingException {
+    // create a message
+    MimeMessage msg = new MimeMessage(session);
+
+    // Set the From field
+    if (StringUtils.isEmpty(vo.getFrom())) {
+      msg.setFrom(
+          new javax.mail.internet.InternetAddress("Qlack Mailing <no-reply@qlack.eurodyn.com>"));
+    } else {
+      msg.setFrom(new javax.mail.internet.InternetAddress(vo.getFrom()));
+    }
+
+    // Set the To field. (Multiple addresses can be separated by semicolons)
+    List<String> toAddresses = vo.getToContact();
+    if (toAddresses != null && !toAddresses.isEmpty()) {
+      msg.setRecipients(javax.mail.Message.RecipientType.TO,
+          stringLToAddressL(toAddresses));
+    }
+
+    // Set the CC field.
+    List<String> ccAddresses = vo.getCcContact();
+    if (ccAddresses != null && !ccAddresses.isEmpty()) {
+      msg.setRecipients(javax.mail.Message.RecipientType.CC,
+          stringLToAddressL(ccAddresses));
+    }
+
+    // Set the BCC field.
+    List<String> bccAddresses = vo.getBccContact();
+    if (bccAddresses != null && !bccAddresses.isEmpty()) {
+      msg.setRecipients(javax.mail.Message.RecipientType.BCC,
+          stringLToAddressL(bccAddresses));
+    }
+
+    // Set the subject and date.
+    msg.setSubject(vo.getSubject(), "utf-8");
+    msg.setSentDate(new Date());
+
+    return msg;
+  }
+
+  private Multipart createMimeAttachments(List<AttachmentDTO> attachmentList, Multipart multipart)
+      throws MessagingException {
+    // Part two, three, four, etc. are attachments
+    for (AttachmentDTO attachmentDTO : attachmentList) {
+      if (attachmentDTO != null) {
+        String filename = attachmentDTO.getFilename();
+        byte[] data = attachmentDTO.getData();
+        String contentType = attachmentDTO.getContentType();
+        if (filename != null && !filename.equals("") && data != null) {
+          ByteArrayDataSource mimePartDataSource = new ByteArrayDataSource(data,
+              contentType);
+          MimeBodyPart attachment = new MimeBodyPart();
+          attachment.setDataHandler(new DataHandler(mimePartDataSource));
+          attachment.setFileName(filename);
+          multipart.addBodyPart(attachment);
+        }
+      }
+    }
+
+    return multipart;
   }
 
   private Address[] stringLToAddressL(List<String> addresses) throws AddressException {

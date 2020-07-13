@@ -63,6 +63,12 @@ public class ResourceIndexer {
           "IOException was thrown when trying to get all resources for " + pckgname);
     }
 
+    return findResources(directories, pckgname, startsWith,
+        endsWith, fileExtension, dirInfo);
+  }
+
+  private static ArrayList<String> findResources(ArrayList<File> directories, String pckgname, String startsWith,
+      String endsWith, String fileExtension, boolean dirInfo) throws ClassNotFoundException {
     ArrayList<String> resources = new ArrayList<>();
     // For every directory identified capture all the .fileExtension files
     for (File directory : directories) {

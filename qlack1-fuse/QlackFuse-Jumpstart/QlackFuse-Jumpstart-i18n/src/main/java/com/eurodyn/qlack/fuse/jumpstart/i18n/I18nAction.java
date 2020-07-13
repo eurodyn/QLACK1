@@ -55,18 +55,20 @@ public class I18nAction extends ActionSupport {
   private static Map<String, String> effectiveLocaleMap;
   private static List<LexLanguageDTO> activeLanguages;
 
+  private static final String EAR = "QlackFuseJS.i18n.parent.ear";
+
   static {
     try {
       // Since EJBs get declared as Static, we can not use the @InjectEJB (i.e. pointcut runs
       // after the static initializer).
       logger.log(Level.CONFIG, "Initialising I18nAction.");
       logger.log(Level.CONFIG, "Parent EAR: {0}",
-          PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.parent.ear"));
+          PropertiesLoaderSingleton.getInstance().getProperty(EAR));
       keyManager = (KeyManager) ContextSingleton.getInstance().lookup("java:global/"
-          + PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.parent.ear")
+          + PropertiesLoaderSingleton.getInstance().getProperty(EAR)
           + "QlackFuse-Modules-Lexicon/KeyManagerBean");
       languageManager = (LanguageManager) ContextSingleton.getInstance().lookup("java:global/"
-          + PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.parent.ear")
+          + PropertiesLoaderSingleton.getInstance().getProperty(EAR)
           + "QlackFuse-Modules-Lexicon/LanguageManagerBean");
       logger.log(Level.CONFIG, "Fetching application translations.");
       fetchTranslations();
@@ -252,13 +254,7 @@ public class I18nAction extends ActionSupport {
         while (m.find()) {
           if (m.group(1) != null) {   // A translation with arguments.
             String[] params = m.group(2).split(TRANSLATABLE_TEXT_PARAMS_DELIMITER);
-            for (int i = 0; i < params.length; i++) {
-              if (params[i].startsWith(TRANSLATABLE_TEXT_TRANSLATION_PREFIX)) {
-                params[i] = parseTranslatableText(
-                    params[i].replace("&#92;", "\\]").replace("&#91;", "\\[")
-                        .replace("&#124;", "\\|"));
-              }
-            }
+            parseTranslatableTextIterator(params);
             m.appendReplacement(sb, getText(m.group(1), params));
           } else {    // A translation without arguments.
             m.appendReplacement(sb, getText(m.group(3)));
@@ -272,6 +268,16 @@ public class I18nAction extends ActionSupport {
       logger.log(Level.WARNING, "Could not parse translation '" + txt + "': "
           + ex.getLocalizedMessage(), ex);
       return txt;
+    }
+  }
+
+  private void parseTranslatableTextIterator(String[] params) {
+    for (int i = 0; i < params.length; i++) {
+      if (params[i].startsWith(TRANSLATABLE_TEXT_TRANSLATION_PREFIX)) {
+        params[i] = parseTranslatableText(
+            params[i].replace("&#92;", "\\]").replace("&#91;", "\\[")
+                .replace("&#124;", "\\|"));
+      }
     }
   }
 

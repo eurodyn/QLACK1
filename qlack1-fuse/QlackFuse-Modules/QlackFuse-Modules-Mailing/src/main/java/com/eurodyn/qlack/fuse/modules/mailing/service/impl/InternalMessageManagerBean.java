@@ -1,5 +1,8 @@
 package com.eurodyn.qlack.fuse.modules.mailing.service.impl;
 
+import static com.eurodyn.qlack.fuse.commons.messaging.QlackMessage.PRIVATE_USERID;
+import static com.eurodyn.qlack.fuse.modules.mailing.util.MailingMessage.PROPERTY_TO_USER_ID;
+
 import com.eurodyn.qlack.fuse.commons.messaging.Messenger;
 import com.eurodyn.qlack.fuse.modules.mailing.dto.InternalMessagesDTO;
 import com.eurodyn.qlack.fuse.modules.mailing.dto.InternalMsgAttachmentDTO;
@@ -101,8 +104,8 @@ public class InternalMessageManagerBean implements InternalMessageManager {
       MailingMessage message = new MailingMessage();
       message.setType(MailingMessage.MSGTYPE_MAIL_SENT);
       message.setSrcUserID(dto.getFromId());
-      message.setStringProperty(MailingMessage.PRIVATE_USERID, dto.getToId());
-      message.setStringProperty(MailingMessage.PROPERTY_TO_USER_ID, dto.getToId());
+      message.setStringProperty(PRIVATE_USERID, dto.getToId());
+      message.setStringProperty(PROPERTY_TO_USER_ID, dto.getToId());
       try {
         Messenger.post(connectionFactory, notificationTopic, message);
       } catch (JMSException ex) {

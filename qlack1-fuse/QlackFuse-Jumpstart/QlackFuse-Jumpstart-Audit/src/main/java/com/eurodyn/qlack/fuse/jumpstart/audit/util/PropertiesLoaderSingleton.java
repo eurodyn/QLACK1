@@ -37,33 +37,37 @@ public class PropertiesLoaderSingleton {
       InputStream in = Thread.currentThread().getContextClassLoader()
           .getResourceAsStream(nextFileToLoad);
       if (in != null) {
-        Properties newProperties = new Properties();
-        try {
-          newProperties.load(in);
-          properties.putAll(newProperties);
-          logger.log(Level.INFO, "Loaded properties file {0} from {1}.",
-              new String[]{nextFileToLoad, Thread.currentThread().getContextClassLoader()
-                  .getResource(nextFileToLoad).toString()});
-        } catch (IOException ex) {
-          if (!isOptional) {
-            logger.log(Level.SEVERE, "Could not load properties file {0} [file was found].",
-                nextFileToLoad);
-            throw new RuntimeException(
-                "Could not load properties file '" + nextFileToLoad + "' [file was found].", ex);
-          }
-        } finally {
-          try {
-            in.close();
-          } catch (IOException ex) {
-            logger
-                .log(Level.SEVERE, "Could not close inputstream used to load properties file {0}.",
-                    nextFileToLoad);
-          }
-        }
+        initForInputStream(in, nextFileToLoad, isOptional);
       } else {
         if (!isOptional) {
           logger.log(Level.SEVERE, "Could not find properties file: {0}.", nextFileToLoad);
         }
+      }
+    }
+  }
+
+  private void initForInputStream(InputStream in, String nextFileToLoad, boolean isOptional){
+    Properties newProperties = new Properties();
+    try {
+      newProperties.load(in);
+      properties.putAll(newProperties);
+      logger.log(Level.INFO, "Loaded properties file {0} from {1}.",
+          new String[]{nextFileToLoad, Thread.currentThread().getContextClassLoader()
+              .getResource(nextFileToLoad).toString()});
+    } catch (IOException ex) {
+      if (!isOptional) {
+        logger.log(Level.SEVERE, "Could not load properties file {0} [file was found].",
+            nextFileToLoad);
+        throw new RuntimeException(
+            "Could not load properties file '" + nextFileToLoad + "' [file was found].", ex);
+      }
+    } finally {
+      try {
+        in.close();
+      } catch (IOException ex) {
+        logger
+            .log(Level.SEVERE, "Could not close inputstream used to load properties file {0}.",
+                nextFileToLoad);
       }
     }
   }

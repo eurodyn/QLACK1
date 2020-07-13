@@ -29,6 +29,6 @@ public class NewsletterDTO implements Serializable {
 
   private List<DistributionListDTO> distributionLists;
 
-  private List<NewsletterScheduleDTO> schedule;
+  private transient List<NewsletterScheduleDTO> schedule;
 
 }
