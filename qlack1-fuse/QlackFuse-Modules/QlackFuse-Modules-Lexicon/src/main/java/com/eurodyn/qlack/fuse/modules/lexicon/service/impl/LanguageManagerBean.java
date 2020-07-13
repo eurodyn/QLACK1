@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -241,30 +242,29 @@ public class LanguageManagerBean implements LanguageManager {
     Map<String, String> translations = keyManager.getTranslationsForLocale(locale, null);
 
     // Create an Excel workbook.
-    Workbook wb = new HSSFWorkbook();
-    CreationHelper createHelper = wb.getCreationHelper();
-    Sheet sheet = wb.createSheet("Translations (" + locale + ")");
+    try (Workbook wb = new HSSFWorkbook()) {
+      CreationHelper createHelper = wb.getCreationHelper();
+      Sheet sheet = wb.createSheet("Translations (" + locale + ")");
 
-    // Add the header.
-    Row row1 = sheet.createRow(0);
-    Cell cell1 = row1.createCell(0);
-    cell1.setCellValue(createHelper.createRichTextString("Translations - " + locale));
+      // Add the header.
+      Row row1 = sheet.createRow(0);
+      Cell cell1 = row1.createCell(0);
+      cell1.setCellValue(createHelper.createRichTextString("Translations - " + locale));
 
-    // Add the data.
-    int rowCounter = 3;
-    for (String key : translations.keySet()) {
-      Row row = sheet.createRow(rowCounter++);
-      row.createCell(0).setCellValue(createHelper.createRichTextString(key));
-      row.createCell(1).setCellValue(createHelper.createRichTextString(translations.get(key)));
-    }
+      // Add the data.
+      int rowCounter = 3;
+      for (Entry<String, String> key : translations.entrySet()) {
+        Row row = sheet.createRow(rowCounter++);
+        row.createCell(0).setCellValue(createHelper.createRichTextString(key.getKey()));
+        row.createCell(1).setCellValue(createHelper.createRichTextString(translations.get(key.getKey())));
+      }
 
-    // Create the byte[] holding the Excel data.
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    try {
+      // Create the byte[] holding the Excel data.
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
       wb.write(bos);
       retVal = bos.toByteArray();
-    } catch (IOException ex) {
-      logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
+    } catch (IOException e) {
+      logger.log(Level.SEVERE, e.getLocalizedMessage(), e);
       throw new QlackFuseLexiconException(CODES.ERR_LEXICON_0028, "Could not create Excel "
           + "byte[].");
     }

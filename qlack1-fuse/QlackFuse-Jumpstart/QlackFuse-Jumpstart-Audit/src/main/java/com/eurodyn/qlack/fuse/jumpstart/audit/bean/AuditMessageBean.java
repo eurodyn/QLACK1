@@ -38,7 +38,7 @@ public class AuditMessageBean implements MessageListener {
   @Resource
   private UserTransaction userTx;
 
-  public void init() {
+  public static void init() {
     try {
       String parentEar = PropertiesLoaderSingleton.getInstance()
           .getProperty("QlackFuseJS.audit.parent.ear");

@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -15,13 +17,43 @@ import java.util.UUID;
 @Table(
     name = "mai_attachment"
 )
+@Getter
+@Setter
 public class MaiAttachment implements Serializable {
 
+  @Id
   private String id;
+
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "email_id",
+      nullable = false
+  )
   private MaiEmail emailId;
+
+  @Column(
+      name = "filename",
+      length = 254
+  )
   private String filename;
+
+  @Column(
+      name = "content_type",
+      length = 254
+  )
   private String contentType;
+
+  @Column(
+      name = "data",
+      nullable = false
+  )
   private byte[] data;
+
+  @Column(
+      name = "attachment_size"
+  )
   private Long attachmentSize;
 
   public MaiAttachment() {
@@ -40,7 +72,6 @@ public class MaiAttachment implements Serializable {
     this.attachmentSize = attachmentSize;
   }
 
-  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
@@ -48,70 +79,5 @@ public class MaiAttachment implements Serializable {
 
     return this.id;
   }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "email_id",
-      nullable = false
-  )
-  public MaiEmail getEmailId() {
-    return this.emailId;
-  }
-
-  public void setEmailId(MaiEmail emailId) {
-    this.emailId = emailId;
-  }
-
-  @Column(
-      name = "filename",
-      length = 254
-  )
-  public String getFilename() {
-    return this.filename;
-  }
-
-  public void setFilename(String filename) {
-    this.filename = filename;
-  }
-
-  @Column(
-      name = "content_type",
-      length = 254
-  )
-  public String getContentType() {
-    return this.contentType;
-  }
-
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
-
-  @Column(
-      name = "data",
-      nullable = false
-  )
-  public byte[] getData() {
-    return this.data;
-  }
-
-  public void setData(byte[] data) {
-    this.data = data;
-  }
-
-  @Column(
-      name = "attachment_size"
-  )
-  public Long getAttachmentSize() {
-    return this.attachmentSize;
-  }
-
-  public void setAttachmentSize(Long attachmentSize) {
-    this.attachmentSize = attachmentSize;
-  }
+  
 }

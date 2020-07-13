@@ -1,7 +1,11 @@
 package com.eurodyn.qlack.fuse.modules.scheduler.util;
 
+import static org.quartz.Trigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+import static org.quartz.Trigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+
 import com.eurodyn.qlack.fuse.modules.scheduler.job.SchedulerWrappedJob;
 import com.eurodyn.qlack.fuse.modules.scheduler.job.trigger.SchedulerWrappedTrigger;
+import com.eurodyn.qlack.fuse.modules.scheduler.util.Constants.TRIGGER_MONTH_PERIOD;
 import org.quartz.CronExpression;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
@@ -17,6 +21,9 @@ import java.text.ParseException;
  * @author European Dynamics S.A.
  */
 public class QuartzConverters {
+
+  private QuartzConverters() {
+  }
 
   /**
    * Get a Quartz job object that contains all the details passed from the Scheduler wrapped job.
@@ -71,19 +78,18 @@ public class QuartzConverters {
         break;
       case Monthly:
         String dom = "";
-        switch (trigger.getMonthlyPeriod()) {
-          case FIRST:
-            dom = "1";
-            break;
-          case LAST:
-            dom = "L";
-            break;
+        if (trigger.getMonthlyPeriod() == TRIGGER_MONTH_PERIOD.FIRST) {
+          dom = "1";
+        } else if (trigger.getMonthlyPeriod() == TRIGGER_MONTH_PERIOD.LAST) {
+          dom = "L";
         }
         ce = new CronExpression("0 " + trigger.getDailyTime().substring(3) + " "
             + trigger.getDailyTime().substring(0, 2) + " " + dom + " * ?");
         break;
       case Cron:
         ce = new CronExpression(trigger.getCronExpression());
+        break;
+      default:
         break;
     }
 
@@ -101,7 +107,7 @@ public class QuartzConverters {
    * Set misfire instruction for trigger.
    */
   private static int setMisfireInstruction(SchedulerWrappedTrigger trigger) {
-    int retVal = CronTrigger.MISFIRE_INSTRUCTION_SMART_POLICY;
+    int retVal = MISFIRE_INSTRUCTION_SMART_POLICY;
 
     if (trigger.getTriggerMisfire() != null) {
       switch (trigger.getTriggerMisfire()) {
@@ -112,7 +118,9 @@ public class QuartzConverters {
           retVal = CronTrigger.MISFIRE_INSTRUCTION_FIRE_ONCE_NOW;
           break;
         case MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY:
-          retVal = CronTrigger.MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+          retVal = MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY;
+          break;
+        default:
           break;
       }
     }

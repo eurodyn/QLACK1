@@ -55,9 +55,9 @@ public class MailQueueMonitor {
 
   private static final Logger logger = Logger.getLogger(MailQueueMonitor.class.getName());
   // How often (in msec) to check for new queued emails.
-  private static final long timerFrequency = 10000;
+  private static final long TIMER_FREQUENCY = 10000;
   // Maximum number of tries to send a previously failed e-mail.
-  private static final byte maxTries = 3;
+  private static final byte MAX_TRIES = 3;
   @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
   private EntityManager em;
   @EJB(name = "MailManagerBean")
@@ -73,7 +73,7 @@ public class MailQueueMonitor {
   @PostConstruct
   private void startup() {
     logger.log(Level.CONFIG, "Initialising MailingManager schedule with poll period {0} sec.",
-        timerFrequency);
+        TIMER_FREQUENCY);
 
     // Remove any already running schedules.
     Collection timers = context.getTimerService().getTimers();
@@ -88,7 +88,7 @@ public class MailQueueMonitor {
     }
 
     // Create a new schedule.
-    context.getTimerService().createTimer(0, timerFrequency, "MailManager");
+    context.getTimerService().createTimer(0, TIMER_FREQUENCY, "MailManager");
     logger.log(Level.CONFIG, "MailingManager scheduled successfully.");
   }
 
@@ -115,7 +115,7 @@ public class MailQueueMonitor {
   private synchronized void checkAndSendQueued(Timer timer) {
     logger.log(Level.FINER, "checkAndSendQueued timer is fired.");
     Criteria criteria = CriteriaFactory.createCriteria("MaiEmail");
-    criteria.add(Restrictions.lt("tries", maxTries));
+    criteria.add(Restrictions.lt("tries", MAX_TRIES));
     criteria.add(Restrictions.eq("status", EMAIL_STATUS.QUEUED.toString()));
     List<MaiEmail> emails = criteria.prepareQuery(em).getResultList();
     if (!emails.isEmpty()) {
@@ -165,7 +165,7 @@ public class MailQueueMonitor {
         } catch (Exception ex) {
           // We catch an Exception here, since we do not want an error to cancel the timer.
           logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-          if (email.getTries() >= maxTries) {
+          if (email.getTries() >= MAX_TRIES) {
             email.setStatus(EMAIL_STATUS.FAILED.toString());
             email.setServerResponse(ex.getCause() != null
                 ? ex.getCause().getLocalizedMessage()
@@ -233,7 +233,7 @@ public class MailQueueMonitor {
 
       // Set the content.
       // Need to work in parts in case of attachments.
-      if ((vo.getAttachments() != null) && (vo.getAttachments().size() > 0)) {
+      if ((vo.getAttachments() != null) && (!vo.getAttachments().isEmpty())) {
         Multipart multipart = new MimeMultipart();
         // part one is the general text of the message.
         MimeBodyPart messageBodyPart = new MimeBodyPart();

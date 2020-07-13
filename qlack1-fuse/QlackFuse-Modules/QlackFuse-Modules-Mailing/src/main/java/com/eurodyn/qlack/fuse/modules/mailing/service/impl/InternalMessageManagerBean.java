@@ -99,10 +99,10 @@ public class InternalMessageManagerBean implements InternalMessageManager {
     if (PropertiesLoaderSingleton.getInstance()
         .getProperty("QlackFuse.Mailing.realtime.JMS.notifications").equals("true")) {
       MailingMessage message = new MailingMessage();
-      message.setType(MailingMessage.MSGTYPE__MAIL_SENT);
+      message.setType(MailingMessage.MSGTYPE_MAIL_SENT);
       message.setSrcUserID(dto.getFromId());
       message.setStringProperty(MailingMessage.PRIVATE_USERID, dto.getToId());
-      message.setStringProperty(MailingMessage.PROPERTY__TO_USER_ID, dto.getToId());
+      message.setStringProperty(MailingMessage.PROPERTY_TO_USER_ID, dto.getToId());
       try {
         Messenger.post(connectionFactory, notificationTopic, message);
       } catch (JMSException ex) {

@@ -7,6 +7,9 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class StringEscape {
 
+  private StringEscape() {
+  }
+
   /**
    * Html escapes the characters in a string. For example & will become &amp;
    *

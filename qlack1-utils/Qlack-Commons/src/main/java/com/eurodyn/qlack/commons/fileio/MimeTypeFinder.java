@@ -10,6 +10,9 @@ import java.util.Collection;
  */
 public class MimeTypeFinder {
 
+  private MimeTypeFinder() {
+  }
+
   /**
    * Find  mime types of a file.
    *

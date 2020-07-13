@@ -129,7 +129,6 @@ public class GroupManagerBean implements GroupManager {
    * @return {@inheritDoc}
    * @throws QlackFuseLexiconException {@inheritDoc}
    */
-  //TODO why not caching here?
   @Override
   public LexGroupDTO[] searchGroups(String searchTerm, PagingParams paging)
       throws QlackFuseLexiconException {
@@ -147,7 +146,7 @@ public class GroupManagerBean implements GroupManager {
       retVal.add(ConverterUtil.lexGroupToLexGroupDTO(o));
     }
 
-    return retVal.toArray(new LexGroupDTO[retVal.size()]);
+    return retVal.toArray(new LexGroupDTO[0]);
   }
 
 }

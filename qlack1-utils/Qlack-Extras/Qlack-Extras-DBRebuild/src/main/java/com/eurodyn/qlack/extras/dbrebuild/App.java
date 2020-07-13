@@ -102,7 +102,6 @@ public class App {
     }
   }
 
-  //TODO Pooled...
   private Connection getConnection() throws SQLException {
     Connection con = DriverManager.getConnection(dburl, dbuser, dbpassword);
 
@@ -115,15 +114,9 @@ public class App {
 
   private void checkDbVersionTable(Connection con) throws SQLException {
     DatabaseMetaData dbmd = con.getMetaData();
-    ResultSet rs = null;
-    try {
-      rs = dbmd.getTables(null, null, "db_version", new String[]{"TABLE"});
+    try (ResultSet rs = dbmd.getTables(null, null, "db_version", new String[]{"TABLE"})) {
       if (rs.next()) {
         dbVersionAvailable = true;
-      }
-    } finally {
-      if (rs != null) {
-        rs.close();
       }
     }
   }
@@ -206,31 +199,17 @@ public class App {
 
     if (dbVersionAvailable) {
       // Extract component name and version from script name.
-      String component = scriptName.substring(0, scriptName.lastIndexOf("_"));
+      String component = scriptName.substring(0, scriptName.lastIndexOf('_'));
       String version = scriptName
           .substring(scriptName.lastIndexOf("_v") + 2, scriptName.lastIndexOf(".sql"));
-      Statement stmt = null;
-      ResultSet rs = null;
-      Connection con = getConnection();
-      try {
-        stmt = con.createStatement();
-        rs = stmt.executeQuery("select * from db_version where dbversion = '"
-            + version + "' and component = '" + component + "'");
+      try (Connection con = getConnection(); Statement stmt = con.createStatement(); ResultSet rs = stmt
+          .executeQuery("select * from db_version where dbversion = '"
+              + version + "' and component = '" + component + "'")) {
         if (rs.first()) {
           retVal = false;
         }
       } catch (SQLException ex) {
         ex.printStackTrace();
-      } finally {
-        if (rs != null) {
-          rs.close();
-        }
-        if (stmt != null) {
-          stmt.close();
-        }
-        if (con != null) {
-          con.close();
-        }
       }
     }
 
@@ -239,38 +218,39 @@ public class App {
 
   private Reader readFile(String dirPath, String scriptFile)
       throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(dirPath
-        + System.getProperty("file.separator") + scriptFile));
+    try (BufferedReader reader = new BufferedReader(new FileReader(dirPath
+        + System.getProperty("file.separator") + scriptFile))) {
 
-    if (properties != null) {
-      PropertiesLoader loader = new PropertiesLoader(properties);
+      if (properties != null) {
+        PropertiesLoader loader = new PropertiesLoader(properties);
 
-      Map<String, String> tokens = loader.getPropertiesMap();
-      if (tokens != null && !tokens.isEmpty()) {
-        // Create pattern of the format
-        String patternString = "&(" + StringUtils.join(tokens.keySet(), "|") + ")";
-        Pattern pattern = Pattern.compile(patternString);
+        Map<String, String> tokens = loader.getPropertiesMap();
+        if (tokens != null && !tokens.isEmpty()) {
+          // Create pattern of the format
+          String patternString = "&(" + StringUtils.join(tokens.keySet(), "|") + ")";
+          Pattern pattern = Pattern.compile(patternString);
 
-        String line = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        String ls = System.getProperty("line.separator");
-        while ((line = reader.readLine()) != null) {
-          Matcher matcher = pattern.matcher(line);
+          String line = null;
+          StringBuilder stringBuilder = new StringBuilder();
+          String ls = System.getProperty("line.separator");
+          while ((line = reader.readLine()) != null) {
+            Matcher matcher = pattern.matcher(line);
 
-          StringBuffer sb = new StringBuffer();
-          while (matcher.find()) {
-            matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
+            StringBuffer sb = new StringBuffer();
+            while (matcher.find()) {
+              matcher.appendReplacement(sb, tokens.get(matcher.group(1)));
+            }
+            matcher.appendTail(sb);
+
+            stringBuilder.append(sb.toString());
+            stringBuilder.append(ls);
+
           }
-          matcher.appendTail(sb);
-
-          stringBuilder.append(sb.toString());
-          stringBuilder.append(ls);
-
+          return new StringReader(stringBuilder.toString());
         }
-        return new StringReader(stringBuilder.toString());
       }
-    }
 
-    return reader;
+      return reader;
+    }
   }
 }

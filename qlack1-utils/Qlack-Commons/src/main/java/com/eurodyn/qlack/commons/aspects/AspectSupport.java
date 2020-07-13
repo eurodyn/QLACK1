@@ -6,7 +6,7 @@ package com.eurodyn.qlack.commons.aspects;
  *
  * @author European Dynamics SA
  */
-public abstract class AspectSupport {
+public class AspectSupport {
 
   /**
    * Finds the value of a named argument inside a JoinPoint.

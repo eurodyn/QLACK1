@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,16 +39,16 @@ import java.util.regex.Pattern;
  */
 public class I18nAction extends ActionSupport {
 
-  private static final Logger logger = Logger.getLogger(ActionSupport.class.getName());
+  private static final Logger logger = Logger.getLogger(I18nAction.class.getName());
 
   private static Map<String, Map<String, String>> dictionary;
   // A helper secondary dictionary keeping only filtered keys.
   private static Map<String, Map<String, String>> secondaryDictionary;
   private static Pattern p;
   // Prefix indicating a key that needs to be translated.
-  private static final String translatableTextTranslationPrefix = "@";
+  private static final String TRANSLATABLE_TEXT_TRANSLATION_PREFIX = "@";
   // Delimiter for the parameters of a translation key.
-  private static final String translatableTextParamsDelimiter = "\\|";
+  private static final String TRANSLATABLE_TEXT_PARAMS_DELIMITER = "\\|";
   private static KeyManager keyManager;
   private static LanguageManager languageManager;
   // The locale-reduce algorithm results cache.
@@ -104,9 +105,9 @@ public class I18nAction extends ActionSupport {
         String filter = PropertiesLoaderSingleton.getInstance()
             .getProperty("QlackFuseJS.i18n.secondary.dictionary.regex");
         HashMap<String, String> innerDict = new HashMap<>();
-        for (String key : pairs.keySet()) {
-          if (key.matches(filter)) {
-            innerDict.put(key, pairs.get(key));
+        for (Entry<String, String> key : pairs.entrySet()) {
+          if (key.getKey().matches(filter)) {
+            innerDict.put(key.getKey(), pairs.get(key.getKey()));
           }
           secondaryDictionary.put(lgDTO.getLocale(), innerDict);
         }
@@ -194,7 +195,7 @@ public class I18nAction extends ActionSupport {
     List<String> processedArgs = null;
     // In case the List has come from Freemarker it is wraped in a SequenceAdapter which we
     // need first to unwrap.
-    if (args != null && args.size() > 0 && args.get(0) instanceof AbstractList) {
+    if (args != null && !args.isEmpty() && args.get(0) instanceof AbstractList) {
       AbstractList al = (AbstractList) args.get(0);
       processedArgs = new ArrayList<>(al.size());
       for (Object o : al) {
@@ -245,17 +246,17 @@ public class I18nAction extends ActionSupport {
    */
   public String parseTranslatableText(String txt) {
     try {
-      if (txt.contains(translatableTextTranslationPrefix)) {
+      if (txt.contains(TRANSLATABLE_TEXT_TRANSLATION_PREFIX)) {
         Matcher m = p.matcher(txt);
         StringBuffer sb = new StringBuffer();
         while (m.find()) {
           if (m.group(1) != null) {   // A translation with arguments.
-            String[] params = m.group(2).split(translatableTextParamsDelimiter);
+            String[] params = m.group(2).split(TRANSLATABLE_TEXT_PARAMS_DELIMITER);
             for (int i = 0; i < params.length; i++) {
-              if (params[i].startsWith(translatableTextTranslationPrefix)) {
+              if (params[i].startsWith(TRANSLATABLE_TEXT_TRANSLATION_PREFIX)) {
                 params[i] = parseTranslatableText(
-                    params[i].replaceAll("&#92;", "\\]").replaceAll("&#91;", "\\[")
-                        .replaceAll("&#124;", "\\|"));
+                    params[i].replace("&#92;", "\\]").replace("&#91;", "\\[")
+                        .replace("&#124;", "\\|"));
               }
             }
             m.appendReplacement(sb, getText(m.group(1), params));

@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -169,11 +170,7 @@ public class SchedulerTriggerBuilder {
     } else {
       swt.setTriggerGroup(triggerGroup);
     }
-    if (startOn == null) {
-      swt.setStartOn(Calendar.getInstance().getTime());
-    } else {
-      swt.setStartOn(startOn);
-    }
+    swt.setStartOn(Objects.requireNonNullElseGet(startOn, () -> Calendar.getInstance().getTime()));
     if (endOn != null) {
       swt.setEndOn(endOn);
     }
@@ -205,7 +202,7 @@ public class SchedulerTriggerBuilder {
           throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0005,
               "Trigger type 'Daily' requires a 'dailyTime' attribute defined.");
         }
-        if ((dailyTime.length() < 5) || (dailyTime.indexOf(":") != 2)) {
+        if ((dailyTime.length() < 5) || (dailyTime.indexOf(':') != 2)) {
           throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0005,
               "Trigger type 'Daily' requires a 'dailyTime' attribute defined as HH:mi, i.e. 07:19.");
         }
@@ -235,6 +232,8 @@ public class SchedulerTriggerBuilder {
           throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0005,
               "Trigger type 'Cron' requires a 'cronExpression' attribute defined.");
         }
+        break;
+      default:
         break;
     }
   }

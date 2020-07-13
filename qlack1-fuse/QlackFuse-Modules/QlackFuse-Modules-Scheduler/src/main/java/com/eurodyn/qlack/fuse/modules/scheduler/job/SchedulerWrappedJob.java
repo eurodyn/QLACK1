@@ -24,7 +24,7 @@ public class SchedulerWrappedJob implements Serializable {
   private String jobGroup;
 
   // the job data
-  private Map<String, Object> dataMap;
+  private transient Map<String, Object> dataMap;
 
   // weather the job is durable (default is false)
   private boolean durable = false;
@@ -90,7 +90,7 @@ public class SchedulerWrappedJob implements Serializable {
    */
   public Map<String, Object> getDataMap() {
     return dataMap != null
-        ? new HashMap<String, Object>(dataMap)
+        ? new HashMap<>(dataMap)
         : null;
   }
 
@@ -100,7 +100,7 @@ public class SchedulerWrappedJob implements Serializable {
    * @param dataMap the dataMap to set
    */
   public void setDataMap(Map<String, Object> dataMap) {
-    this.dataMap = new HashMap<String, Object>(dataMap);
+    this.dataMap = new HashMap<>(dataMap);
   }
 
   /**

@@ -16,14 +16,13 @@ public class InjectTypeListener implements TypeListener {
 
   public static final Logger logger = Logger.getLogger(InjectTypeListener.class.getName());
 
-
   @Override
   public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
     for (Field field : typeLiteral.getRawType().getDeclaredFields()) {
       if (field.isAnnotationPresent(InjectFromJNDI.class)) {
         logger.log(Level.FINEST, "Injecting InjectFromJNDIInjector to {0}.",
-            field.getDeclaringClass().getClass().getName());
-        typeEncounter.register(new InjectFromJNDIInjector<I>(field));
+            field.getDeclaringClass().getName());
+        typeEncounter.register(new InjectFromJNDIInjector<>(field));
       }
     }
   }

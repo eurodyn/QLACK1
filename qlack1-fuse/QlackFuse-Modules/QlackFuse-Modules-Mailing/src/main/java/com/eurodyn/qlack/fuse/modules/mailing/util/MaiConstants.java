@@ -7,6 +7,9 @@ package com.eurodyn.qlack.fuse.modules.mailing.util;
  */
 public class MaiConstants {
 
+  private MaiConstants() {
+  }
+
   public static final String COMMA_TOKEN = ",";
   public static final String SEMI_COLON_TOKEN = ";";
   public static final String INACTIVE_STATUS = "INACTIVE";

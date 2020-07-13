@@ -17,7 +17,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Service implementation for Template Interface.
@@ -27,7 +26,6 @@ import java.util.logging.Logger;
 @Stateless(name = "TemplatesManagerBean")
 public class TemplatesManagerBean implements TemplatesManager {
 
-  private static final Logger logger = Logger.getLogger(TemplatesManagerBean.class.getName());
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
 

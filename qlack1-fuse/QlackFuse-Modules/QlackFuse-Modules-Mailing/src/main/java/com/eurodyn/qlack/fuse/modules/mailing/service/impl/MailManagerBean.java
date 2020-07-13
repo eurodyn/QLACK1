@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 @Stateless(name = "MailManagerBean")
 public class MailManagerBean implements MailManager {
 
-  private static final Logger logger = Logger.getLogger(MailManagerBean.class.getName());
   private final CriteriaBuilderUtil criteriaBuilderUtil = new CriteriaBuilderUtil("MaiEmail");
   @PersistenceContext(unitName = "QlackFuse-Mailing-PU")
   private EntityManager em;

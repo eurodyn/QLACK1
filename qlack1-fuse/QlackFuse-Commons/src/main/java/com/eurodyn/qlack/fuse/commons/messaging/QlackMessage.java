@@ -18,33 +18,33 @@ public abstract class QlackMessage implements Serializable {
    * security-related actions. Also note that, usually, components tend to leave this value as 'null' unless there is
    * some real need to know the user ID.
    */
-  public static final String PROPERTY__SRC_USERID = "SRC_USERID";
+  public static final String PROPERTY_SRC_USERID = "SRC_USERID";
   /**
    * The name of the component that created this message. (i.e. Chat, Forum, etc.)
    */
-  public static final String PROPERTY__COMPONENT = "COMPONENT";
+  public static final String PROPERTY_COMPONENT = "COMPONENT";
   /**
    * The type of this message is component-specific. (i.e. CREATE_ROOM, CREATE_TOPIC, etc.)
    */
-  public static final String PROPERTY__TYPE = "TYPE";
+  public static final String PROPERTY_TYPE = "TYPE";
   /**
    * Allows callers to specify that a balloon should automatically be created for this notification.
    */
-  public static final String PROPERTY__AUTOBALLOON = "AUTO_BALLOON";
+  public static final String PROPERTY_AUTOBALLOON = "AUTO_BALLOON";
   /* JMS messages that should be delivered to a particular recipient should indicate
   /*
    * JMS messages that should be delivered to a particular recipient should indicate
    * the recipient's user ID specifying this JMS property.
    */
   public static final String PRIVATE_USERID = "PRIVATE_USERID";
-  private HashMap<String, Object> messageProperties = new HashMap<>();
+  private final transient HashMap<String, Object> messageProperties = new HashMap<>();
   private Serializable msgBody;
 
   /**
    * Get the user Id.
    */
   public String getSrcUserID() {
-    Object retVal = messageProperties.get(PROPERTY__SRC_USERID);
+    Object retVal = messageProperties.get(PROPERTY_SRC_USERID);
     if (retVal != null) {
       return (String) retVal;
     } else {
@@ -56,14 +56,14 @@ public abstract class QlackMessage implements Serializable {
    * Set the source user Id.
    */
   public void setSrcUserID(String srcUserID) {
-    messageProperties.put(PROPERTY__SRC_USERID, srcUserID);
+    messageProperties.put(PROPERTY_SRC_USERID, srcUserID);
   }
 
   /**
    * Get the component.
    */
   public String getComponent() {
-    Object retVal = messageProperties.get(PROPERTY__COMPONENT);
+    Object retVal = messageProperties.get(PROPERTY_COMPONENT);
     if (retVal != null) {
       return (String) retVal;
     } else {
@@ -75,7 +75,7 @@ public abstract class QlackMessage implements Serializable {
    * Set the component.
    */
   public void setComponent(String component) {
-    messageProperties.put(PROPERTY__COMPONENT, component);
+    messageProperties.put(PROPERTY_COMPONENT, component);
   }
 
   /**
@@ -84,7 +84,7 @@ public abstract class QlackMessage implements Serializable {
    * @return String Type
    */
   public String getType() {
-    Object retVal = messageProperties.get(PROPERTY__TYPE);
+    Object retVal = messageProperties.get(PROPERTY_TYPE);
     if (retVal != null) {
       return (String) retVal;
     } else {
@@ -96,7 +96,7 @@ public abstract class QlackMessage implements Serializable {
    * Set the type.
    */
   public void setType(String type) {
-    messageProperties.put(PROPERTY__TYPE, type);
+    messageProperties.put(PROPERTY_TYPE, type);
   }
 
   /**

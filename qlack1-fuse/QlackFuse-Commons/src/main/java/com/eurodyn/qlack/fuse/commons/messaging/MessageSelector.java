@@ -11,7 +11,7 @@ public class MessageSelector {
   /**
    * The message selectors (pairs of property:value)
    */
-  private List<String> selectors = new ArrayList<>();
+  private final List<String> selectors = new ArrayList<>();
 
 
   /**
@@ -20,7 +20,6 @@ public class MessageSelector {
    * @return String - the new selector concatenated (propertyName:propertyValue)
    */
   public String addSelector(String propertyName, String propertyValue) {
-    //TODO we need to escape here
     String newSelector = propertyName + ":" + propertyValue;
     selectors.add(newSelector);
 

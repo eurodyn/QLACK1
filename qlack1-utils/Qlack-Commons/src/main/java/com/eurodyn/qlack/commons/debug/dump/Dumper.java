@@ -12,6 +12,9 @@ import java.util.Set;
  */
 public class Dumper {
 
+  private Dumper() {
+  }
+
   /**
    * Return the contents of a List dumped in a String, comma separated.
    *

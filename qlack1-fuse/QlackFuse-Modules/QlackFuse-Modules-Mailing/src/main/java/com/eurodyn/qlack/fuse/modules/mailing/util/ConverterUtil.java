@@ -92,7 +92,7 @@ public class ConverterUtil {
    */
   public static List createRecepientlist(String emails) {
     String token = ",";
-    List contacts = new ArrayList();
+    List contacts = new ArrayList<>();
     StringTokenizer st = new StringTokenizer(emails, token);
     while (st.hasMoreElements()) {
       String next = (String) st.nextElement();
@@ -144,7 +144,7 @@ public class ConverterUtil {
     List<InternalMsgAttachmentDTO> internalMsgAttachments =
         dto.getInternalAttachments();
 
-    List<MaiInternalAttachment> entityAttachments = new ArrayList();
+    List<MaiInternalAttachment> entityAttachments = new ArrayList<>();
 
     if (internalMsgAttachments != null) {
       for (InternalMsgAttachmentDTO attachment : internalMsgAttachments) {
@@ -236,7 +236,7 @@ public class ConverterUtil {
         entity.getMaiInternalAttachments();
 
     List<InternalMsgAttachmentDTO> dtoAttachments =
-        new ArrayList();
+        new ArrayList<>();
 
     if (entityAttachments != null && !entityAttachments.isEmpty()) {
       for (MaiInternalAttachment maiAttachment : entityAttachments) {
@@ -282,7 +282,7 @@ public class ConverterUtil {
   public static List<InternalMessagesDTO> convertToInternalMessagesDTOList(
       List<MaiInternalMessages> maiInternalMessagesList, EntityManager em) {
 
-    List<InternalMessagesDTO> messagesDTOList = new ArrayList();
+    List<InternalMessagesDTO> messagesDTOList = new ArrayList<>();
 
     for (MaiInternalMessages maiInternalMessages : maiInternalMessagesList) {
       InternalMessagesDTO dto = converToInternalMessagesDTO(maiInternalMessages);

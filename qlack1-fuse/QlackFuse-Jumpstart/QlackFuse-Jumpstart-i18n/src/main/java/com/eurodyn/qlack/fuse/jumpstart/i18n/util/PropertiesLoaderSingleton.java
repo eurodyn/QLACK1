@@ -18,15 +18,14 @@ public class PropertiesLoaderSingleton {
 
   private static final Logger logger = Logger.getLogger(PropertiesLoaderSingleton.class.getName());
 
-  private static PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
-  private static Properties properties;
+  private static final PropertiesLoaderSingleton INSTANCE = new PropertiesLoaderSingleton();
+  private static Properties properties = new Properties();
 
   private PropertiesLoaderSingleton() {
     String[] filesToLoad = {"QlackFuseJS-i18n.properties"};
 
     logger.log(Level.CONFIG, "Initialising PropertiesLoaderSingleton for: {0}.",
         Arrays.deepToString(filesToLoad));
-    properties = new Properties();
     for (String nextFileToLoad : filesToLoad) {
       boolean isOptional = false;
       if (nextFileToLoad.startsWith("!")) {
@@ -74,7 +73,7 @@ public class PropertiesLoaderSingleton {
    *
    */
   public static PropertiesLoaderSingleton getInstance() {
-    return _instance;
+    return INSTANCE;
   }
 
   /**
@@ -82,10 +81,10 @@ public class PropertiesLoaderSingleton {
    */
   public String getProperty(String propertyName) {
     if (propertyName != null) {
-      Object property = properties.getProperty(propertyName);
+      String property = properties.getProperty(propertyName);
       logger.log(Level.FINEST, "Returning application property {0} with value {1}.",
-          new String[]{propertyName, (String) property});
-      return (property != null ? (String) property : null);
+          new String[]{propertyName, property});
+      return (property);
     } else {
       return null;
     }

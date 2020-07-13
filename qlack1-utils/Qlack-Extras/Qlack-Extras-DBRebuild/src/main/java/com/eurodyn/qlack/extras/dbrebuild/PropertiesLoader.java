@@ -16,33 +16,20 @@ import java.util.logging.Logger;
 public class PropertiesLoader {
 
   private static final Logger logger = Logger.getLogger(PropertiesLoader.class.getName());
-  private Properties properties;
+  private final Properties properties;
 
   public PropertiesLoader(String fileToLoad) {
     logger.log(Level.CONFIG, "Initialising PropertiesLoader for: {0}.", fileToLoad);
     properties = new Properties();
     logger.log(Level.INFO, "Looking for properties file: {0}.", fileToLoad);
 
-    InputStream in = null;
-    try {
-      in = new FileInputStream(new File(fileToLoad));
-      if (in != null) {
-        properties.load(in);
-        logger.log(Level.INFO, "Loaded properties file {0}.", fileToLoad);
-      } else {
-        logger.log(Level.SEVERE, "Could not find properties file: {0}.", fileToLoad);
-      }
+    try (InputStream in = new FileInputStream(new File(fileToLoad))) {
+      properties.load(in);
+      logger.log(Level.INFO, "Loaded properties file {0}.", fileToLoad);
     } catch (IOException ex) {
       logger.log(Level.SEVERE, "Could not load properties file {0} [file was found].", fileToLoad);
       throw new RuntimeException(
           "Could not load properties file '" + fileToLoad + "' [file was found].", ex);
-    } finally {
-      try {
-        in.close();
-      } catch (IOException ex) {
-        logger.log(Level.SEVERE, "Could not close inputstream used to load properties file {0}.",
-            fileToLoad);
-      }
     }
 
   }
@@ -51,7 +38,7 @@ public class PropertiesLoader {
    * Returns the loaded properties as a map.
    */
   public Map<String, String> getPropertiesMap() {
-    Map<String, String> propertiesMap = new HashMap<String, String>();
+    Map<String, String> propertiesMap = new HashMap<>();
     for (Map.Entry<Object, Object> entry : properties.entrySet()) {
       String property = (entry.getKey() != null ? (String) entry.getKey() : null);
       String value = (entry.getValue() != null ? (String) entry.getValue() : null);

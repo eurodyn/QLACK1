@@ -5,10 +5,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -20,20 +18,19 @@ import java.util.logging.Logger;
  */
 public class ContextSingleton {
 
-  private static Map<String, Object> cache = Collections
+  private static final Map<String, Object> cache = Collections
       .synchronizedMap(new HashMap<>());
-  private static Context context;
+  private Context context;
   public static final Logger logger = Logger.getLogger(ContextSingleton.class.getName());
 
-  private static ContextSingleton _instance = new ContextSingleton();
-  private boolean isProduction;
+  private static final ContextSingleton INSTANCE = new ContextSingleton();
+  private final boolean isProduction;
 
 
   private ContextSingleton() {
-    List<String> test = new ArrayList<>();
     logger.log(Level.CONFIG, "Initialising ContextSingleton.");
 
-    Map<String, String> applicationProperties = new HashMap<String, String>();
+    Map<String, String> applicationProperties = new HashMap<>();
     applicationProperties.put("java.naming.factory.initial",
         PropertiesLoaderSingleton.getInstance()
             .getProperty("QlackFuseJS.Lookups.java.naming.factory.initial"));
@@ -96,7 +93,7 @@ public class ContextSingleton {
   }
 
   public static ContextSingleton getInstance() {
-    return _instance;
+    return INSTANCE;
   }
 
 }

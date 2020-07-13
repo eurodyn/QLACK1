@@ -5,6 +5,9 @@ package com.eurodyn.qlack.commons.debug.dump;
  */
 public class ArrayDump {
 
+  private ArrayDump() {
+  }
+
   /**
    * Display a dump of the content of an array.
    *

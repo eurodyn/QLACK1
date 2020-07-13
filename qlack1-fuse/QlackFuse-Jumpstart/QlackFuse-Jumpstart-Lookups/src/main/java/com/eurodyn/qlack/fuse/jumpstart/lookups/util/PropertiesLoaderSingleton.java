@@ -19,14 +19,13 @@ public class PropertiesLoaderSingleton {
   private static final Logger logger = Logger.getLogger(PropertiesLoaderSingleton.class.getName());
 
   private static PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
-  private static Properties properties;
+  private static Properties properties = new Properties();
 
   private PropertiesLoaderSingleton() {
     String[] filesToLoad = {"QlackFuseJS-Lookups.properties"};
 
     logger.log(Level.CONFIG, "Initialising PropertiesLoaderSingleton for: {0}.",
         Arrays.deepToString(filesToLoad));
-    properties = new Properties();
     for (String nextFileToLoad : filesToLoad) {
       boolean isOptional = false;
       if (nextFileToLoad.startsWith("!")) {

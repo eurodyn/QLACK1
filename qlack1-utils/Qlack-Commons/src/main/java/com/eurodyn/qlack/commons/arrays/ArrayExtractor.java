@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
  */
 public class ArrayExtractor {
 
+  private ArrayExtractor() {
+  }
+
   /**
    * A helper method allowing you to obtain a array of specified type by extracting it using a bean property of an
    * another array. This is useful when you have a complex DTO object and you only need to e.g. extract all User IDs
@@ -24,8 +27,8 @@ public class ArrayExtractor {
         if (propertyName.contains(".")) {
           String[] parts = propertyName.split(Pattern.quote("."));
           Object value = array[i];
-          for (int j = 0; j < parts.length; j++) {
-            PropertyDescriptor pd = new PropertyDescriptor(parts[j], value.getClass());
+          for (String part : parts) {
+            PropertyDescriptor pd = new PropertyDescriptor(part, value.getClass());
             Method getter = pd.getReadMethod();
             value = getter.invoke(value);
           }
@@ -41,11 +44,7 @@ public class ArrayExtractor {
       } catch (IntrospectionException e) {
         e.printStackTrace();
         throw new NoSuchMethodException();
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      } catch (IllegalArgumentException e) {
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
+      } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
         e.printStackTrace();
       }
 

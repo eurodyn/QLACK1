@@ -16,8 +16,7 @@ class ExceptionCodeAdapter extends XmlAdapter<ExceptionCodeImpl, ExceptionCode> 
    */
   @Override
   public ExceptionCode unmarshal(ExceptionCodeImpl obj1) {
-    ExceptionCode r = (ExceptionCode) obj1;
-    return r;
+    return (ExceptionCode) obj1;
   }
 
   /**
@@ -25,7 +24,6 @@ class ExceptionCodeAdapter extends XmlAdapter<ExceptionCodeImpl, ExceptionCode> 
    */
   @Override
   public ExceptionCodeImpl marshal(ExceptionCode obj1) {
-    ExceptionCodeImpl r = (ExceptionCodeImpl) obj1;
-    return r;
+    return (ExceptionCodeImpl) obj1;
   }
 }

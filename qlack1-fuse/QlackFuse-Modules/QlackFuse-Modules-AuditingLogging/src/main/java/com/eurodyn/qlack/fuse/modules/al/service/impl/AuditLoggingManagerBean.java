@@ -147,7 +147,7 @@ public class AuditLoggingManagerBean implements AuditLoggingManager {
    */
   @Override
   public void truncateAudits(Date createdOn) {
-    logger.log(Level.FINER, "Clearing audit log data before {0}", createdOn.toString());
+    logger.log(Level.FINER, "Clearing audit log data before {0}", createdOn);
     Query query = em.createQuery("DELETE FROM AlAudit a WHERE a.createdOn < :createdOn");
     query.setParameter("createdOn", createdOn.getTime());
     query.executeUpdate();

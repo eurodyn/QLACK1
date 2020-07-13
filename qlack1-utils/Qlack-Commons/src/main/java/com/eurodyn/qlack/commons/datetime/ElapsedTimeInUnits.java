@@ -1,5 +1,7 @@
 package com.eurodyn.qlack.commons.datetime;
 
+import static java.util.Calendar.getInstance;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -10,6 +12,9 @@ import java.util.GregorianCalendar;
  */
 public class ElapsedTimeInUnits {
 
+  private ElapsedTimeInUnits() {
+  }
+
   /**
    * Returns the elapsed time between two given dates in days. This method calculates the elapsed time based on calendar
    * days and not on 24hour intervals. This means that the elapsed time between 01/01/2010 23:59 and 02/01/2010 00:01 is
@@ -18,9 +23,9 @@ public class ElapsedTimeInUnits {
    * @return int The elapsed time between the provided dates in days
    */
   public static int getDays(long timestamp1, long timestamp2) {
-    Calendar gc1 = GregorianCalendar.getInstance();
+    Calendar gc1 = getInstance();
     gc1.setTimeInMillis(timestamp1);
-    Calendar gc2 = GregorianCalendar.getInstance();
+    Calendar gc2 = getInstance();
     gc2.setTimeInMillis(timestamp2);
 
     return getDays(gc1, gc2);
@@ -34,7 +39,8 @@ public class ElapsedTimeInUnits {
    * @return int The elapsed time between the provided dates in days
    */
   public static int getDays(Calendar g1, Calendar g2) {
-    GregorianCalendar gc1, gc2;
+    GregorianCalendar gc1;
+    GregorianCalendar gc2;
     if (g2.after(g1)) {
       gc2 = (GregorianCalendar) g2.clone();
       gc1 = (GregorianCalendar) g1.clone();

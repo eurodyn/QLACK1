@@ -1,10 +1,5 @@
 package com.eurodyn.qlack.extras.translationsconverter;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -18,9 +13,14 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 /**
- * This class takes the columns of an excel file and puts them into properties files of the type
- * key=value. <br/>
+ * This class takes the columns of an excel file and puts them into properties files of the type key=value. <br/>
  * <ul>
  * <li>The first column is always recognized as the column containing the keys.
  * <li>The second to the last column contain the values of these keys.
@@ -32,7 +32,38 @@ public class XLS2Properties {
 
   private static final Options options = new Options();
 
-  private final String OUTPUT_ENCODING = "UTF8";
+  public static void main(String[] args) throws Exception {
+    // Define command-line args.
+    options.addOption("inputFile", true, "The XLS file to parse.");
+    options.addOption("outputPath", true,
+        "The path where to output the translations properties files.");
+
+    // Parse the command line.
+    CommandLineParser parser = new PosixParser();
+    CommandLine cmd;
+    try {
+      cmd = parser.parse(options, args);
+      if (!cmd.hasOption("inputFile")) {
+        printHelpAndExit();
+      }
+
+      XLS2Properties app = new XLS2Properties();
+      app.translate(cmd.getOptionValue("inputFile"), cmd.getOptionValue("outputPath"));
+    } catch (ParseException ex) {
+      printHelpAndExit();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private static void printHelpAndExit() {
+    HelpFormatter formatter = new HelpFormatter();
+    formatter.printHelp(
+        "java -cp QlackFuse-Extras-TranslationsConverter-2.0.jar; com.eurodyn.qlack.fuse.extras.trastranslationsconverter.XLS2Properties \n"
+            + "-inputFile C:\\translations\\ui_translations.xls -outputPath C:\\translations"
+        , options);
+    System.exit(1);
+  }
 
   public String[] translate(String inputFile, String outputPath) throws IOException {
     POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(new File(inputFile)));
@@ -84,7 +115,7 @@ public class XLS2Properties {
       if (row == null) {
         System.out.println("Row: " + i + " is null. Adding a newline to each file");
         for (int j = 1; j <= lastHeadCellNum; j++) {
-          outputs[j].write("\n".getBytes(OUTPUT_ENCODING));
+          outputs[j].write("\n".getBytes(StandardCharsets.UTF_8));
         }
         continue;
       }
@@ -93,13 +124,13 @@ public class XLS2Properties {
 
       for (int j = 1; j <= lastHeadCellNum; j++) {
         if (firstCell == null) {
-          outputs[j].write("\n".getBytes(OUTPUT_ENCODING));
+          outputs[j].write("\n".getBytes(StandardCharsets.UTF_8));
           continue;
         }
         String firstCellContent = firstCell.getStringCellValue();
 
         if ((firstCellContent.startsWith("#")) || (firstCellContent.trim().length() == 0)) {
-          outputs[j].write((firstCellContent + "\n").getBytes(OUTPUT_ENCODING));
+          outputs[j].write((firstCellContent + "\n").getBytes(StandardCharsets.UTF_8));
         } else {
           //if the translation exists for a key x ,it is used. otherwise lang_x is used
           String value = "";
@@ -112,7 +143,7 @@ public class XLS2Properties {
           }
 
           String outputLine = firstCellContent + "=" + value + "\n";
-          outputs[j].write(outputLine.getBytes(OUTPUT_ENCODING));
+          outputs[j].write(outputLine.getBytes(StandardCharsets.UTF_8));
         }
       }
     }
@@ -122,39 +153,5 @@ public class XLS2Properties {
       outputs[fcount].close();
       System.out.println(filenames[fcount] + "  closed");
     }
-  }
-
-
-  public static void main(String[] args) throws Exception {
-    // Define command-line args.
-    options.addOption("inputFile", true, "The XLS file to parse.");
-    options.addOption("outputPath", true,
-        "The path where to output the translations properties files.");
-
-    // Parse the command line.
-    CommandLineParser parser = new PosixParser();
-    CommandLine cmd;
-    try {
-      cmd = parser.parse(options, args);
-      if (!cmd.hasOption("inputFile")) {
-        printHelpAndExit();
-      }
-
-      XLS2Properties app = new XLS2Properties();
-      app.translate(cmd.getOptionValue("inputFile"), cmd.getOptionValue("outputPath"));
-    } catch (ParseException ex) {
-      printHelpAndExit();
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-  }
-
-  private static void printHelpAndExit() {
-    HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp(
-        "java -cp QlackFuse-Extras-TranslationsConverter-2.0.jar; com.eurodyn.qlack.fuse.extras.trastranslationsconverter.XLS2Properties \n"
-            + "-inputFile C:\\translations\\ui_translations.xls -outputPath C:\\translations"
-        , options);
-    System.exit(1);
   }
 }

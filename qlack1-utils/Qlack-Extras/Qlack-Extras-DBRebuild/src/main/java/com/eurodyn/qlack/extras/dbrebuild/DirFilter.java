@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public class DirFilter implements FilenameFilter {
 
-  private Pattern pattern;
+  private final Pattern pattern;
 
   public DirFilter(String regex) {
     pattern = Pattern.compile(regex);

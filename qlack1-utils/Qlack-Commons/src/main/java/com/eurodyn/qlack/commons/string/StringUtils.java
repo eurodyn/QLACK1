@@ -8,6 +8,9 @@ package com.eurodyn.qlack.commons.string;
  */
 public class StringUtils {
 
+  private StringUtils() {
+  }
+
   /**
    * Matches Regular Expressions.
    *
@@ -148,21 +151,21 @@ public class StringUtils {
     }
     result = result.concat(text.substring(0, linkStart));
 
-    int linkEnd = text.indexOf(">", linkStart);
+    int linkEnd = text.indexOf('>', linkStart);
     if (linkEnd == -1) {
       linkEnd = text.length();
     }
 
     while (linkEnd < text.length()) {
       int endLinkStart = text.indexOf("</a", linkEnd);
-      int endLinkEnd = text.indexOf(">", endLinkStart);
+      int endLinkEnd = text.indexOf('>', endLinkStart);
 
       result = result.concat(text.substring(linkEnd + 1, endLinkStart));
 
       linkStart = text.indexOf("<a", endLinkEnd);
 
       if (linkStart > -1) {
-        linkEnd = text.indexOf(">", linkStart);
+        linkEnd = text.indexOf('>', linkStart);
         if (linkEnd == -1) {
           linkEnd = text.length();
         }

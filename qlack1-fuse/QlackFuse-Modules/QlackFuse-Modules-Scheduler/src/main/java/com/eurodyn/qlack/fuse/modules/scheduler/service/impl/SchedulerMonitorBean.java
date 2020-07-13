@@ -36,7 +36,7 @@ public class SchedulerMonitorBean {
   /**
    * Initialize the Scheduler instance.
    */
-  private void initScheduler() throws SchedulerException {
+  private static void initScheduler() throws SchedulerException {
     logger.log(Level.CONFIG, "Initialising default scheduler...");
     scheduler = StdSchedulerFactory.getDefaultScheduler();
     logger.log(Level.CONFIG, "Default scheduler initialised.");

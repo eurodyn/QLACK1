@@ -1,8 +1,6 @@
 package com.eurodyn.qlack.fuse.jumpstart.audit.util;
 
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -20,14 +18,13 @@ public class PropertiesLoaderSingleton {
 
   private static final Logger logger = Logger.getLogger(PropertiesLoaderSingleton.class.getName());
 
-  private static PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
-  private static Properties properties;
+  private static PropertiesLoaderSingleton INSTANCE = new PropertiesLoaderSingleton();
+  private static Properties properties = new Properties();
 
   private PropertiesLoaderSingleton() {
     String[] filesToLoad = {"QlackFuseJS-Audit.properties"};
     logger.log(Level.CONFIG, "Initialising PropertiesLoaderSingleton for: {0}.",
         Arrays.deepToString(filesToLoad));
-    properties = new Properties();
     for (String nextFileToLoad : filesToLoad) {
       boolean isOptional = false;
       if (nextFileToLoad.startsWith("!")) {
@@ -75,7 +72,7 @@ public class PropertiesLoaderSingleton {
    *
    */
   public static PropertiesLoaderSingleton getInstance() {
-    return _instance;
+    return INSTANCE;
   }
 
   /**

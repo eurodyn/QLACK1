@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class ArraysHelper {
 
+  private ArraysHelper() {
+  }
+
   /**
    * Useful to convert an array to a list when Arrays.asList does not properly keep the underlying data-type (usual case
    * when you try to add an array in a JPA-query in the 'in' clause).

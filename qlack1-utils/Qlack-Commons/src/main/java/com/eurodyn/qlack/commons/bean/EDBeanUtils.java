@@ -13,6 +13,9 @@ import java.util.regex.Pattern;
  */
 public class EDBeanUtils {
 
+  private EDBeanUtils() {
+  }
+
   /**
    * Convenience method to extract a property from a bean array.
    */
@@ -25,10 +28,10 @@ public class EDBeanUtils {
         if (propertyName.contains(".")) {
           String[] parts = propertyName.split(Pattern.quote("."));
           Object value = o;
-          for (int j = 0; j < parts.length; j++) {
+          for (String part : parts) {
             PropertyDescriptor pd;
 
-            pd = new PropertyDescriptor(parts[j], value.getClass());
+            pd = new PropertyDescriptor(part, value.getClass());
 
             Method getter = pd.getReadMethod();
             value = getter.invoke(value);
@@ -46,11 +49,7 @@ public class EDBeanUtils {
       } catch (IntrospectionException e) {
         e.printStackTrace();
         throw new NoSuchMethodException();
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      } catch (IllegalArgumentException e) {
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
+      } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
         e.printStackTrace();
       }
 
@@ -70,8 +69,8 @@ public class EDBeanUtils {
         Object value = o;
         if (propertyName.contains(".")) {
           String[] parts = propertyName.split(Pattern.quote("."));
-          for (int j = 0; j < parts.length; j++) {
-            PropertyDescriptor pd = new PropertyDescriptor(parts[j], value.getClass());
+          for (String part : parts) {
+            PropertyDescriptor pd = new PropertyDescriptor(part, value.getClass());
             Method getter = pd.getReadMethod();
             value = getter.invoke(value);
           }
@@ -89,11 +88,7 @@ public class EDBeanUtils {
       } catch (IntrospectionException e) {
         e.printStackTrace();
         throw new NoSuchMethodException();
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      } catch (IllegalArgumentException e) {
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
+      } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
         e.printStackTrace();
       }
     }

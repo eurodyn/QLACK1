@@ -7,6 +7,9 @@ import java.util.Collection;
  */
 public class QlackCollectionUtils {
 
+  private QlackCollectionUtils() {
+  }
+
   /**
    * Returns true if this collection Collection is not null and contains no elements.
    *

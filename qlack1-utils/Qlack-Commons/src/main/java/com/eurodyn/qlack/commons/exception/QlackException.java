@@ -15,12 +15,12 @@ public abstract class QlackException extends Exception implements Serializable {
   /**
    * The error code.
    */
-  private ExceptionCode errorCode;
+  private final transient ExceptionCode errorCode;
 
   /**
    * The error message.
    */
-  private String message;
+  private final String message;
 
   /**
    * Set the errorCode and the message for the PhoenixException.

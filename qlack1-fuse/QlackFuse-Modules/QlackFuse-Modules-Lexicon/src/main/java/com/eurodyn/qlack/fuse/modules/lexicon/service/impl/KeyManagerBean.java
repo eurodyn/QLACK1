@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.Map.Entry;
 
 /**
  * A Stateless Session EJB and also web service implementation class providing methods for key management like CRUD
@@ -44,7 +44,6 @@ import java.util.logging.Logger;
 @Stateless(name = "KeyManagerBean")
 public class KeyManagerBean implements KeyManager {
 
-  private static final Logger logger = Logger.getLogger(KeyManagerBean.class.getName());
   @PersistenceContext(unitName = "QlackFuse-Lexicon-PU")
   private EntityManager em;
   @EJB(name = "LanguageManagerBean")
@@ -181,16 +180,16 @@ public class KeyManagerBean implements KeyManager {
 
   private void updateTranslationsByKey(LexKey key, Map<String, String> data,
       String modifiedBy) {
-    for (String s : data.keySet()) {
+    for (Entry<String, String> s : data.entrySet()) {
       Criteria criteria = CriteriaFactory.createCriteria("LexData");
       criteria.createAlias("keyId", "key");
       criteria.add(Restrictions.eq("key.id", key.getId()));
       criteria.createAlias("languageId", "lg");
-      criteria.add(Restrictions.eq("lg.locale", s));
+      criteria.add(Restrictions.eq("lg.locale", s.getKey()));
       LexData lexData = (LexData) criteria.prepareQuery(em).getSingleResult();
       lexData.setLastModifiedBy(modifiedBy);
       lexData.setLastModifiedOn(System.currentTimeMillis());
-      lexData.setValue(data.get(s));
+      lexData.setValue(data.get(s.getKey()));
       em.persist(lexData);
     }
   }
@@ -424,14 +423,14 @@ public class KeyManagerBean implements KeyManager {
     LexLanguage lexLanguage = (LexLanguage) criteria.prepareQuery(em).getSingleResult();
 
     em.setFlushMode(FlushModeType.COMMIT);
-    for (String key : values.keySet()) {
+    for (Entry<String, String> key : values.entrySet()) {
       LexData lexData = new LexData();
-      lexData.setKeyId(getKeyByName(key));
+      lexData.setKeyId(getKeyByName(key.getKey()));
       lexData.setLanguageId(lexLanguage);
       lexData.setCreatedBy(createdBy);
       lexData.setCreatedOn(System.currentTimeMillis());
       lexData.setApproved(true);
-      lexData.setValue(values.get(key));
+      lexData.setValue(values.get(key.getKey()));
       em.persist(lexData);
     }
   }

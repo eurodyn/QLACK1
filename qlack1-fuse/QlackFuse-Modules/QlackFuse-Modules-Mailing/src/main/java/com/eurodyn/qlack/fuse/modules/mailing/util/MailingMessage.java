@@ -10,11 +10,11 @@ public class MailingMessage extends QlackMessage {
   /**
    * The message type for sent email.
    */
-  public static final String MSGTYPE__MAIL_SENT = "MAIL_SENT";
+  public static final String MSGTYPE_MAIL_SENT = "MAIL_SENT";
   /**
    * The property user id.
    */
-  public static final String PROPERTY__TO_USER_ID = "USER_ID";
+  public static final String PROPERTY_TO_USER_ID = "USER_ID";
   /**
    * The component's name
    */

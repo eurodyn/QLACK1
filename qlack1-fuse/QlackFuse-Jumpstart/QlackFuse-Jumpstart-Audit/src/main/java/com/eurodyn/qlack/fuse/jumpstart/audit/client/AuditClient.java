@@ -18,16 +18,14 @@ import java.util.logging.Logger;
  */
 public class AuditClient {
 
-  private ConnectionFactory connectionFactory;
   private Connection connection;
   private Queue queue;
   private static final Logger logger = Logger.getLogger(AuditClient.class.getName());
-  private static AuditClient _instance = new AuditClient();
 
   private AuditClient() {
     logger.log(Level.CONFIG, "Initialising AuditClient.");
     try {
-      connectionFactory = (ConnectionFactory) ContextSingleton.getInstance()
+      ConnectionFactory connectionFactory = (ConnectionFactory) ContextSingleton.getInstance()
           .lookup("jms/Qlack_JMS_Connector");
       queue = (javax.jms.Queue) ContextSingleton.getInstance().lookup("jms/AuditQueue");
       connection = connectionFactory.createConnection();

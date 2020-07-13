@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -260,9 +261,9 @@ public class SchedulerManagerBean implements SchedulerManager {
     boolean retVal = true;
 
     try {
-      for (String nextJob : jobs.keySet()) {
+      for (Entry<String, String> nextJob : jobs.entrySet()) {
         retVal = retVal && schedulerMonitor.getSchedulerInstance()
-            .deleteJob(JobKey.jobKey(nextJob, jobs.get(nextJob)));
+            .deleteJob(JobKey.jobKey(nextJob.getKey(), jobs.get(nextJob.getKey())));
       }
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);

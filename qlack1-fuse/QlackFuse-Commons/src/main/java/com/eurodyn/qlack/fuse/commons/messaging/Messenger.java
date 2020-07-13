@@ -10,6 +10,7 @@ import javax.jms.Session;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * @author EUROPEAN DYNAMICS SA.
@@ -39,10 +40,9 @@ public class Messenger {
       // First, set the properties of the message.
       ObjectMessage jmsMessage = session.createObjectMessage();
       HashMap<String, Object> msgProperties = message.getAllProperties();
-      for (String key : msgProperties.keySet()) {
-        Object val = msgProperties.get(key);
-        if (val instanceof String) {
-          jmsMessage.setStringProperty(key, (String) val);
+      for (Entry<String, Object> key : msgProperties.entrySet()) {
+        if (key.getValue() instanceof String) {
+          jmsMessage.setStringProperty(key.getKey(), (String) key.getValue());
         }
       }
       // Second, set the body of the message.

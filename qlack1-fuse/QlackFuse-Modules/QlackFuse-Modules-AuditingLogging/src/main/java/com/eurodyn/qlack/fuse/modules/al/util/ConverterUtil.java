@@ -21,6 +21,9 @@ public final class ConverterUtil {
 
   private static final Logger logger = Logger.getLogger(ConverterUtil.class.getSimpleName());
 
+  private ConverterUtil() {
+  }
+
   /**
    * Convert AuditLevelDTO DTO to AlAuditLevel Model.
    *
@@ -122,11 +125,10 @@ public final class ConverterUtil {
   public static List<AuditLogDTO> convertToAuditLogList(List<AlAudit> list) {
     logger.log(Level.FINEST, "Converting audit log model list to audit log DTO list.");
     if (list == null) {
-      return null;
+      return new ArrayList<>();
     }
     List<AuditLogDTO> aList = new ArrayList<>(list.size());
-    for (int i = 0; i < list.size(); i++) {
-      AlAudit auditLog = list.get(i);
+    for (AlAudit auditLog : list) {
       aList.add(ConverterUtil.convertToAuditLogDTO(auditLog));
     }
     return aList;
@@ -141,11 +143,10 @@ public final class ConverterUtil {
     logger.log(Level.FINEST, "Converting audit level model list to audit level DTO list ''{0}''.",
         list);
     if (list == null) {
-      return null;
+      return new ArrayList<>();
     }
     List<AuditLevelDTO> aList = new ArrayList<>(list.size());
-    for (int i = 0; i < list.size(); i++) {
-      AlAuditLevel auditLog = list.get(i);
+    for (AlAuditLevel auditLog : list) {
       aList.add(ConverterUtil.convertToAuditLevelDTO(auditLog));
     }
     return aList;

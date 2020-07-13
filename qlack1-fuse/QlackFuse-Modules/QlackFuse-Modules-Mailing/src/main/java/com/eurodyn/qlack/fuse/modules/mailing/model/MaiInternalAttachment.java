@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -15,13 +17,43 @@ import java.util.UUID;
 @Table(
     name = "mai_internal_attachment"
 )
+@Getter
+@Setter
 public class MaiInternalAttachment implements Serializable {
 
+  @Id
   private String id;
+
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "messages_id",
+      nullable = false
+  )
   private MaiInternalMessages messagesId;
+
+  @Column(
+      name = "filename",
+      length = 254
+  )
   private String filename;
+
+  @Column(
+      name = "content_type",
+      length = 254
+  )
   private String contentType;
+
+  @Column(
+      name = "data"
+  )
   private byte[] data;
+
+  @Column(
+      name = "format",
+      length = 45
+  )
   private String format;
 
   public MaiInternalAttachment() {
@@ -40,7 +72,6 @@ public class MaiInternalAttachment implements Serializable {
     this.format = format;
   }
 
-  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
@@ -49,69 +80,4 @@ public class MaiInternalAttachment implements Serializable {
     return this.id;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "messages_id",
-      nullable = false
-  )
-  public MaiInternalMessages getMessagesId() {
-    return this.messagesId;
-  }
-
-  public void setMessagesId(MaiInternalMessages messagesId) {
-    this.messagesId = messagesId;
-  }
-
-  @Column(
-      name = "filename",
-      length = 254
-  )
-  public String getFilename() {
-    return this.filename;
-  }
-
-  public void setFilename(String filename) {
-    this.filename = filename;
-  }
-
-  @Column(
-      name = "content_type",
-      length = 254
-  )
-  public String getContentType() {
-    return this.contentType;
-  }
-
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
-
-  @Column(
-      name = "data"
-  )
-  public byte[] getData() {
-    return this.data;
-  }
-
-  public void setData(byte[] data) {
-    this.data = data;
-  }
-
-  @Column(
-      name = "format",
-      length = 45
-  )
-  public String getFormat() {
-    return this.format;
-  }
-
-  public void setFormat(String format) {
-    this.format = format;
-  }
 }

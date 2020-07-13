@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -19,18 +21,76 @@ import java.util.UUID;
         columnNames = {"key_id", "language_id"}
     )}
 )
+@Getter
+@Setter
 public class LexData implements Serializable {
 
+  @Id
   private String id;
+
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "language_id",
+      nullable = false
+  )
   private LexLanguage languageId;
+
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "key_id",
+      nullable = false
+  )
   private LexKey keyId;
+
+  @Column(
+      name = "value",
+      length = 65535
+  )
   private String value;
+
+  @Column(
+      name = "created_by",
+      nullable = false,
+      length = 36
+  )
   private String createdBy;
+
+  @Column(
+      name = "created_on",
+      nullable = false
+  )
   private long createdOn;
+
+  @Column(
+      name = "last_modified_on"
+  )
   private Long lastModifiedOn;
+
+  @Column(
+      name = "last_modified_by",
+      length = 36
+  )
   private String lastModifiedBy;
+
+  @Column(
+      name = "approved",
+      nullable = false
+  )
   private boolean approved;
+
+  @Column(
+      name = "approved_by",
+      length = 36
+  )
   private String approvedBy;
+
+  @Column(
+      name = "approved_on"
+  )
   private Long approvedOn;
 
   public LexData() {
@@ -58,7 +118,6 @@ public class LexData implements Serializable {
     this.approvedOn = approvedOn;
   }
 
-  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
@@ -67,132 +126,4 @@ public class LexData implements Serializable {
     return this.id;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "language_id",
-      nullable = false
-  )
-  public LexLanguage getLanguageId() {
-    return this.languageId;
-  }
-
-  public void setLanguageId(LexLanguage languageId) {
-    this.languageId = languageId;
-  }
-
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "key_id",
-      nullable = false
-  )
-  public LexKey getKeyId() {
-    return this.keyId;
-  }
-
-  public void setKeyId(LexKey keyId) {
-    this.keyId = keyId;
-  }
-
-  @Column(
-      name = "value",
-      length = 65535
-  )
-  public String getValue() {
-    return this.value;
-  }
-
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  @Column(
-      name = "created_by",
-      nullable = false,
-      length = 36
-  )
-  public String getCreatedBy() {
-    return this.createdBy;
-  }
-
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  @Column(
-      name = "created_on",
-      nullable = false
-  )
-  public long getCreatedOn() {
-    return this.createdOn;
-  }
-
-  public void setCreatedOn(long createdOn) {
-    this.createdOn = createdOn;
-  }
-
-  @Column(
-      name = "last_modified_on"
-  )
-  public Long getLastModifiedOn() {
-    return this.lastModifiedOn;
-  }
-
-  public void setLastModifiedOn(Long lastModifiedOn) {
-    this.lastModifiedOn = lastModifiedOn;
-  }
-
-  @Column(
-      name = "last_modified_by",
-      length = 36
-  )
-  public String getLastModifiedBy() {
-    return this.lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(String lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  @Column(
-      name = "approved",
-      nullable = false
-  )
-  public boolean isApproved() {
-    return this.approved;
-  }
-
-  public void setApproved(boolean approved) {
-    this.approved = approved;
-  }
-
-  @Column(
-      name = "approved_by",
-      length = 36
-  )
-  public String getApprovedBy() {
-    return this.approvedBy;
-  }
-
-  public void setApprovedBy(String approvedBy) {
-    this.approvedBy = approvedBy;
-  }
-
-  @Column(
-      name = "approved_on"
-  )
-  public Long getApprovedOn() {
-    return this.approvedOn;
-  }
-
-  public void setApprovedOn(Long approvedOn) {
-    this.approvedOn = approvedOn;
-  }
 }

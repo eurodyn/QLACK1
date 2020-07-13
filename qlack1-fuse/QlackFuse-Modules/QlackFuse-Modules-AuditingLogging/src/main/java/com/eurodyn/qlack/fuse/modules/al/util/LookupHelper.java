@@ -15,6 +15,9 @@ import java.util.List;
 @Slf4j
 public class LookupHelper {
 
+  private LookupHelper() {
+  }
+
   /**
    * Retrieve an audit level by its name
    *

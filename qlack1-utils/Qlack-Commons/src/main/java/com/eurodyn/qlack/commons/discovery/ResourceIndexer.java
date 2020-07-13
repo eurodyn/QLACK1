@@ -15,6 +15,9 @@ import java.util.List;
  */
 public class ResourceIndexer {
 
+  private ResourceIndexer() {
+  }
+
   /**
    * Returns the list of resources (i.e. classes, properties, generally any kind of file) found under a specific
    * package. This method does not scan inside JAR files (so use it with care when using it in a web application
@@ -69,7 +72,7 @@ public class ResourceIndexer {
         if (files != null) {
           for (String file : files) {
             if (((endsWith == null) || (
-                ((file.lastIndexOf(".") > -1) && ((file.substring(0, file.lastIndexOf(".")))
+                ((file.lastIndexOf('.') > -1) && ((file.substring(0, file.lastIndexOf('.')))
                     .endsWith(endsWith)))
                     || (file.endsWith(endsWith))))
                 && ((fileExtension == null) || (file.endsWith(fileExtension)))
