@@ -9,8 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,51 +22,15 @@ import java.util.UUID;
         columnNames = {"name"}
     )}
 )
-@Getter
-@Setter
 public class LexKey implements Serializable {
 
-  @Id
   private String id;
-
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "group_id"
-  )
   private LexGroup groupId;
-
-  @Column(
-      name = "name",
-      unique = true
-  )
   private String name;
-
-  @Column(
-      name = "created_by",
-      nullable = false,
-      length = 36
-  )
   private String createdBy;
-
-  @Column(
-      name = "created_on",
-      nullable = false
-  )
   private long createdOn;
-
-  @Column(
-      name = "last_modified_on"
-  )
   private Long lastModifiedOn;
-
-  @Column(
-      name = "last_modified_by",
-      length = 36
-  )
   private String lastModifiedBy;
-
   private Set<LexData> lexDatas = new HashSet(0);
 
   public LexKey() {
@@ -90,12 +52,91 @@ public class LexKey implements Serializable {
     this.lexDatas = lexDatas;
   }
 
+  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
     }
 
     return this.id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "group_id"
+  )
+  public LexGroup getGroupId() {
+    return this.groupId;
+  }
+
+  public void setGroupId(LexGroup groupId) {
+    this.groupId = groupId;
+  }
+
+  @Column(
+      name = "name",
+      unique = true
+  )
+  public String getName() {
+    return this.name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Column(
+      name = "created_by",
+      nullable = false,
+      length = 36
+  )
+  public String getCreatedBy() {
+    return this.createdBy;
+  }
+
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  @Column(
+      name = "created_on",
+      nullable = false
+  )
+  public long getCreatedOn() {
+    return this.createdOn;
+  }
+
+  public void setCreatedOn(long createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  @Column(
+      name = "last_modified_on"
+  )
+  public Long getLastModifiedOn() {
+    return this.lastModifiedOn;
+  }
+
+  public void setLastModifiedOn(Long lastModifiedOn) {
+    this.lastModifiedOn = lastModifiedOn;
+  }
+
+  @Column(
+      name = "last_modified_by",
+      length = 36
+  )
+  public String getLastModifiedBy() {
+    return this.lastModifiedBy;
+  }
+
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
   }
 
   @OneToMany(
@@ -109,5 +150,4 @@ public class LexKey implements Serializable {
   public void setLexDatas(Set<LexData> lexDatas) {
     this.lexDatas = lexDatas;
   }
-
 }

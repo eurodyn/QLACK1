@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -18,56 +16,15 @@ import java.util.UUID;
 @Table(
     name = "lex_template"
 )
-@Getter
-@Setter
 public class LexTemplate implements Serializable {
 
-  @Id
   private String id;
-
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "language_id",
-      nullable = false
-  )
   private LexLanguage languageId;
-
-  @Column(
-      name = "name",
-      nullable = false
-  )
   private String name;
-
-  @Column(
-      name = "value",
-      length = 65535
-  )
   private String value;
-
-  @Column(
-      name = "created_on",
-      nullable = false
-  )
   private long createdOn;
-
-  @Column(
-      name = "created_by",
-      nullable = false,
-      length = 36
-  )
   private String createdBy;
-
-  @Column(
-      name = "last_modified_on"
-  )
   private Long lastModifiedOn;
-
-  @Column(
-      name = "last_modified_by",
-      length = 36
-  )
   private String lastModifiedBy;
 
   public LexTemplate() {
@@ -91,6 +48,7 @@ public class LexTemplate implements Serializable {
     this.lastModifiedBy = lastModifiedBy;
   }
 
+  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
@@ -99,5 +57,95 @@ public class LexTemplate implements Serializable {
     return this.id;
   }
 
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "language_id",
+      nullable = false
+  )
+  public LexLanguage getLanguageId() {
+    return this.languageId;
+  }
+
+  public void setLanguageId(LexLanguage languageId) {
+    this.languageId = languageId;
+  }
+
+  @Column(
+      name = "name",
+      nullable = false
+  )
+  public String getName() {
+    return this.name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Column(
+      name = "value",
+      length = 65535
+  )
+  public String getValue() {
+    return this.value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  @Column(
+      name = "created_on",
+      nullable = false
+  )
+  public long getCreatedOn() {
+    return this.createdOn;
+  }
+
+  public void setCreatedOn(long createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  @Column(
+      name = "created_by",
+      nullable = false,
+      length = 36
+  )
+  public String getCreatedBy() {
+    return this.createdBy;
+  }
+
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  @Column(
+      name = "last_modified_on"
+  )
+  public Long getLastModifiedOn() {
+    return this.lastModifiedOn;
+  }
+
+  public void setLastModifiedOn(Long lastModifiedOn) {
+    this.lastModifiedOn = lastModifiedOn;
+  }
+
+  @Column(
+      name = "last_modified_by",
+      length = 36
+  )
+  public String getLastModifiedBy() {
+    return this.lastModifiedBy;
+  }
+
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 }
 
