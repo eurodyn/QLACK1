@@ -69,10 +69,6 @@ public class LexKey implements Serializable {
   )
   private String lastModifiedBy;
 
-  @OneToMany(
-      fetch = FetchType.LAZY,
-      mappedBy = "keyId"
-  )
   private Set<LexData> lexDatas = new HashSet(0);
 
   public LexKey() {
@@ -94,13 +90,24 @@ public class LexKey implements Serializable {
     this.lexDatas = lexDatas;
   }
 
-  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
     }
 
     return this.id;
+  }
+
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "keyId"
+  )
+  public Set<LexData> getLexDatas() {
+    return this.lexDatas;
+  }
+
+  public void setLexDatas(Set<LexData> lexDatas) {
+    this.lexDatas = lexDatas;
   }
 
 }

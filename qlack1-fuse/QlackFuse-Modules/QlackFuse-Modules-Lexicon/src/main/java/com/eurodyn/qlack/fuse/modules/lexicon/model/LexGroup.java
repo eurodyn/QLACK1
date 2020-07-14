@@ -60,10 +60,6 @@ public class LexGroup implements Serializable {
   )
   private Long lastModifiedOn;
 
-  @OneToMany(
-      fetch = FetchType.LAZY,
-      mappedBy = "groupId"
-  )
   private Set<LexKey> lexKeies = new HashSet(0);
 
   public LexGroup() {
@@ -85,13 +81,24 @@ public class LexGroup implements Serializable {
     this.lexKeies = lexKeies;
   }
 
-  @Id
   public String getId() {
     if (this.id == null) {
       this.id = UUID.randomUUID().toString();
     }
 
     return this.id;
+  }
+
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "groupId"
+  )
+  public Set<LexKey> getLexKeies() {
+    return this.lexKeies;
+  }
+
+  public void setLexKeies(Set<LexKey> lexKeies) {
+    this.lexKeies = lexKeies;
   }
 
 }

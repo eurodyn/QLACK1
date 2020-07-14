@@ -69,16 +69,8 @@ public class LexLanguage implements Serializable {
   )
   private boolean active;
 
-  @OneToMany(
-      fetch = FetchType.LAZY,
-      mappedBy = "languageId"
-  )
   private Set<LexTemplate> lexTemplates = new HashSet(0);
 
-  @OneToMany(
-      fetch = FetchType.LAZY,
-      mappedBy = "languageId"
-  )
   private Set<LexData> lexDatas = new HashSet(0);
 
   public LexLanguage() {
@@ -111,6 +103,30 @@ public class LexLanguage implements Serializable {
     }
 
     return this.id;
+  }
+
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "languageId"
+  )
+  public Set<LexTemplate> getLexTemplates() {
+    return this.lexTemplates;
+  }
+
+  public void setLexTemplates(Set<LexTemplate> lexTemplates) {
+    this.lexTemplates = lexTemplates;
+  }
+
+  @OneToMany(
+      fetch = FetchType.LAZY,
+      mappedBy = "languageId"
+  )
+  public Set<LexData> getLexDatas() {
+    return this.lexDatas;
+  }
+
+  public void setLexDatas(Set<LexData> lexDatas) {
+    this.lexDatas = lexDatas;
   }
 
 }
