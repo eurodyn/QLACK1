@@ -19,7 +19,7 @@ public class PropertiesLoaderSingleton {
   private static final Logger logger = Logger.getLogger(PropertiesLoaderSingleton.class.getName());
 
   private static final PropertiesLoaderSingleton INSTANCE = new PropertiesLoaderSingleton();
-  private static Properties properties = new Properties();
+  private static Properties properties;
 
   private PropertiesLoaderSingleton() {
     String[] filesToLoad = {"QlackFuseJS-i18n.properties"};
@@ -49,6 +49,7 @@ public class PropertiesLoaderSingleton {
 
   private void initForInputStream(InputStream in, String nextFileToLoad, boolean isOptional){
     Properties newProperties = new Properties();
+    properties = new Properties();
     try {
       newProperties.load(in);
       properties.putAll(newProperties);
