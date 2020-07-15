@@ -16,35 +16,12 @@ import java.util.UUID;
 @Table(
     name = "lex_group"
 )
-public class LexGroup implements Serializable {
+public class LexGroup extends LexBase implements Serializable {
 
   private String id;
   private String title;
   private String description;
-  private long createdOn;
-  private String createdBy;
-  private String lastModifiedBy;
-  private Long lastModifiedOn;
   private Set<LexKey> lexKeies = new HashSet(0);
-
-  public LexGroup() {
-  }
-
-  public LexGroup(long createdOn, String createdBy) {
-    this.createdOn = createdOn;
-    this.createdBy = createdBy;
-  }
-
-  public LexGroup(String title, String description, long createdOn, String createdBy, String lastModifiedBy,
-      Long lastModifiedOn, Set<LexKey> lexKeies) {
-    this.title = title;
-    this.description = description;
-    this.createdOn = createdOn;
-    this.createdBy = createdBy;
-    this.lastModifiedBy = lastModifiedBy;
-    this.lastModifiedOn = lastModifiedOn;
-    this.lexKeies = lexKeies;
-  }
 
   @Id
   public String getId() {
@@ -80,54 +57,6 @@ public class LexGroup implements Serializable {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  @Column(
-      name = "created_on",
-      nullable = false
-  )
-  public long getCreatedOn() {
-    return this.createdOn;
-  }
-
-  public void setCreatedOn(long createdOn) {
-    this.createdOn = createdOn;
-  }
-
-  @Column(
-      name = "created_by",
-      nullable = false,
-      length = 36
-  )
-  public String getCreatedBy() {
-    return this.createdBy;
-  }
-
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  @Column(
-      name = "last_modified_by",
-      length = 36
-  )
-  public String getLastModifiedBy() {
-    return this.lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(String lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  @Column(
-      name = "last_modified_on"
-  )
-  public Long getLastModifiedOn() {
-    return this.lastModifiedOn;
-  }
-
-  public void setLastModifiedOn(Long lastModifiedOn) {
-    this.lastModifiedOn = lastModifiedOn;
   }
 
   @OneToMany(

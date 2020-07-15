@@ -16,42 +16,14 @@ import java.util.UUID;
 @Table(
     name = "lex_language"
 )
-public class LexLanguage implements Serializable {
+public class LexLanguage extends LexBase implements Serializable {
 
   private String id;
   private String name;
   private String locale;
-  private long createdOn;
-  private String createdBy;
-  private Long lastModifiedOn;
-  private String lastModifiedBy;
   private boolean active;
   private Set<LexTemplate> lexTemplates = new HashSet(0);
   private Set<LexData> lexDatas = new HashSet(0);
-
-  public LexLanguage() {
-  }
-
-  public LexLanguage(String name, String locale, long createdOn, String createdBy, boolean active) {
-    this.name = name;
-    this.locale = locale;
-    this.createdOn = createdOn;
-    this.createdBy = createdBy;
-    this.active = active;
-  }
-
-  public LexLanguage(String name, String locale, long createdOn, String createdBy, Long lastModifiedOn,
-      String lastModifiedBy, boolean active, Set<LexTemplate> lexTemplates, Set<LexData> lexDatas) {
-    this.name = name;
-    this.locale = locale;
-    this.createdOn = createdOn;
-    this.createdBy = createdBy;
-    this.lastModifiedOn = lastModifiedOn;
-    this.lastModifiedBy = lastModifiedBy;
-    this.active = active;
-    this.lexTemplates = lexTemplates;
-    this.lexDatas = lexDatas;
-  }
 
   @Id
   public String getId() {
@@ -90,54 +62,6 @@ public class LexLanguage implements Serializable {
 
   public void setLocale(String locale) {
     this.locale = locale;
-  }
-
-  @Column(
-      name = "created_on",
-      nullable = false
-  )
-  public long getCreatedOn() {
-    return this.createdOn;
-  }
-
-  public void setCreatedOn(long createdOn) {
-    this.createdOn = createdOn;
-  }
-
-  @Column(
-      name = "created_by",
-      nullable = false,
-      length = 36
-  )
-  public String getCreatedBy() {
-    return this.createdBy;
-  }
-
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  @Column(
-      name = "last_modified_on"
-  )
-  public Long getLastModifiedOn() {
-    return this.lastModifiedOn;
-  }
-
-  public void setLastModifiedOn(Long lastModifiedOn) {
-    this.lastModifiedOn = lastModifiedOn;
-  }
-
-  @Column(
-      name = "last_modified_by",
-      length = 36
-  )
-  public String getLastModifiedBy() {
-    return this.lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(String lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
   }
 
   @Column(
