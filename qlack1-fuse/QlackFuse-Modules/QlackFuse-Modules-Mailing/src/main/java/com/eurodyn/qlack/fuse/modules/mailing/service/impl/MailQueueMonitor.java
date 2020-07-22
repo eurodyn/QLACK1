@@ -64,7 +64,7 @@ public class MailQueueMonitor {
   private MailManager mailManager;
   @Resource
   private SessionContext context;
-  @Resource(mappedName = "mail/QlackMailSession")
+  @Resource(lookup = "java:jboss/mail/QlackMailSession")
   private Session session;
 
   /**

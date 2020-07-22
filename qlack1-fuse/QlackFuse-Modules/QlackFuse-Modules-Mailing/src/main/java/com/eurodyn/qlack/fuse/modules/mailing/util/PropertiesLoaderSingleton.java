@@ -20,7 +20,7 @@ public class PropertiesLoaderSingleton {
   private static final PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
 
   //properties
-  private static Properties properties = new Properties();
+  private static Properties properties;
 
   /**
    * Constructor of PropertiesLoaderSingleton.
@@ -30,6 +30,8 @@ public class PropertiesLoaderSingleton {
 
     log.info("Initialising PropertiesLoaderSingleton for: {0}.",
         Arrays.deepToString(filesToLoad));
+    properties = new Properties();
+    		
     for (String nextFileToLoad : filesToLoad) {
       boolean isOptional = false;
       if (nextFileToLoad.startsWith("!")) {
