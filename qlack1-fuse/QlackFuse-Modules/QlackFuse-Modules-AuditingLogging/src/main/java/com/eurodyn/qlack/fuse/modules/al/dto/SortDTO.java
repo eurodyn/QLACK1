@@ -2,25 +2,33 @@ package com.eurodyn.qlack.fuse.modules.al.dto;
 
 import com.eurodyn.qlack.fuse.modules.al.enums.AuditLogColumns;
 import com.eurodyn.qlack.fuse.modules.al.enums.SortOperator;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
 
 /**
  * @author European Dynamics SA
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class SortDTO implements Serializable {
 
   private AuditLogColumns column;
 
   private SortOperator operator;
+
+  public AuditLogColumns getColumn() {
+    return column;
+  }
+
+  public void setColumn(AuditLogColumns column) {
+    this.column = column;
+  }
+
+  public SortOperator getOperator() {
+    return operator;
+  }
+
+  public void setOperator(SortOperator operator) {
+    this.operator = operator;
+  }
 
   @Override
   public String toString() {
