@@ -56,8 +56,6 @@ public class SchedulerMonitorBean {
       logger.log(Level.CONFIG, "Scheduler started [{0}].", scheduler);
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-      throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
-          "Could not start the Scheduler");
     }
   }
 
@@ -74,8 +72,6 @@ public class SchedulerMonitorBean {
       logger.log(Level.CONFIG, "Scheduler shutdown.");
     } catch (SchedulerException ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
-      throw new QlackFuseSchedulerException(QlackFuseSchedulerException.CODES.ERR_SCH_0001,
-          "Could not shutdown the Scheduler");
     }
   }
 
