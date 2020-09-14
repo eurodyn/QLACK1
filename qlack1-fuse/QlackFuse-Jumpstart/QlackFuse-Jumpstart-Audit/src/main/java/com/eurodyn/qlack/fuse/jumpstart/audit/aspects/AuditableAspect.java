@@ -33,6 +33,41 @@ public class AuditableAspect {
 
   private static final Logger logger = Logger.getLogger(AuditableAspect.class.getName());
 
+  public static String dump(Object o) {
+    if (o == null) {
+      return "";
+    }
+    if (o.getClass().toString().startsWith("class java.lang")) {
+      return (o.toString());
+    } else {
+      return Dumper.dumpMap(describe(o));
+    }
+  }
+
+  private static Map<String, String> describe(Object o) {
+    Map<String, String> map = new HashMap<>();
+    try {
+      BeanInfo bean = Introspector.getBeanInfo(o.getClass());
+      PropertyDescriptor[] descriptors = bean.getPropertyDescriptors();
+      for (PropertyDescriptor propertyDescriptor : descriptors) {
+        String value = StringUtils.EMPTY;
+        if (propertyDescriptor.getReadMethod() != null) {
+          Object object = propertyDescriptor.getReadMethod().invoke(o);
+          if (object != null) {
+            value = object.toString();
+          }
+        }
+        map.put(propertyDescriptor.getName(), value);
+      }
+    } catch (IntrospectionException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+      logger.log(Level.SEVERE, "Error processing Auditable annotation: " + e.getLocalizedMessage(),
+          e);
+    }
+
+    return map;
+
+  }
+
   @Pointcut("execution(@com.eurodyn.qlack.fuse.jumpstart.audit.client.annotations.Auditable * * (..))")
   void auditablePointCut() {
   }
@@ -98,40 +133,5 @@ public class AuditableAspect {
       logger.log(Level.SEVERE, "Error processing Auditable annotation: " + ex.getLocalizedMessage(),
           ex);
     }
-  }
-
-  public static String dump(Object o) {
-    if (o == null) {
-      return "";
-    }
-    if (o.getClass().toString().startsWith("class java.lang")) {
-      return (o.toString());
-    } else {
-      return Dumper.dumpMap(describe(o));
-    }
-  }
-
-  private static Map<String, String> describe(Object o) {
-    Map<String, String> map = new HashMap<>();
-    try {
-      BeanInfo bean = Introspector.getBeanInfo(o.getClass());
-      PropertyDescriptor[] descriptors = bean.getPropertyDescriptors();
-      for (PropertyDescriptor propertyDescriptor : descriptors) {
-        String value = StringUtils.EMPTY;
-        if (propertyDescriptor.getReadMethod() != null) {
-          Object object = propertyDescriptor.getReadMethod().invoke(o);
-          if (object != null) {
-            value = object.toString();
-          }
-        }
-        map.put(propertyDescriptor.getName(), value);
-      }
-    } catch (IntrospectionException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-      logger.log(Level.SEVERE, "Error processing Auditable annotation: " + e.getLocalizedMessage(),
-          e);
-    }
-
-    return map;
-
   }
 }

@@ -12,10 +12,9 @@ import java.util.logging.Logger;
  */
 public class InjectFromJNDIInjector<T> implements MembersInjector<T> {
 
+  public static final Logger logger = Logger.getLogger(InjectFromJNDIInjector.class.getName());
   private final Field field;
   private String jndiName;
-
-  public static final Logger logger = Logger.getLogger(InjectFromJNDIInjector.class.getName());
 
 
   InjectFromJNDIInjector(Field f) {

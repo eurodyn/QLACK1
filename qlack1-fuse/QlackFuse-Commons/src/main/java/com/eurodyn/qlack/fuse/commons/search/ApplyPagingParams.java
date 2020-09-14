@@ -2,14 +2,14 @@ package com.eurodyn.qlack.fuse.commons.search;
 
 import com.eurodyn.qlack.commons.search.PagingParams;
 import javax.persistence.Query;
-import lombok.NoArgsConstructor;
 
 /**
  * @author EUROPEAN DYNAMICS SA.
  */
 public class ApplyPagingParams {
 
-  private ApplyPagingParams(){}
+  private ApplyPagingParams() {
+  }
 
   /**
    * @return Query

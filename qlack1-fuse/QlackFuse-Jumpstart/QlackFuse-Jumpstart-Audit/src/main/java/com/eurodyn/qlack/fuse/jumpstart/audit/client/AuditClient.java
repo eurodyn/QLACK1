@@ -18,9 +18,9 @@ import java.util.logging.Logger;
  */
 public class AuditClient {
 
+  private static final Logger logger = Logger.getLogger(AuditClient.class.getName());
   private Connection connection;
   private Queue queue;
-  private static final Logger logger = Logger.getLogger(AuditClient.class.getName());
 
   private AuditClient() {
     logger.log(Level.CONFIG, "Initialising AuditClient.");
@@ -36,11 +36,6 @@ public class AuditClient {
 
   public static AuditClient getInstance() {
     return AuditClientHolder.INSTANCE;
-  }
-
-  private static class AuditClientHolder {
-
-    private static final AuditClient INSTANCE = new AuditClient();
   }
 
   public void audit(AuditLogDTO auditDTO) {
@@ -69,5 +64,10 @@ public class AuditClient {
         }
       }
     }
+  }
+
+  private static class AuditClientHolder {
+
+    private static final AuditClient INSTANCE = new AuditClient();
   }
 }

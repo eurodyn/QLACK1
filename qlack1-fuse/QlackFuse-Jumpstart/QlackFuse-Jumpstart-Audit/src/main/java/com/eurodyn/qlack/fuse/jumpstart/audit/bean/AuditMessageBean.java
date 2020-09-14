@@ -5,11 +5,11 @@ import com.eurodyn.qlack.fuse.jumpstart.lookups.guice.injectors.ContextSingleton
 import com.eurodyn.qlack.fuse.modules.al.dto.AuditLogDTO;
 import com.eurodyn.qlack.fuse.modules.al.service.AuditLoggingManager;
 import javax.annotation.Resource;
+import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJBException;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.ejb.ActivationConfigProperty;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -24,17 +24,15 @@ import java.util.logging.Logger;
  */
 //@MessageDriven(name = "AuditMDB")
 @MessageDriven(activationConfig = {
-        @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
-        @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/AuditQueue"),
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue") })
+    @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge"),
+    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/AuditQueue"),
+    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")})
 @TransactionManagement(TransactionManagementType.BEAN)
 public class AuditMessageBean implements MessageListener {
   //IMPORTANT: MDBs should implement MessageListener, in order to be deployed on Jboss-AS server
 
-  private static AuditLoggingManager audit;
-
   private static final Logger logger = Logger.getLogger(AuditMessageBean.class.getName());
-
+  private static AuditLoggingManager audit;
   @Resource
   private UserTransaction userTx;
 
@@ -49,7 +47,7 @@ public class AuditMessageBean implements MessageListener {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
     }
   }
-  
+
   public void onMessage(Message message) {
     logger.log(Level.FINER, "Received an audit message.");
     try {

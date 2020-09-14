@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  * A properties loader mechanism from anywhere in the classpath. The list of files to be loaded are defined in
  * 'filesToLoad' String array; filename beginning with a "!" are optional (i.e. they do not cause an error in case they
@@ -47,7 +48,14 @@ public class PropertiesLoaderSingleton {
     }
   }
 
-  private void initForInputStream(InputStream in, String nextFileToLoad, boolean isOptional){
+  /**
+   *
+   */
+  public static PropertiesLoaderSingleton getInstance() {
+    return INSTANCE;
+  }
+
+  private void initForInputStream(InputStream in, String nextFileToLoad, boolean isOptional) {
     Properties newProperties = new Properties();
     try {
       newProperties.load(in);
@@ -71,13 +79,6 @@ public class PropertiesLoaderSingleton {
                 nextFileToLoad);
       }
     }
-  }
-
-  /**
-   *
-   */
-  public static PropertiesLoaderSingleton getInstance() {
-    return INSTANCE;
   }
 
   /**

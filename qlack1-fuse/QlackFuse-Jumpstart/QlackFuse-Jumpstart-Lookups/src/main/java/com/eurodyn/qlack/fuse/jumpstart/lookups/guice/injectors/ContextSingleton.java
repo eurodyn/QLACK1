@@ -18,13 +18,12 @@ import java.util.logging.Logger;
  */
 public class ContextSingleton {
 
+  public static final Logger logger = Logger.getLogger(ContextSingleton.class.getName());
   private static final Map<String, Object> cache = Collections
       .synchronizedMap(new HashMap<>());
-  private Context context;
-  public static final Logger logger = Logger.getLogger(ContextSingleton.class.getName());
-
   private static final ContextSingleton INSTANCE = new ContextSingleton();
   private final boolean isProduction;
+  private Context context;
 
 
   private ContextSingleton() {
@@ -68,6 +67,10 @@ public class ContextSingleton {
     logger.log(Level.CONFIG, "ContextSingleton initialised.");
   }
 
+  public static ContextSingleton getInstance() {
+    return INSTANCE;
+  }
+
   public Object lookup(String jndiName) throws NamingException {
     logger.log(Level.FINER, "Requested JNDI lookup for: {0}. Production mode = {1}.",
         new String[]{jndiName, String.valueOf(isProduction)});
@@ -90,10 +93,6 @@ public class ContextSingleton {
     }
 
     return objectRef;
-  }
-
-  public static ContextSingleton getInstance() {
-    return INSTANCE;
   }
 
 }

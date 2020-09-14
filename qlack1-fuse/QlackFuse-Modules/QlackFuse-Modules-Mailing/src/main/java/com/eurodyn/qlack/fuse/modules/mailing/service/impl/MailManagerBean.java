@@ -18,7 +18,6 @@ import net.bzdyl.ejb3.criteria.restrictions.Restrictions;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Bean implementation for Send and Search Mail functionality

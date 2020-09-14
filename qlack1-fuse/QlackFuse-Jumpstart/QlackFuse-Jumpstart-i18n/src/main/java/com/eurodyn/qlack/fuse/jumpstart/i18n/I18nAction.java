@@ -40,22 +40,20 @@ import java.util.regex.Pattern;
 public class I18nAction extends ActionSupport {
 
   private static final Logger logger = Logger.getLogger(I18nAction.class.getName());
-
-  private static Map<String, Map<String, String>> dictionary;
-  // A helper secondary dictionary keeping only filtered keys.
-  private static Map<String, Map<String, String>> secondaryDictionary;
-  private static Pattern p;
   // Prefix indicating a key that needs to be translated.
   private static final String TRANSLATABLE_TEXT_TRANSLATION_PREFIX = "@";
   // Delimiter for the parameters of a translation key.
   private static final String TRANSLATABLE_TEXT_PARAMS_DELIMITER = "\\|";
+  private static final String EAR = "QlackFuseJS.i18n.parent.ear";
+  private static Map<String, Map<String, String>> dictionary;
+  // A helper secondary dictionary keeping only filtered keys.
+  private static Map<String, Map<String, String>> secondaryDictionary;
+  private static Pattern p;
   private static KeyManager keyManager;
   private static LanguageManager languageManager;
   // The locale-reduce algorithm results cache.
   private static Map<String, String> effectiveLocaleMap;
   private static List<LexLanguageDTO> activeLanguages;
-
-  private static final String EAR = "QlackFuseJS.i18n.parent.ear";
 
   static {
     try {
@@ -128,6 +126,19 @@ public class I18nAction extends ActionSupport {
     Map<String, String> existingTranslations = dictionary.remove(locale);
     existingTranslations.putAll(translations);
     dictionary.put(locale, existingTranslations);
+  }
+
+  public static String getEffectiveLocale(String locale) {
+    String retVal;
+    if (effectiveLocaleMap.get(locale) != null) {
+      retVal = effectiveLocaleMap.get(locale);
+    } else {
+      retVal = languageManager.getEffectiveLanguage(locale,
+          PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.default.locale"));
+      effectiveLocaleMap.put(locale, retVal);
+    }
+
+    return retVal;
   }
 
   private HashMap<String, String> getLgKeys(String locale) {
@@ -296,19 +307,6 @@ public class I18nAction extends ActionSupport {
     } else {
       return txt;
     }
-  }
-
-  public static String getEffectiveLocale(String locale) {
-    String retVal;
-    if (effectiveLocaleMap.get(locale) != null) {
-      retVal = effectiveLocaleMap.get(locale);
-    } else {
-      retVal = languageManager.getEffectiveLanguage(locale,
-          PropertiesLoaderSingleton.getInstance().getProperty("QlackFuseJS.i18n.default.locale"));
-      effectiveLocaleMap.put(locale, retVal);
-    }
-
-    return retVal;
   }
 
   private Locale getUserLocale() {

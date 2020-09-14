@@ -48,6 +48,13 @@ public class PropertiesLoaderSingleton {
     }
   }
 
+  /**
+   *
+   */
+  public static PropertiesLoaderSingleton getInstance() {
+    return _instance;
+  }
+
   private void initForInputStream(InputStream in, String nextFileToLoad, boolean isOptional) {
     Properties newProperties = new Properties();
     try {
@@ -72,13 +79,6 @@ public class PropertiesLoaderSingleton {
                 nextFileToLoad);
       }
     }
-  }
-
-  /**
-   *
-   */
-  public static PropertiesLoaderSingleton getInstance() {
-    return _instance;
   }
 
   /**

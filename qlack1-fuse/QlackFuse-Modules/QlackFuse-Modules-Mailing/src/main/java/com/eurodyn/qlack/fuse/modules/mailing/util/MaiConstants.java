@@ -7,9 +7,6 @@ package com.eurodyn.qlack.fuse.modules.mailing.util;
  */
 public class MaiConstants {
 
-  private MaiConstants() {
-  }
-
   public static final String COMMA_TOKEN = ",";
   public static final String SEMI_COLON_TOKEN = ";";
   public static final String INACTIVE_STATUS = "INACTIVE";
@@ -56,4 +53,6 @@ public class MaiConstants {
   public static final String NL_SCHEDULE = "MaiNewsletterSchedule";
   public static final String NL_SCHEDULE_ID = "id";
   public static final String NL_SCHEDULE_NL_ID = "newsletterId.id";
+  private MaiConstants() {
+  }
 }

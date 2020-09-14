@@ -3,53 +3,17 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>com.eurodyn.qlack</groupId>
+    <artifactId>Qlack</artifactId>
+    <version>1.7.0-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
   <groupId>com.eurodyn.qlack.commons</groupId>
   <artifactId>Qlack-Commons</artifactId>
   <packaging>jar</packaging>
-  <version>2.10.0-SNAPSHOT</version>
   <name>Qlack-Commons</name>
-  <url>http://www.qlack.com</url>
-
-  <issueManagement>
-    <system>Bugzilla</system>
-    <url>http://bugzilla.eurodyn.com</url>
-  </issueManagement>
-
-  <ciManagement>
-    <system>Hudson</system>
-    <url>http://qs.eurodyn.com</url>
-  </ciManagement>
-
-  <organization>
-    <name>European Dynamics SA</name>
-    <url>http://www.eurodyn.com</url>
-  </organization>
-
-  <developers>
-    <developer>
-      <id>nmix</id>
-      <name>Nassos A. Michas</name>
-      <email>nassos.michas@eurodyn.com</email>
-      <organization>European Dynamics SA</organization>
-      <organizationUrl>http://www.eurodyn.com</organizationUrl>
-    </developer>
-    <developer>
-      <id>cka</id>
-      <name>Christina Kaskoura</name>
-      <email>christina.kaskoura@eurodyn.com</email>
-      <organization>European Dynamics SA</organization>
-      <organizationUrl>http://www.eurodyn.com</organizationUrl>
-    </developer>
-  </developers>
-
-  <!-- Default SCM configuration -->
-  <scm>
-    <connection>scm:svn:svn://svn.eurodyn.com/qlack-utils/trunk/Qlack-Commons/</connection>
-    <developerConnection>scm:svn:svn://svn.eurodyn.com/qlack-utils/trunk/Qlack-Commons/
-    </developerConnection>
-    <tag>HEAD</tag>
-    <url>svn://svn.eurodyn.com/qlack-utils/trunk/Qlack-Commons/</url>
-  </scm>
 
   <properties>
     <maven.compiler.target>11</maven.compiler.target>

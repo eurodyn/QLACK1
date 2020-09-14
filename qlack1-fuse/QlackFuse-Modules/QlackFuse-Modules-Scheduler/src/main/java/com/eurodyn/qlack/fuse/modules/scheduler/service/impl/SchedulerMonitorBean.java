@@ -25,21 +25,21 @@ public class SchedulerMonitorBean {
   private static Scheduler scheduler;
 
   /**
-   * Get the Scheduler instance.
-   *
-   * @return Scheduler
-   */
-  public Scheduler getSchedulerInstance() {
-    return scheduler;
-  }
-
-  /**
    * Initialize the Scheduler instance.
    */
   private static void initScheduler() throws SchedulerException {
     logger.log(Level.CONFIG, "Initialising default scheduler...");
     scheduler = StdSchedulerFactory.getDefaultScheduler();
     logger.log(Level.CONFIG, "Default scheduler initialised.");
+  }
+
+  /**
+   * Get the Scheduler instance.
+   *
+   * @return Scheduler
+   */
+  public Scheduler getSchedulerInstance() {
+    return scheduler;
   }
 
   /**

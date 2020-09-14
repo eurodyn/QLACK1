@@ -31,7 +31,7 @@ public class PropertiesLoaderSingleton {
     log.info("Initialising PropertiesLoaderSingleton for: {0}.",
         Arrays.deepToString(filesToLoad));
     properties = new Properties();
-    		
+
     for (String nextFileToLoad : filesToLoad) {
       boolean isOptional = false;
       if (nextFileToLoad.startsWith("!")) {
@@ -51,6 +51,13 @@ public class PropertiesLoaderSingleton {
         }
       }
     }
+  }
+
+  /**
+   * Get the instance of PropertiesLoaderSingleton.
+   */
+  public static PropertiesLoaderSingleton getInstance() {
+    return _instance;
   }
 
   private void initForInputStream(InputStream in, String nextFileToLoad, boolean isOptional) {
@@ -76,13 +83,6 @@ public class PropertiesLoaderSingleton {
             nextFileToLoad);
       }
     }
-  }
-
-  /**
-   * Get the instance of PropertiesLoaderSingleton.
-   */
-  public static PropertiesLoaderSingleton getInstance() {
-    return _instance;
   }
 
   /**
