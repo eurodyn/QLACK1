@@ -10,6 +10,7 @@
   <version>1.7.0-SNAPSHOT</version>
   <name>Qlack1</name>
 
+  <description>QLACK1 project (Java modules)</description>
   <url>https://github.com/qlack/QLACK-Java</url>
   <licenses>
     <license>
