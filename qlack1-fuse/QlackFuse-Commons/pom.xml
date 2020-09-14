@@ -27,7 +27,7 @@
     <dependency>
       <groupId>com.eurodyn.qlack.commons</groupId>
       <artifactId>Qlack-Commons</artifactId>
-      <version>${qlack.extras.version}</version>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- Hibernate Dependencies -->
