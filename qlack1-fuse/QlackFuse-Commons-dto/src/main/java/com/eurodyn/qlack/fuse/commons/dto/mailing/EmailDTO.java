@@ -1,25 +1,19 @@
 package com.eurodyn.qlack.fuse.commons.dto.mailing;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * DTO class for QLACK Email class
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Getter
-@Setter
-@AllArgsConstructor
-@Slf4j
 public class EmailDTO implements Serializable {
+
+  private static final Logger logger = Logger.getLogger(EmailDTO.class.getName());
 
   private String id;
   private String messageId;
@@ -42,6 +36,106 @@ public class EmailDTO implements Serializable {
     this.emailType = EMAIL_TYPE.TEXT;
   }
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getMessageId() {
+    return messageId;
+  }
+
+  public void setMessageId(String messageId) {
+    this.messageId = messageId;
+  }
+
+  public List<String> getToContact() {
+    return toContact;
+  }
+
+  public List<String> getBccContact() {
+    return bccContact;
+  }
+
+  public void setBccContact(List<String> bccContact) {
+    this.bccContact = bccContact;
+  }
+
+  public List<String> getCcContact() {
+    return ccContact;
+  }
+
+  public void setCcContact(List<String> ccContact) {
+    this.ccContact = ccContact;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public void setSubject(String subject) {
+    this.subject = subject;
+  }
+
+  public String getBody() {
+    return body;
+  }
+
+  public void setBody(String body) {
+    this.body = body;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public List<AttachmentDTO> getAttachments() {
+    return attachments;
+  }
+
+  public void setAttachments(List<AttachmentDTO> attachments) {
+    this.attachments = attachments;
+  }
+
+  public EMAIL_TYPE getEmailType() {
+    return emailType;
+  }
+
+  public void setEmailType(EMAIL_TYPE emailType) {
+    this.emailType = emailType;
+  }
+
+  public Date getDateSent() {
+    return dateSent;
+  }
+
+  public void setDateSent(Date dateSent) {
+    this.dateSent = dateSent;
+  }
+
+  public String getServerResponse() {
+    return serverResponse;
+  }
+
+  public void setServerResponse(String serverResponse) {
+    this.serverResponse = serverResponse;
+  }
+
+  public String getFrom() {
+    return from;
+  }
+
+  public void setFrom(String from) {
+    this.from = from;
+  }
+
   /**
    * @param toContact the toContact to set
    */
@@ -51,7 +145,7 @@ public class EmailDTO implements Serializable {
 
   public void setToContact(String toContact) {
     if (this.toContact != null && !this.toContact.isEmpty()) {
-      log.warn("You are directly setting an individual contact when your"
+      logger.warning("You are directly setting an individual contact when your"
           + " recipients list is not empty. Your existing recipients list will be"
           + " replaced with this contact.");
     }

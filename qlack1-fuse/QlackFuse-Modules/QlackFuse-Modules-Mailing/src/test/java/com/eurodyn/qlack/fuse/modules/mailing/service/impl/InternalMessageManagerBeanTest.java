@@ -12,7 +12,6 @@ import javax.jms.ConnectionFactory;
 import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import lombok.SneakyThrows;
 import net.bzdyl.ejb3.criteria.Criteria;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,6 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -60,9 +60,8 @@ class InternalMessageManagerBeanTest {
   @Mock
   private Query query;
 
-  @SneakyThrows
   @BeforeAll
-  void init() {
+  void init() throws IOException {
     InitTestValues initTestValues = new InitTestValues();
     internalMessagesDTO = initTestValues.createInternalMessagesDTO();
     maiInternalMessages = initTestValues.createMaiInternalMessages();
@@ -139,22 +138,21 @@ class InternalMessageManagerBeanTest {
   }
 
   @Test
-  void getInternalInboxFolderNullUserTest() {
+  void getInternalInboxFolderNullUserTest() throws NoSuchFieldException {
     mockMessageCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiInternalMessageList);
     Assertions.assertEquals(1, internalMessageManagerBean.getInternalInboxFolder(null).size());
   }
 
   @Test
-  void getInternalInboxFolderTest() {
+  void getInternalInboxFolderTest() throws NoSuchFieldException {
     mockMessageCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiInternalMessageList);
     Assertions.assertEquals(1, internalMessageManagerBean.getInternalInboxFolder(USER_ID).size());
   }
 
-  @SneakyThrows
   @Test
-  void getMailCountNullTest() {
+  void getMailCountNullTest() throws NoSuchFieldException {
     FieldSetter.setField(internalMessageManagerBean,
         internalMessageManagerBean.getClass().getDeclaredField("messageCriteriaBuilderUtil"),
         messageCriteriaBuilderUtil);
@@ -164,9 +162,8 @@ class InternalMessageManagerBeanTest {
     Assertions.assertEquals(1, internalMessageManagerBean.getMailCount(null, null));
   }
 
-  @SneakyThrows
   @Test
-  void getMailCountTest() {
+  void getMailCountTest() throws NoSuchFieldException {
     FieldSetter.setField(internalMessageManagerBean,
         internalMessageManagerBean.getClass().getDeclaredField("messageCriteriaBuilderUtil"),
         messageCriteriaBuilderUtil);
@@ -177,35 +174,35 @@ class InternalMessageManagerBeanTest {
   }
 
   @Test
-  void getInternalSendFolderNullUserTest() {
+  void getInternalSendFolderNullUserTest() throws NoSuchFieldException {
     mockMessageCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiInternalMessageList);
     Assertions.assertEquals(1, internalMessageManagerBean.getInternalSentFolder(null).size());
   }
 
   @Test
-  void getInternalSendFolderTest() {
+  void getInternalSendFolderTest() throws NoSuchFieldException {
     mockMessageCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiInternalMessageList);
     Assertions.assertEquals(1, internalMessageManagerBean.getInternalSentFolder(USER_ID).size());
   }
 
   @Test
-  void getInternalAttachmentsNullTest() {
+  void getInternalAttachmentsNullTest() throws NoSuchFieldException {
     mockAttachmentCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(null);
     Assertions.assertEquals(0, internalMessageManagerBean.getInternalAttachments(null).size());
   }
 
   @Test
-  void getInternalAttachmentsTest() {
+  void getInternalAttachmentsTest() throws NoSuchFieldException {
     mockAttachmentCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiInternalAttachments);
     Assertions.assertEquals(1, internalMessageManagerBean.getInternalAttachments(maiInternalMessages.getId()).size());
   }
 
   @Test
-  void saveInternalAttachmentNullTest() {
+  void saveInternalAttachmentNullTest() throws NoSuchFieldException {
     mockAttachmentCriteriaBuilderUtil();
     Mockito.when(query.getSingleResult()).thenReturn(maiInternalAttachment);
     Assertions.assertEquals(maiInternalAttachment.getId(),
@@ -213,15 +210,14 @@ class InternalMessageManagerBeanTest {
   }
 
   @Test
-  void saveInternalAttachmentTest() {
+  void saveInternalAttachmentTest() throws NoSuchFieldException {
     mockAttachmentCriteriaBuilderUtil();
     Mockito.when(query.getSingleResult()).thenReturn(maiInternalAttachment);
     Assertions.assertEquals(maiInternalAttachment.getId(),
         internalMessageManagerBean.saveInternalAttachment(maiInternalAttachment.getId()).getId());
   }
 
-  @SneakyThrows
-  private void mockMessageCriteriaBuilderUtil() {
+  private void mockMessageCriteriaBuilderUtil() throws NoSuchFieldException {
     FieldSetter.setField(internalMessageManagerBean,
         internalMessageManagerBean.getClass().getDeclaredField("messageCriteriaBuilderUtil"),
         messageCriteriaBuilderUtil);
@@ -229,8 +225,7 @@ class InternalMessageManagerBeanTest {
     Mockito.when(criteria.prepareQuery(entityManager)).thenReturn(query);
   }
 
-  @SneakyThrows
-  private void mockAttachmentCriteriaBuilderUtil() {
+  private void mockAttachmentCriteriaBuilderUtil() throws NoSuchFieldException {
     FieldSetter.setField(internalMessageManagerBean,
         internalMessageManagerBean.getClass().getDeclaredField("attachmentCriteriaBuilderUtil"),
         attachmentCriteriaBuilderUtil);

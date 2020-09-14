@@ -1,21 +1,22 @@
 package com.eurodyn.qlack.fuse.commons.util;
 
 import com.eurodyn.qlack.fuse.commons.dto.BaseDTO;
-import lombok.extern.slf4j.Slf4j;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
 
 /**
  * Utility class to convert 1.transfer object to entity 2.entity to transfer object.
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Slf4j
 public class ConverterUtility {
+
+  private static final Logger logger = Logger.getLogger(ConverterUtility.class.getName());
 
   private ConverterUtility() {
   }
@@ -37,11 +38,11 @@ public class ConverterUtility {
       o = to.getDeclaredConstructor().newInstance();
       copyProperties(frm, o);
     } catch (InstantiationException ex) {
-      log.error("Error Instantiating:{0}", ex.getMessage());
+      logger.severe("Error Instantiating:" + ex.getMessage());
     } catch (IllegalAccessException ex) {
-      log.error("Error Accessing:{0}", ex.getMessage());
+      logger.severe("Error Accessing: " + ex.getMessage());
     } catch (NoSuchMethodException | InvocationTargetException e) {
-      log.error(e.getMessage());
+      logger.severe(e.getMessage());
     }
     return o;
   }
@@ -65,7 +66,7 @@ public class ConverterUtility {
 
       copyProperties(frm, dto);
     } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-      log.error("Error1:{0}", ex.getMessage());
+      logger.severe("Error1: " + ex.getMessage());
     }
     return dto;
   }
@@ -94,7 +95,7 @@ public class ConverterUtility {
 
       }
     } catch (IntrospectionException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-      log.error(e.getLocalizedMessage());
+      logger.severe(e.getLocalizedMessage());
     }
   }
 }

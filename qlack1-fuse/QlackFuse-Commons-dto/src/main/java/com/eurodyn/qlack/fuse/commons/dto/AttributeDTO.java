@@ -1,10 +1,5 @@
 package com.eurodyn.qlack.fuse.commons.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +9,17 @@ import java.util.Map;
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AttributeDTO implements Serializable {
 
   private transient Map<String, Object> attribute = new HashMap<>();
+
+  public Map<String, Object> getAttribute() {
+    return attribute;
+  }
+
+  public void setAttribute(Map<String, Object> attribute) {
+    this.attribute = attribute;
+  }
 
   /**
    * @return the attribute

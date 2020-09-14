@@ -1,17 +1,8 @@
 package com.eurodyn.qlack.fuse.modules.mailing.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * @author European Dynamics SA
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class NewsletterScheduleDTO {
 
   private String id;
@@ -24,4 +15,43 @@ public class NewsletterScheduleDTO {
 
   private Long sentOn;
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getNewsletterID() {
+    return newsletterID;
+  }
+
+  public void setNewsletterID(String newsletterID) {
+    this.newsletterID = newsletterID;
+  }
+
+  public String getScheduledFor() {
+    return scheduledFor;
+  }
+
+  public void setScheduledFor(String scheduledFor) {
+    this.scheduledFor = scheduledFor;
+  }
+
+  public boolean isSent() {
+    return sent;
+  }
+
+  public void setSent(boolean sent) {
+    this.sent = sent;
+  }
+
+  public Long getSentOn() {
+    return sentOn;
+  }
+
+  public void setSentOn(Long sentOn) {
+    this.sentOn = sentOn;
+  }
 }

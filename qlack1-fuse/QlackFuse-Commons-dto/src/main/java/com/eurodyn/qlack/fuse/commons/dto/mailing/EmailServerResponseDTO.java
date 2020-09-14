@@ -1,9 +1,5 @@
 package com.eurodyn.qlack.fuse.commons.dto.mailing;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 
 /**
@@ -11,9 +7,6 @@ import java.io.Serializable;
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Getter
-@Setter
-@AllArgsConstructor
 public class EmailServerResponseDTO implements Serializable {
 
   private String emailID;
@@ -28,4 +21,35 @@ public class EmailServerResponseDTO implements Serializable {
     error = false;
   }
 
+  public String getEmailID() {
+    return emailID;
+  }
+
+  public void setEmailID(String emailID) {
+    this.emailID = emailID;
+  }
+
+  public String getServerResponse() {
+    return serverResponse;
+  }
+
+  public void setServerResponse(String serverResponse) {
+    this.serverResponse = serverResponse;
+  }
+
+  public long getServerResponseDate() {
+    return serverResponseDate;
+  }
+
+  public void setServerResponseDate(long serverResponseDate) {
+    this.serverResponseDate = serverResponseDate;
+  }
+
+  public boolean isError() {
+    return error;
+  }
+
+  public void setError(boolean error) {
+    this.error = error;
+  }
 }

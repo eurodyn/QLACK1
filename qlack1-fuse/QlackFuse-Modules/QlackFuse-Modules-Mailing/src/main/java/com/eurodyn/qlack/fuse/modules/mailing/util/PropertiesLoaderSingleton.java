@@ -1,11 +1,11 @@
 package com.eurodyn.qlack.fuse.modules.mailing.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A properties loader mechanism from anywhere in the classpath. The list of files to be loaded are defined in
@@ -14,8 +14,9 @@ import java.util.Properties;
  *
  * @author European Dynamics SA
  */
-@Slf4j
 public class PropertiesLoaderSingleton {
+
+  private static final Logger logger = Logger.getLogger(PropertiesLoaderSingleton.class.getName());
 
   private static final PropertiesLoaderSingleton _instance = new PropertiesLoaderSingleton();
 
@@ -28,18 +29,18 @@ public class PropertiesLoaderSingleton {
   private PropertiesLoaderSingleton() {
     String[] filesToLoad = {"QlackFuse-Mailing.properties"};
 
-    log.info("Initialising PropertiesLoaderSingleton for: {0}.",
+    logger.info("Initialising PropertiesLoaderSingleton for: " +
         Arrays.deepToString(filesToLoad));
     properties = new Properties();
 
     for (String nextFileToLoad : filesToLoad) {
       boolean isOptional = false;
       if (nextFileToLoad.startsWith("!")) {
-        log.info("Looking for optional properties file: {0}.", nextFileToLoad);
+        logger.info("Looking for optional properties file: " + nextFileToLoad);
         isOptional = true;
         nextFileToLoad = nextFileToLoad.substring(1);
       } else {
-        log.info("Looking for properties file: {0}.", nextFileToLoad);
+        logger.info("Looking for properties file: " + nextFileToLoad);
       }
       InputStream in = Thread.currentThread().getContextClassLoader()
           .getResourceAsStream(nextFileToLoad);
@@ -47,7 +48,7 @@ public class PropertiesLoaderSingleton {
         initForInputStream(in, nextFileToLoad, isOptional);
       } else {
         if (!isOptional) {
-          log.error("Could not find properties file: {0}.", nextFileToLoad);
+          logger.severe("Could not find properties file: " + nextFileToLoad);
         }
       }
     }
@@ -65,12 +66,12 @@ public class PropertiesLoaderSingleton {
     try {
       newProperties.load(in);
       properties.putAll(newProperties);
-      log.info("Loaded properties file {0} from {1}.",
+      logger.log(Level.INFO, "Loaded properties file {0} from {1}.",
           new String[]{nextFileToLoad, Thread.currentThread().getContextClassLoader()
               .getResource(nextFileToLoad).toString()});
     } catch (IOException ex) {
       if (!isOptional) {
-        log.error("Could not load properties file {0} [file was found].",
+        logger.log(Level.SEVERE, "Could not load properties file {0} [file was found].",
             nextFileToLoad);
         throw new RuntimeException(
             "Could not load properties file '" + nextFileToLoad + "' [file was found].", ex);
@@ -79,7 +80,7 @@ public class PropertiesLoaderSingleton {
       try {
         in.close();
       } catch (IOException ex) {
-        log.error("Could not close inputstream used to load properties file {0}.",
+        logger.severe("Could not close inputstream used to load properties file " +
             nextFileToLoad);
       }
     }
@@ -93,7 +94,7 @@ public class PropertiesLoaderSingleton {
   public String getProperty(String propertyName) {
     if (propertyName != null) {
       Object property = properties.getProperty(propertyName);
-      log.info("Returning application property {0} with value {1}.",
+      logger.log(Level.FINEST, "Returning application property {0} with value {1}.",
           new String[]{propertyName, (String) property});
       return (property != null ? (String) property : null);
     } else {

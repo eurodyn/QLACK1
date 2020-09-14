@@ -1,19 +1,10 @@
 package com.eurodyn.qlack.fuse.commons.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 /**
  * DTO class for entity User
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserDTO extends BaseDTO {
 
   private String userID;
@@ -22,4 +13,27 @@ public class UserDTO extends BaseDTO {
 
   private byte status;
 
+  public String getUserID() {
+    return userID;
+  }
+
+  public void setUserID(String userID) {
+    this.userID = userID;
+  }
+
+  public Long getCreatedOn() {
+    return createdOn;
+  }
+
+  public void setCreatedOn(Long createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  public byte getStatus() {
+    return status;
+  }
+
+  public void setStatus(byte status) {
+    this.status = status;
+  }
 }

@@ -1,20 +1,12 @@
 package com.eurodyn.qlack.fuse.modules.lexicon.dto;
 
 import com.eurodyn.qlack.fuse.commons.dto.BaseDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * DTO class for entity LexGroup
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class LexGroupDTO extends BaseDTO {
 
   private String title;
@@ -29,4 +21,51 @@ public class LexGroupDTO extends BaseDTO {
 
   private Long lastModifiedOn;
 
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public long getCreatedOn() {
+    return createdOn;
+  }
+
+  public void setCreatedOn(long createdOn) {
+    this.createdOn = createdOn;
+  }
+
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  public String getLastModifiedBy() {
+    return lastModifiedBy;
+  }
+
+  public void setLastModifiedBy(String lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
+
+  public Long getLastModifiedOn() {
+    return lastModifiedOn;
+  }
+
+  public void setLastModifiedOn(Long lastModifiedOn) {
+    this.lastModifiedOn = lastModifiedOn;
+  }
 }

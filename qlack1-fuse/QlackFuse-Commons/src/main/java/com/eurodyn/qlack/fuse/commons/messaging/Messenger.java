@@ -7,16 +7,17 @@ import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.logging.Logger;
 
 /**
  * @author EUROPEAN DYNAMICS SA.
  */
-@Slf4j
 public class Messenger {
+
+  private static final Logger logger = Logger.getLogger(Messenger.class.getName());
 
   private Messenger() {
   }
@@ -31,7 +32,7 @@ public class Messenger {
     Session session = null;
     MessageProducer msgProducer = null;
     try {
-      log.info("Posting a new message on JMS channel {0}.", destination.toString());
+      logger.info("Posting a new message on JMS channel " + destination.toString());
       // Create the message producer.
       connection = connectionFactory.createConnection();
       session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

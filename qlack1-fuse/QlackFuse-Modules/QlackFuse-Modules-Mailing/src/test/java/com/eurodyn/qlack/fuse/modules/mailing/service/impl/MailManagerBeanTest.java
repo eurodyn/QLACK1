@@ -9,7 +9,6 @@ import com.eurodyn.qlack.fuse.modules.mailing.service.MailManager.EMAIL_STATUS;
 import com.eurodyn.qlack.fuse.modules.mailing.util.CriteriaBuilderUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import lombok.SneakyThrows;
 import net.bzdyl.ejb3.criteria.Criteria;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,6 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -52,7 +52,7 @@ class MailManagerBeanTest {
   private Query query;
 
   @BeforeAll
-  void init() {
+  void init() throws IOException {
     InitTestValues initTestValues = new InitTestValues();
     emailDTOs = initTestValues.createEmailDTOs();
     emailDTO = initTestValues.createEmailDTO();
@@ -96,7 +96,7 @@ class MailManagerBeanTest {
   }
 
   @Test
-  void cleanupNullTest() {
+  void cleanupNullTest() throws NoSuchFieldException {
     mockCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiEmails);
     mailManagerBean.cleanup(null, null);
@@ -104,7 +104,7 @@ class MailManagerBeanTest {
   }
 
   @Test
-  void cleanupEmptyStatusTest() {
+  void cleanupEmptyStatusTest() throws NoSuchFieldException {
     mockCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiEmails);
     mailManagerBean.cleanup(null, new EMAIL_STATUS[]{});
@@ -112,15 +112,14 @@ class MailManagerBeanTest {
   }
 
   @Test
-  void cleanupTest() {
+  void cleanupTest() throws NoSuchFieldException {
     mockCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiEmails);
     mailManagerBean.cleanup(new Date().getTime(), new EMAIL_STATUS[]{QUEUED});
     Mockito.verify(entityManager, Mockito.times(1)).remove(maiEmails.get(0));
   }
 
-  @SneakyThrows
-  private void mockCriteriaBuilderUtil() {
+  private void mockCriteriaBuilderUtil() throws NoSuchFieldException {
     FieldSetter.setField(mailManagerBean,
         mailManagerBean.getClass().getDeclaredField("criteriaBuilderUtil"),
         criteriaBuilderUtil);

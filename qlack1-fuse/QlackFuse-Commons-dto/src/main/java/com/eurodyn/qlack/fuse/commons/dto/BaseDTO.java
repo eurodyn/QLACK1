@@ -1,10 +1,5 @@
 package com.eurodyn.qlack.fuse.commons.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.io.Serializable;
 
 /**
@@ -12,10 +7,6 @@ import java.io.Serializable;
  *
  * @author EUROPEAN DYNAMICS SA.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class BaseDTO extends AttributeDTO implements Serializable {
 
   private String id;
@@ -25,4 +16,19 @@ public class BaseDTO extends AttributeDTO implements Serializable {
   //used for security checks.
   private String srcUserId;
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getSrcUserId() {
+    return srcUserId;
+  }
+
+  public void setSrcUserId(String srcUserId) {
+    this.srcUserId = srcUserId;
+  }
 }

@@ -8,7 +8,6 @@ import com.eurodyn.qlack.fuse.modules.mailing.model.MaiDistributionList;
 import com.eurodyn.qlack.fuse.modules.mailing.util.CriteriaBuilderUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import lombok.SneakyThrows;
 import net.bzdyl.ejb3.criteria.Criteria;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -112,34 +111,32 @@ class DistributionListManagerBeanTest {
   }
 
   @Test
-  void searchEmptyTest() {
+  void searchEmptyTest() throws NoSuchFieldException {
     mockCriteriaBuilderUtil();
     Assertions.assertEquals(new ArrayList<>(), distributionListManagerBean.search(distributionListDTO));
   }
 
   @Test
-  void searchNullTest() {
+  void searchNullTest() throws NoSuchFieldException {
     mockCriteriaBuilderUtil();
     Assertions.assertEquals(new ArrayList<>(), distributionListManagerBean.search(null));
   }
 
   @Test
-  void searchEmptyNameTest() {
+  void searchEmptyNameTest() throws NoSuchFieldException {
     distributionListDTO.setName(null);
     mockCriteriaBuilderUtil();
     Assertions.assertEquals(new ArrayList<>(), distributionListManagerBean.search(distributionListDTO));
   }
 
   @Test
-  void searchTest() {
+  void searchTest() throws NoSuchFieldException {
     mockCriteriaBuilderUtil();
     Mockito.when(query.getResultList()).thenReturn(maiDistributionLists);
     Assertions.assertEquals(1, distributionListManagerBean.search(distributionListDTO).size());
   }
 
-
-  @SneakyThrows
-  private void mockCriteriaBuilderUtil() {
+  private void mockCriteriaBuilderUtil() throws NoSuchFieldException {
     FieldSetter.setField(distributionListManagerBean,
         distributionListManagerBean.getClass().getDeclaredField("criteriaBuilderUtil"),
         criteriaBuilderUtil);

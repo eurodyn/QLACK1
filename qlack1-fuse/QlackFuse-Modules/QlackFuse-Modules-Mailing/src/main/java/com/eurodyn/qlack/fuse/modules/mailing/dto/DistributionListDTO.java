@@ -1,10 +1,5 @@
 package com.eurodyn.qlack.fuse.modules.mailing.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.List;
 
 /**
@@ -12,10 +7,6 @@ import java.util.List;
  *
  * @author European Dynamics SA.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class DistributionListDTO extends MailBaseDTO {
 
   private String name;
@@ -27,6 +18,9 @@ public class DistributionListDTO extends MailBaseDTO {
   private String createdBy;
 
   private Long createdOn;
+
+  public DistributionListDTO() {
+  }
 
   /**
    * Constructor with parameters
@@ -41,4 +35,43 @@ public class DistributionListDTO extends MailBaseDTO {
     this.contactList = contactList;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public List<ContactDTO> getContactList() {
+    return contactList;
+  }
+
+  public void setContactList(List<ContactDTO> contactList) {
+    this.contactList = contactList;
+  }
+
+  public String getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setCreatedBy(String createdBy) {
+    this.createdBy = createdBy;
+  }
+
+  public Long getCreatedOn() {
+    return createdOn;
+  }
+
+  public void setCreatedOn(Long createdOn) {
+    this.createdOn = createdOn;
+  }
 }

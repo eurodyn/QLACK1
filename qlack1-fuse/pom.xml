@@ -78,7 +78,6 @@
     <jaxb-runtim3.version>2.3.2</jaxb-runtim3.version>
     <javax.ejb-api.version>3.2.2</javax.ejb-api.version>
     <javaee-api.version>8.0.1</javaee-api.version>
-    <lombok.version>1.18.12</lombok.version>
     <slf4j-api.version>1.7.30</slf4j-api.version>
     <poi.version>4.1.2</poi.version>
     <freemarker.version>2.3.30</freemarker.version>

@@ -13,9 +13,9 @@ import com.eurodyn.qlack.fuse.modules.mailing.model.MaiEmail;
 import com.eurodyn.qlack.fuse.modules.mailing.model.MaiInternalAttachment;
 import com.eurodyn.qlack.fuse.modules.mailing.model.MaiInternalMessages;
 import com.eurodyn.qlack.fuse.modules.mailing.service.MailManager.EMAIL_STATUS;
-import lombok.SneakyThrows;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,8 +31,7 @@ public class InitTestValues {
 
   private static final String EMAIL = "qlack@eurodyn.com";
 
-  @SneakyThrows
-  public AttachmentDTO createAttachmentDTO() {
+  public AttachmentDTO createAttachmentDTO() throws IOException {
     AttachmentDTO attachmentDTO = new AttachmentDTO();
     attachmentDTO.setId("8740d380-9b87-4a61-902f-c33487751880");
     attachmentDTO.setFilename("test_attachment.png");
@@ -43,14 +42,14 @@ public class InitTestValues {
     return attachmentDTO;
   }
 
-  public List<AttachmentDTO> createAttachmentDTOs() {
+  public List<AttachmentDTO> createAttachmentDTOs() throws IOException {
     List<AttachmentDTO> attachmentDTOS = new ArrayList<>();
     attachmentDTOS.add(createAttachmentDTO());
 
     return attachmentDTOS;
   }
 
-  public EmailDTO createEmailDTO() {
+  public EmailDTO createEmailDTO() throws IOException {
     EmailDTO emailDTO = new EmailDTO();
     emailDTO.setId("b32a5858-c305-4e5e-9039-38516f00c8a8");
     emailDTO.setMessageId("64e301c0-e96f-4ff4-a06f-7cdad0122588");
@@ -65,7 +64,7 @@ public class InitTestValues {
     return emailDTO;
   }
 
-  public List<EmailDTO> createEmailDTOs() {
+  public List<EmailDTO> createEmailDTOs() throws IOException {
     List<EmailDTO> emailDTOS = new ArrayList<>();
     emailDTOS.add(createEmailDTO());
 
@@ -153,7 +152,7 @@ public class InitTestValues {
     return maiContact;
   }
 
-  public InternalMessagesDTO createInternalMessagesDTO() {
+  public InternalMessagesDTO createInternalMessagesDTO() throws IOException {
     InternalMessagesDTO internalMessagesDTO = new InternalMessagesDTO();
     internalMessagesDTO.setId("f9726eb8-edce-4216-b71b-72b88a8377be");
     internalMessagesDTO.setSubject("Test Subject");
@@ -167,8 +166,7 @@ public class InitTestValues {
     return internalMessagesDTO;
   }
 
-  @SneakyThrows
-  public InternalMsgAttachmentDTO createInternalMsgAttachmentDTO() {
+  public InternalMsgAttachmentDTO createInternalMsgAttachmentDTO() throws IOException {
     InternalMsgAttachmentDTO internalMsgAttachmentDTO = new InternalMsgAttachmentDTO();
     internalMsgAttachmentDTO.setId("d156c45c-330d-478e-8f02-c2d8cb2f5687");
     internalMsgAttachmentDTO.setFilename("test_attachment.png");
@@ -179,15 +177,14 @@ public class InitTestValues {
     return internalMsgAttachmentDTO;
   }
 
-  public List<InternalMsgAttachmentDTO> createInternalMsgAttachmentDTOs() {
+  public List<InternalMsgAttachmentDTO> createInternalMsgAttachmentDTOs() throws IOException {
     List<InternalMsgAttachmentDTO> internalMsgAttachmentDTOS = new ArrayList<>();
     internalMsgAttachmentDTOS.add(createInternalMsgAttachmentDTO());
 
     return internalMsgAttachmentDTOS;
   }
 
-  @SneakyThrows
-  public MaiInternalAttachment createMaiInternalAttachment() {
+  public MaiInternalAttachment createMaiInternalAttachment() throws IOException {
     MaiInternalAttachment maiInternalAttachment = new MaiInternalAttachment();
     maiInternalAttachment.setId("d156c45c-330d-478e-8f02-c2d8cb2f5687");
     maiInternalAttachment.setFilename("test_attachment.png");
@@ -199,7 +196,7 @@ public class InitTestValues {
     return maiInternalAttachment;
   }
 
-  public List<MaiInternalAttachment> createMaiInternalAttachments() {
+  public List<MaiInternalAttachment> createMaiInternalAttachments() throws IOException {
     List<MaiInternalAttachment> maiInternalAttachments = new ArrayList<>();
     maiInternalAttachments.add(createMaiInternalAttachment());
 

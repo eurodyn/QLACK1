@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -17,8 +15,6 @@ import java.util.UUID;
 @Table(
     name = "mai_internal_attachment"
 )
-@Getter
-@Setter
 public class MaiInternalAttachment implements Serializable {
 
   @Id
@@ -80,4 +76,47 @@ public class MaiInternalAttachment implements Serializable {
     return this.id;
   }
 
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public MaiInternalMessages getMessagesId() {
+    return messagesId;
+  }
+
+  public void setMessagesId(MaiInternalMessages messagesId) {
+    this.messagesId = messagesId;
+  }
+
+  public String getFilename() {
+    return filename;
+  }
+
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
+
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
+
+  public byte[] getData() {
+    return data;
+  }
+
+  public void setData(byte[] data) {
+    this.data = data;
+  }
+
+  public String getFormat() {
+    return format;
+  }
+
+  public void setFormat(String format) {
+    this.format = format;
+  }
 }
