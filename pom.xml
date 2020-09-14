@@ -10,6 +10,37 @@
   <version>1.7.0-SNAPSHOT</version>
   <name>Qlack1</name>
 
+  <url>https://github.com/qlack/QLACK-Java</url>
+  <licenses>
+    <license>
+      <name>European Union Public Licence (EUPL v.1.1)</name>
+      <url>
+        https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11
+      </url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>European Dynamics</name>
+      <email>info@eurodyn.com</email>
+      <organization>European Dynamics</organization>
+      <organizationUrl>http://www.eurodyn.com</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git@github.com:eurodyn/QLACK1.git</connection>
+    <developerConnection>scm:git:git@github.com:eurodyn/QLACK1.git
+    </developerConnection>
+    <url>https://github.com/eurodyn/QLACK1</url>
+    <tag>1.7.0</tag>
+  </scm>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
   <properties>
     <maven.compiler.target>11</maven.compiler.target>
     <maven.compiler.source>11</maven.compiler.source>
@@ -18,6 +49,8 @@
     <dependency-check-maven.version>5.3.2</dependency-check-maven.version>
     <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
+    <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
     
     <sonar.dependencyCheck.reportPath>${project.build.directory}/dependency-check-report.xml
     </sonar.dependencyCheck.reportPath>
@@ -66,4 +99,67 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${maven.source.plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${maven.gpg.plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <configuration>
+                  <keyname>info@eurodyn.com</keyname>
+                  <passphraseServerId>gpg.passphrase.qlack
+                  </passphraseServerId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>${maven.release.plugin.version}</version>
+            <configuration>
+              <autoVersionSubmodules>true</autoVersionSubmodules>
+              <arguments>-DskipTests</arguments>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <!-- Promote releases automatically (to Central) -->
+              <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
