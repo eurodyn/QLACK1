@@ -49,6 +49,7 @@
     <dependency-check-maven.version>5.3.2</dependency-check-maven.version>
     <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
     <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
     <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
     
