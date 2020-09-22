@@ -46,7 +46,7 @@ public class SchedulerMonitorBean {
    * Start the Scheduler instance.
    */
   @PostConstruct
-  public void startScheduler() throws QlackFuseSchedulerException {
+  public void startScheduler() {
     try {
       logger.log(Level.CONFIG, "Starting scheduler...");
       if (scheduler == null) {
@@ -63,7 +63,7 @@ public class SchedulerMonitorBean {
    * Shutdown the Scheduler instance.
    */
   @PreDestroy
-  public void shutdownScheduler() throws QlackFuseSchedulerException {
+  public void shutdownScheduler() {
     try {
       logger.log(Level.CONFIG, "Shutting-down scheduler...");
       if (scheduler != null) {
