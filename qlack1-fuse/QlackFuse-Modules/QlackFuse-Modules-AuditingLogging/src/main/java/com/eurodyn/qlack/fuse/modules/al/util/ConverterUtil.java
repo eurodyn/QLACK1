@@ -7,6 +7,7 @@ import com.eurodyn.qlack.fuse.modules.al.model.AlAuditLevel;
 import com.eurodyn.qlack.fuse.modules.al.model.AlAuditTrace;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,7 +77,7 @@ public final class ConverterUtil {
     AlAudit alLog = null;
     if (null != log) {
       alLog = new AlAudit();
-      alLog.setTraceId(getAuditTraceObject(log));
+      alLog.setTraceId(Collections.singletonList(getAuditTraceObject(log)));
       if (null != log.getCreatedOn()) {
         alLog.setCreatedOn(log.getCreatedOn().getTime());
       }
@@ -102,7 +103,7 @@ public final class ConverterUtil {
     if (null != log) {
       alLog = new AuditLogDTO();
       if (null != log.getTraceId()) {
-        alLog.setTraceData(log.getTraceId().getTraceData());
+        alLog.setTraceData(log.getTraceId().get(0).getTraceData());
       }
       if (null != log.getCreatedOn()) {
         alLog.setCreatedOn(new Date(log.getCreatedOn()));

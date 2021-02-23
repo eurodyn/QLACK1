@@ -1,15 +1,13 @@
 package com.eurodyn.qlack.fuse.modules.al.model;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(
@@ -17,38 +15,29 @@ import java.util.Set;
 )
 public class AlAuditTrace implements Serializable {
 
-  private String id;
+  @EmbeddedId
+  private Pk id;
   private String traceData;
-  private Set<AlAudit> alAudits = new HashSet(0);
 
   public AlAuditTrace() {
   }
 
-  public AlAuditTrace(String id, String traceData) {
+  public AlAuditTrace(Pk id, String traceData) {
     this.id = id;
     this.traceData = traceData;
   }
 
-  public AlAuditTrace(String id, String traceData, Set<AlAudit> alAudits) {
+  public AlAuditTrace(Pk id, String traceData, AlAudit alAudit) {
     this.id = id;
     this.traceData = traceData;
-    this.alAudits = alAudits;
+    this.alAudit = alAudit;
   }
 
-  @Id
-  @Column(
-      name = "id",
-      unique = true,
-      nullable = false
-  )
-  public String getId() {
-    if (this.id == null) {
-      this.id = java.util.UUID.randomUUID().toString();
-    }
-    return this.id;
+  public Pk getId() {
+    return id;
   }
 
-  public void setId(String id) {
+  public void setId(Pk id) {
     this.id = id;
   }
 
@@ -64,15 +53,15 @@ public class AlAuditTrace implements Serializable {
     this.traceData = traceData;
   }
 
-  @OneToMany(
-      fetch = FetchType.LAZY,
-      mappedBy = "traceId"
-  )
-  public Set<AlAudit> getAlAudits() {
-    return this.alAudits;
+  @ManyToOne
+  @JoinColumn(name="id", insertable = false, updatable = false)
+  private AlAudit alAudit;
+
+  public AlAudit getAlAudit() {
+    return alAudit;
   }
 
-  public void setAlAudits(Set<AlAudit> alAudits) {
-    this.alAudits = alAudits;
+  public void setAlAudit(AlAudit alAudit) {
+    this.alAudit = alAudit;
   }
 }

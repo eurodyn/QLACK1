@@ -6,9 +6,11 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(
@@ -18,7 +20,7 @@ public class AlAudit implements Serializable {
 
   private String id;
   private AlAuditLevel levelId;
-  private AlAuditTrace traceId;
+  private List<AlAuditTrace> traceId;
   private Long createdOn;
   private String event;
   private String groupName;
@@ -35,7 +37,7 @@ public class AlAudit implements Serializable {
     this.event = event;
   }
 
-  public AlAudit(String id, AlAuditLevel levelId, AlAuditTrace traceId, Long createdOn, String event, String groupName,
+  public AlAudit(String id, AlAuditLevel levelId, List<AlAuditTrace> traceId, Long createdOn, String event, String groupName,
       String prinSessionId, String referenceId, String shortDescription) {
     this.id = id;
     this.levelId = levelId;
@@ -80,17 +82,12 @@ public class AlAudit implements Serializable {
     this.levelId = levelId;
   }
 
-  @ManyToOne(
-      fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-      name = "trace_id"
-  )
-  public AlAuditTrace getTraceId() {
+  @OneToMany(targetEntity=AlAuditTrace.class, mappedBy="alAudit", fetch=FetchType.LAZY)
+  public List<AlAuditTrace> getTraceId() {
     return this.traceId;
   }
 
-  public void setTraceId(AlAuditTrace traceId) {
+  public void setTraceId(List<AlAuditTrace> traceId) {
     this.traceId = traceId;
   }
 
