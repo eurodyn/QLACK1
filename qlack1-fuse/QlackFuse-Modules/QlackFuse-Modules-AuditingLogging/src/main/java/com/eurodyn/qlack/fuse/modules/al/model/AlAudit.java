@@ -6,11 +6,9 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(
@@ -20,15 +18,18 @@ public class AlAudit implements Serializable {
 
   private String id;
   private AlAuditLevel levelId;
-  private List<AlAuditTrace> traceId;
+  private AlAuditTrace traceId;
   private Long createdOn;
   private String event;
   private String groupName;
   private String prinSessionId;
   private String referenceId;
   private String shortDescription;
+  private String lang;
 
-  public AlAudit() {
+
+
+public AlAudit() {
   }
 
   public AlAudit(String id, AlAuditLevel levelId, String event) {
@@ -37,7 +38,7 @@ public class AlAudit implements Serializable {
     this.event = event;
   }
 
-  public AlAudit(String id, AlAuditLevel levelId, List<AlAuditTrace> traceId, Long createdOn, String event, String groupName,
+  public AlAudit(String id, AlAuditLevel levelId, AlAuditTrace traceId, Long createdOn, String event, String groupName,
       String prinSessionId, String referenceId, String shortDescription) {
     this.id = id;
     this.levelId = levelId;
@@ -82,12 +83,17 @@ public class AlAudit implements Serializable {
     this.levelId = levelId;
   }
 
-  @OneToMany(targetEntity=AlAuditTrace.class, mappedBy="alAudit", fetch=FetchType.LAZY)
-  public List<AlAuditTrace> getTraceId() {
+  @ManyToOne(
+      fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+      name = "trace_id"
+  )
+  public AlAuditTrace getTraceId() {
     return this.traceId;
   }
 
-  public void setTraceId(List<AlAuditTrace> traceId) {
+  public void setTraceId(AlAuditTrace traceId) {
     this.traceId = traceId;
   }
 
@@ -159,4 +165,16 @@ public class AlAudit implements Serializable {
   public void setShortDescription(String shortDescription) {
     this.shortDescription = shortDescription;
   }
+  
+  @Column(
+	      name = "lang"
+	  )
+  public String getLang() {
+	return lang;
+}
+
+public void setLang(String lang) {
+	this.lang = lang;
+}
+
 }

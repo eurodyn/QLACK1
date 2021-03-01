@@ -5,6 +5,6 @@ package com.eurodyn.qlack.fuse.modules.al.enums;
  */
 public enum AuditLogColumns {
 
-  event, shortDescription, traceData, referenceId, level, prinSessionId, groupName, createdOn
+  event, shortDescription, traceData, referenceId, level, prinSessionId, groupName, createdOn, lang
 
 }

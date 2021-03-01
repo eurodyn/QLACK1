@@ -31,8 +31,11 @@ public class AuditLogDTO implements Serializable {
   private String referenceId;
 
   private String groupName;
+  
+  private String lang;
 
-  public String getId() {
+
+public String getId() {
     return id;
   }
 
@@ -108,4 +111,13 @@ public class AuditLogDTO implements Serializable {
   public void setGroupName(String groupName) {
     this.groupName = groupName;
   }
+  
+  public String getLang() {
+	return lang;
+}
+
+public void setLang(String lang) {
+	this.lang = lang;
+}
+
 }

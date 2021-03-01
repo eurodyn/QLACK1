@@ -7,7 +7,6 @@ import com.eurodyn.qlack.fuse.modules.al.model.AlAuditLevel;
 import com.eurodyn.qlack.fuse.modules.al.model.AlAuditTrace;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -77,7 +76,7 @@ public final class ConverterUtil {
     AlAudit alLog = null;
     if (null != log) {
       alLog = new AlAudit();
-      alLog.setTraceId(Collections.singletonList(getAuditTraceObject(log)));
+      alLog.setTraceId(getAuditTraceObject(log));
       if (null != log.getCreatedOn()) {
         alLog.setCreatedOn(log.getCreatedOn().getTime());
       }
@@ -88,6 +87,7 @@ public final class ConverterUtil {
           null == log.getLevel() ? null : new AuditLevelDTO(log.getLevel())));
       alLog.setReferenceId(log.getReferenceId());
       alLog.setGroupName(log.getGroupName());
+      alLog.setLang(log.getLang());
     }
     return alLog;
   }
@@ -103,7 +103,7 @@ public final class ConverterUtil {
     if (null != log) {
       alLog = new AuditLogDTO();
       if (null != log.getTraceId()) {
-        alLog.setTraceData(log.getTraceId().get(0).getTraceData());
+        alLog.setTraceData(log.getTraceId().getTraceData());
       }
       if (null != log.getCreatedOn()) {
         alLog.setCreatedOn(new Date(log.getCreatedOn()));
@@ -114,6 +114,7 @@ public final class ConverterUtil {
       alLog.setLevel(log.getLevelId().getName());
       alLog.setReferenceId(log.getReferenceId());
       alLog.setGroupName(log.getGroupName());
+      alLog.setLang(log.getLang());
     }
     return alLog;
   }
