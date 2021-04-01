@@ -53,5 +53,5 @@ pipeline {
                 body: '$DEFAULT_CONTENT',
                 to: 'qlack@eurodyn.com'
         }
-    }/*
+    }*/
 }
