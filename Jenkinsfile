@@ -22,7 +22,9 @@ pipeline {
         }
         stage('Sonar Analysis') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.projectName=Qlack1-Git -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_KEY_QLACK1}'
+                withSonarQubeEnv('sonar'){
+                    sh 'mvn sonar:sonar -Dsonar.projectName=Qlack1-Git -Dsonar.host.url=${SONAR_HOST_URL} -Dsonar.login=${SONAR_KEY_QLACK1}'
+                }
             }
         }
         stage('Produce bom.xml'){
