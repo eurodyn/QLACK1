@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'imousmoutis/maven3-jdk11:1.0.1'
+            image 'eddevopsd2/maven-java-npm-docker:mvn3.6.3-jdk11-npm6.14.4-docker'
             args '-v /root/.m2/Qlack1-GIT:/root/.m2'
         }
     }
