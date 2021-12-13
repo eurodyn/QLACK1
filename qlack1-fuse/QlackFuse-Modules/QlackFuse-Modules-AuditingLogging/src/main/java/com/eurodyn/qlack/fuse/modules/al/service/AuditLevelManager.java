@@ -1,6 +1,8 @@
 package com.eurodyn.qlack.fuse.modules.al.service;
 
 import com.eurodyn.qlack.fuse.modules.al.dto.AuditLevelDTO;
+import com.eurodyn.qlack.fuse.modules.al.model.AlAuditLevel;
+
 import javax.ejb.Remote;
 
 import java.util.List;
@@ -57,4 +59,11 @@ public interface AuditLevelManager {
    * @return List of AuditLevels.
    */
   List<AuditLevelDTO> listAuditLevels();
+
+  /**
+   * To get all audit levels present in the DB
+   *
+   * @return List of AuditLevels.
+   */
+  List<AlAuditLevel> getAllAudLevelsFromDB();
 }

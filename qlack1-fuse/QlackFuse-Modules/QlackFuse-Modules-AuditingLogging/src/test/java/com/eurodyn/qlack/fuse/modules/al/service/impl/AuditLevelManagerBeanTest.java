@@ -73,7 +73,7 @@ class AuditLevelManagerBeanTest {
   void listAuditLevelsTest() {
     Mockito.when(entityManager.createQuery(Mockito.anyString())).thenReturn(query);
     Mockito.when(query.getResultList()).thenReturn(alAuditLevels);
-    Assertions.assertEquals(1, auditLevelManagerBean.listAuditLevels().size());
+    Assertions.assertEquals(1, auditLevelManagerBean.getAllAudLevelsFromDB().size());
   }
 
 }

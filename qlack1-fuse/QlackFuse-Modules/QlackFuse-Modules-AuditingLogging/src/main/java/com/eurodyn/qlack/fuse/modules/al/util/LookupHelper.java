@@ -1,10 +1,10 @@
 package com.eurodyn.qlack.fuse.modules.al.util;
 
 import com.eurodyn.qlack.fuse.modules.al.model.AlAuditLevel;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import com.eurodyn.qlack.fuse.modules.al.service.AlAuditSingleton;
 
-import java.util.List;
+import javax.persistence.EntityManager;
+
 import java.util.logging.Logger;
 
 /**
@@ -27,14 +27,6 @@ public class LookupHelper {
    */
   public static AlAuditLevel getAuditLevelByName(String levelName, EntityManager em) {
     logger.info("Retrieving audit level with name " + levelName);
-
-    Query q = em.createQuery("SELECT l FROM AlAuditLevel l WHERE l.name = :name");
-    q.setParameter("name", levelName);
-    List<AlAuditLevel> resultList = q.getResultList();
-    if ((resultList != null) && (!resultList.isEmpty())) {
-      return resultList.get(0);
-    } else {
-      return null;
-    }
+    return AlAuditSingleton.getInstance().getAuditLevelByName(levelName);
   }
 }
