@@ -1,8 +1,10 @@
 package com.eurodyn.qlack.fuse.modules.scheduler.util;
 
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.PersistJobDataAfterExecution;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,6 +15,8 @@ import java.util.logging.Logger;
 /**
  * @author European Dynamics S.A.
  */
+@PersistJobDataAfterExecution
+@DisallowConcurrentExecution
 public class SchedulerJobRunner implements Job {
 
   private static final Logger logger = Logger.getLogger(SchedulerJobRunner.class.getName());
