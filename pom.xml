@@ -45,17 +45,11 @@
     <maven.compiler.source>11</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <dependency-check-maven.version>5.3.2</dependency-check-maven.version>
     <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
     <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
     <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
-    
-    <sonar.dependencyCheck.reportPath>${project.build.directory}/dependency-check-report.xml
-    </sonar.dependencyCheck.reportPath>
-    <sonar.dependencyCheck.htmlReportPath>${project.build.directory}/dependency-check-report.html
-    </sonar.dependencyCheck.htmlReportPath>
     <sonar.projectKey>${project.groupId}:${project.artifactId}:git</sonar.projectKey>
   </properties>
 
@@ -80,21 +74,6 @@
           <groupId>org.sonarsource.scanner.maven</groupId>
           <artifactId>sonar-maven-plugin</artifactId>
           <version>${sonar-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.owasp</groupId>
-          <artifactId>dependency-check-maven</artifactId>
-          <version>${dependency-check-maven.version}</version>
-          <configuration>
-            <format>ALL</format>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>aggregate</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
