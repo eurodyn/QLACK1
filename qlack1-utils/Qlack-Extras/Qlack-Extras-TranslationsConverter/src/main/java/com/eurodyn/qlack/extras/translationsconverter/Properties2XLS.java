@@ -1,8 +1,5 @@
 package com.eurodyn.qlack.extras.translationsconverter;
 
-import static org.apache.poi.ss.usermodel.CellStyle.ALIGN_CENTER;
-import static org.apache.poi.ss.usermodel.Font.BOLDWEIGHT_BOLD;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -15,6 +12,7 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.BufferedReader;
@@ -104,10 +102,10 @@ public class Properties2XLS {
     HSSFFont headcellfont = wb.createFont();
     headcellfont.setFontName(HSSFFont.FONT_ARIAL);
     headcellfont.setFontHeightInPoints((short) 10);
-    headcellfont.setBoldweight(BOLDWEIGHT_BOLD);
+    headcellfont.setBold(true);
     HSSFCellStyle headcellstyle = wb.createCellStyle();
     headcellstyle.setFont(headcellfont);
-    headcellstyle.setAlignment(ALIGN_CENTER);
+    headcellstyle.setVerticalAlignment(VerticalAlignment.CENTER);;
 
     try (BufferedReader br = new BufferedReader(
         new InputStreamReader(new FileInputStream(mainFile), StandardCharsets.UTF_8))) {

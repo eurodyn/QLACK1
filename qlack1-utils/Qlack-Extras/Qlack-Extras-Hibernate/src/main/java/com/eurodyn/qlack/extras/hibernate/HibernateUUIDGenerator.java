@@ -1,6 +1,6 @@
 package com.eurodyn.qlack.extras.hibernate;
 
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
 import java.io.Serializable;
@@ -19,7 +19,7 @@ public class HibernateUUIDGenerator implements IdentifierGenerator {
    * @return Serializable
    */
   @Override
-  public Serializable generate(SessionImplementor session, Object object) {
+  public Serializable generate(SharedSessionContractImplementor session, Object object) {
 
     String uniqueID = UUID.randomUUID().toString();
     logger.log(Level.FINEST, "Generated ID ''{0}''.", uniqueID);

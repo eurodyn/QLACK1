@@ -7,7 +7,7 @@ import com.eurodyn.qlack.fuse.modules.lexicon.service.KeyManager;
 import com.eurodyn.qlack.fuse.modules.lexicon.service.LanguageManager;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.interceptor.I18nInterceptor;
+import org.apache.struts2.interceptor.I18nInterceptor;
 import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.commons.lang.StringUtils;
 
