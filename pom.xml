@@ -125,7 +125,7 @@
                   <goal>sign</goal>
                 </goals>
                 <configuration>
-                  <keyname>info@eurodyn.com</keyname>
+                  <keyname>devops-d2@eurodyn.com</keyname>
                   <passphraseServerId>gpg.passphrase.qlack
                   </passphraseServerId>
                 </configuration>
