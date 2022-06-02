@@ -5,14 +5,14 @@
   <parent>
     <groupId>com.eurodyn.qlack.fuse</groupId>
     <artifactId>QlackFuse</artifactId>
-    <version>1.7.5</version>
+    <version>1.7.6-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>com.eurodyn.qlack.fuse.modules</groupId>
   <artifactId>QlackFuse-Modules</artifactId>
   <packaging>pom</packaging>
-  <version>1.7.5</version>
+  <version>1.7.6-SNAPSHOT</version>
   <name>QlackFuse-Modules</name>
 
   <modules>

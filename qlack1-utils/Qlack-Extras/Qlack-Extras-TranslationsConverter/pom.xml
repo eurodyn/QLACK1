@@ -5,7 +5,7 @@
   <parent>
     <artifactId>Qlack-Extras</artifactId>
     <groupId>com.eurodyn.qlack.extras</groupId>
-    <version>1.7.5</version>
+    <version>1.7.6-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
