@@ -5,7 +5,7 @@
   <groupId>com.eurodyn.qlack</groupId>
   <artifactId>Qlack</artifactId>
   <packaging>pom</packaging>
-  <version>1.7.6-SNAPSHOT</version>
+  <version>1.7.5-SNAPSHOT</version>
   <name>Qlack1</name>
 
   <description>QLACK1 project (Java modules)</description>
